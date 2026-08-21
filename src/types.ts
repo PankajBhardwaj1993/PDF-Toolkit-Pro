@@ -9,6 +9,7 @@ export interface Tool {
   popular?: boolean;
   slug?: string;
   hidden?: boolean;
+  adminOnly?: boolean;
   disabled?: boolean;
   seoTitle?: string;
   seoDescription?: string;

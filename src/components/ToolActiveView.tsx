@@ -826,6 +826,41 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
   }
 
   if (toolId === 'canonical_tag_test' || toolId === 'canonical-tag-test') {
+    if (!user || user.role !== 'admin') {
+      return (
+        <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-xl mx-auto animate-fade-in text-center space-y-6">
+          <div className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-3xl p-8 sm:p-10 shadow-xl space-y-5">
+            <div className="mx-auto w-16 h-16 rounded-2xl bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+              <Key className="h-8 w-8" />
+            </div>
+            <div className="space-y-2">
+              <h2 className="text-xl font-bold font-display text-slate-900 dark:text-zinc-50">
+                Admin Authentication Required
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-zinc-400 leading-relaxed max-w-sm mx-auto">
+                The <strong>SEO &amp; Canonical Tag Tester</strong> is an administrative tool restricted to system administrators. Please sign in with an admin account to access this diagnostic suite.
+              </p>
+            </div>
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <button
+                onClick={onBack}
+                className="w-full sm:w-auto px-5 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-slate-700 dark:text-zinc-300 font-semibold text-xs rounded-xl transition-all cursor-pointer"
+              >
+                Back to Tools
+              </button>
+              <a
+                href="/admin"
+                className="w-full sm:w-auto px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md shadow-blue-500/20 transition-all cursor-pointer flex items-center justify-center gap-2"
+              >
+                <Key className="h-3.5 w-3.5" />
+                Go to Admin Sign In
+              </a>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="py-6 px-4 sm:px-6 lg:px-8 xl:px-12 w-full max-w-[1850px] mx-auto space-y-4 animate-fade-in">
         <div className="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-4">
@@ -836,8 +871,8 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
             <ArrowLeft className="h-4 w-4" />
             Back to Home
           </button>
-          <span className="font-mono text-[10px] text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-white/5 px-3 py-1.5 rounded-lg border border-slate-100 dark:border-white/5">
-            Diagnostic Monitor
+          <span className="font-mono text-[10px] text-purple-600 dark:text-purple-400 font-bold uppercase tracking-widest bg-purple-50 dark:bg-purple-950/40 px-3 py-1.5 rounded-lg border border-purple-200 dark:border-purple-800">
+            Admin Diagnostic Tool
           </span>
         </div>
         <CanonicalTestWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />

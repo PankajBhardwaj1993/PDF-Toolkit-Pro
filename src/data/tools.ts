@@ -410,7 +410,9 @@ export const allToolsList: Tool[] = [
     description: 'Verify, analyze, and test search-engine canonical links and SEO compliance across all workspace pages.',
     category: 'utilities',
     icon: 'Link',
-    popular: true,
+    popular: false,
+    adminOnly: true,
+    hidden: true,
     seoTitle: 'SEO & Canonical Tag Tester | pdftoolkitpro.online',
     seoDescription: 'Inspect, validate, and debug search-engine canonical links across all PDF Toolkit Pro routes. Run bulk SEO checks instantly.',
     seoKeywords: ['canonical tag test', 'seo canonical checker', 'verify canonical tags', 'check canonical link online', 'pdftoolkitpro.online']

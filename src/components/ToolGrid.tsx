@@ -37,13 +37,14 @@ export default function ToolGrid({
   ];
 
   const filteredTools = allToolsList.filter((tool) => {
+    if (tool.hidden || tool.adminOnly) return false;
     const matchesSearch = tool.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           tool.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = activeCategory === 'all' || tool.category === activeCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const popularTools = allToolsList.filter(t => t.popular);
+  const popularTools = allToolsList.filter(t => t.popular && !t.hidden && !t.adminOnly);
 
   return (
     <div className="py-8 px-4 sm:px-6 lg:px-8 xl:px-12 w-full max-w-[1850px] mx-auto space-y-10">

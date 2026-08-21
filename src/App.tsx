@@ -717,6 +717,7 @@ function AppContent() {
             user={user} 
             isDonationDisabled={isDonationDisabled}
             onToggleDonation={(disabled) => setIsDonationDisabled(disabled)}
+            onAddRecentFile={handleAddRecentFile}
             onLoginRequest={() => {
               setAuthMode('login');
               setShowAuthModal(true);
