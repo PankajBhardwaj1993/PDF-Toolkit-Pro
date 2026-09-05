@@ -501,7 +501,7 @@ export const imageAiToolsSeo: Record<string, ToolSeoContent> = {
     relatedTools: [
       { id: 'pdf_to_word', title: 'PDF to Word', anchor: 'Convert recognized documents into editable Word files' },
       { id: 'rotate_pdf', title: 'Rotate PDF', anchor: 'Orient upside-down scans before running OCR' },
-      { id: 'ai_grammar', title: 'AI Grammar Checker', anchor: 'Clean up and polish extracted OCR text' },
+      { id: 'word_editor', title: 'Online Word Editor', anchor: 'Edit and format recognized document text' },
       { id: 'text_to_speech', title: 'Text to Speech', anchor: 'Listen to extracted document text read aloud' }
     ]
   },
@@ -544,7 +544,7 @@ export const imageAiToolsSeo: Record<string, ToolSeoContent> = {
     tipsTitle: 'Tips for Better Speech Synthesis',
     tips: [
       'Use proper punctuation (commas, periods, question marks) to give the voice natural pauses and inflections.',
-      'Check your text with our AI Grammar Checker before listening to ensure clean sentence flow.'
+      'Draft your text carefully before listening to ensure clean sentence flow.'
     ],
     securityTitle: 'Privacy Guarantee',
     securityContent: 'All speech synthesis runs locally in your browser speech engine. Your text is never recorded or stored on remote servers.',
@@ -555,66 +555,10 @@ export const imageAiToolsSeo: Record<string, ToolSeoContent> = {
       { question: 'Is my text uploaded to a server?', answer: 'No. Audio generation utilizes client-side speech synthesis with complete privacy.' }
     ],
     relatedTools: [
-      { id: 'ai_grammar', title: 'AI Grammar Checker', anchor: 'Fix grammar and syntax before reading aloud' },
       { id: 'pdf_ocr', title: 'PDF OCR', anchor: 'Extract text from scanned PDFs to read with text to speech' },
       { id: 'word_editor', title: 'Online Word Editor', anchor: 'Draft and edit articles before listening' },
-      { id: 'markdown_editor', title: 'Markdown Editor', anchor: 'Write and preview technical notes' }
-    ]
-  },
-
-  // 36. AI GRAMMAR CHECKER
-  ai_grammar: {
-    id: 'ai_grammar',
-    primaryKeyword: 'AI grammar checker',
-    secondaryKeywords: ['grammar check online', 'free grammar checker', 'proofread text AI', 'spell check online', 'improve writing AI', 'sentence corrector'],
-    seoTitle: 'AI Grammar Checker Online – Free Writing & Spell Checker',
-    seoDescription: 'Check grammar, spelling, punctuation, and style online for free with AI. Fix errors, improve clarity, and rewrite sentences instantly in your browser.',
-    canonicalUrl: 'https://pdftoolkitpro.online/tools/ai_grammar',
-    h1: 'AI Grammar Checker Online',
-    intro: 'Fix grammar mistakes, spelling errors, punctuation slip-ups, and awkward phrasing instantly with our free AI grammar checker. Enhance clarity, tone, and readability for professional writing.',
-    whatIsTitle: 'What Is an AI Grammar Checker?',
-    whatIsContent: [
-      'An AI grammar checker uses advanced natural language processing (NLP) to analyze written text, detect grammatical flaws, identify spelling errors, and suggest structural improvements.',
-      'Unlike simple spell-checkers that only flag misspelled words, our AI understands context, subject-verb agreement, dangling modifiers, passive voice overuse, and vocabulary enhancement.'
-    ],
-    howToTitle: 'How to Check Grammar Online',
-    howToSteps: [
-      { step: 1, title: 'Paste or Type Text', description: 'Enter your essay, email, cover letter, or article into the grammar workstation.' },
-      { step: 2, title: 'Select Tone / Mode', description: 'Choose your desired writing style: Professional, Academic, Casual, or Concise.' },
-      { step: 3, title: 'Click Check Grammar', description: 'Analyze your writing and generate detailed corrections and explanations.' },
-      { step: 4, title: 'Accept Suggestions & Copy', description: 'Review highlighted fixes, apply improvements with one click, and copy your polished text.' }
-    ],
-    featuresTitle: 'Features of Our AI Grammar Checker',
-    features: [
-      { title: 'Context-Aware Error Detection', description: 'Identifies tricky homophones (their/there/they’re), comma splices, and tense inconsistencies.' },
-      { title: 'Tone & Style Adjustments', description: 'Rewrite paragraphs for professional business correspondence or engaging academic tone.' },
-      { title: 'One-Click Instant Corrections', description: 'Accept individual suggestions or apply all corrections simultaneously in one click.' },
-      { title: 'Zero Cloud Storage Retention', description: 'Your private emails and essays are processed securely and never retained.' }
-    ],
-    useCasesTitle: 'Who Needs an AI Grammar Checker?',
-    useCases: [
-      { title: 'Job Seekers & Professionals', description: 'Polish cover letters, resumes, and executive emails to ensure zero embarrassing typos.' },
-      { title: 'Students & Academics', description: 'Proofread research papers, essays, and admissions statements for academic rigor.' },
-      { title: 'Content Creators & Authors', description: 'Refine blog posts, newsletter articles, and manuscript chapters for maximum reader engagement.' }
-    ],
-    tipsTitle: 'Tips for Improving Your Writing',
-    tips: [
-      'Read your polished text aloud using our Text to Speech tool to hear how naturally the sentences flow.',
-      'Keep sentences concise by trimming unnecessary filler words like "in order to" and "due to the fact that".'
-    ],
-    securityTitle: 'Confidentiality and Data Privacy',
-    securityContent: 'Your writing is processed securely with immediate post-analysis memory deallocation. We never save, log, or train on your proprietary text.',
-    faqs: [
-      { question: 'Is this AI grammar checker free?', answer: 'Yes! PDF Toolkit Pro offers 100% free grammar and spell checking with no subscriptions.' },
-      { question: 'Does it check punctuation as well as spelling?', answer: 'Yes, it checks spelling, punctuation, capitalization, sentence structure, and vocabulary choices.' },
-      { question: 'Can I choose different writing tones?', answer: 'Yes, you can tailor recommendations for Professional, Academic, Casual, or Concise styles.' },
-      { question: 'Is my text stored anywhere?', answer: 'No. All text is processed securely in isolated memory and discarded immediately.' }
-    ],
-    relatedTools: [
-      { id: 'word_editor', title: 'Online Word Editor', anchor: 'Draft and format Word documents in your browser' },
-      { id: 'text_to_speech', title: 'Text to Speech', anchor: 'Listen to your corrected writing read aloud' },
-      { id: 'markdown_editor', title: 'Markdown Editor', anchor: 'Write and preview technical documentation' },
-      { id: 'online_pdf_editor', title: 'Online PDF Editor', anchor: 'Add polished text directly onto PDF pages' }
+      { id: 'markdown_editor', title: 'Markdown Editor', anchor: 'Write and preview technical notes' },
+      { id: 'online_pdf_editor', title: 'Online PDF Editor', anchor: 'Add text directly onto PDF pages' }
     ]
   },
 

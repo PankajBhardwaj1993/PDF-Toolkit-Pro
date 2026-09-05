@@ -37,7 +37,6 @@ PDF Toolkit Pro (https://pdftoolkitpro.online) is a comprehensive web-based docu
 
 - [AI PDF OCR Scanner](https://pdftoolkitpro.online/tools/ocr-pdf): Extract text from scanned PDFs and images with multi-language optical character recognition.
 - [AI PDF Summarizer](https://pdftoolkitpro.online/tools/ai-pdf-summarizer): Generate instant executive summaries, key takeaways, and question-answering from long documents.
-- [AI Grammar & Style Corrector](https://pdftoolkitpro.online/tools/grammar-corrector): Proofread and improve text documents with AI grammar checking.
 - [AI Text to Speech](https://pdftoolkitpro.online/tools/text-to-speech): Convert text and document contents into natural-sounding voice audio.
 - [Online Word Document Editor](https://pdftoolkitpro.online/tools/word-editor): Browser-based rich document editor for Word (.docx) files.
 - [Online Excel Spreadsheet Editor](https://pdftoolkitpro.online/tools/excel-editor): Browser-based spreadsheet editor for Excel (.xlsx) files with formulas and grid calculation.

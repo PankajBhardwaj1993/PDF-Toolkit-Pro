@@ -631,31 +631,6 @@ export const allToolsList: Tool[] = [
     ]
   },
 
-  // 23. AI GRAMMAR & POLISH
-  {
-    id: 'ai_grammar',
-    name: 'AI Grammar & Polish',
-    description: 'Identify syntax mistakes, grammatical errors, and rephrase text for professional tone.',
-    category: 'ai',
-    icon: 'Sparkles',
-    h1: 'AI Grammar & Writing Enhancer',
-    seoTitle: 'AI Grammar Checker Online – Fix Grammar & Polish Text | PDF Toolkit Pro',
-    seoDescription: 'Fix grammar, punctuation, and spelling errors in your text using AI. Enhance clarity, tone, and readability with one click.',
-    seoKeywords: [
-      'AI grammar checker',
-      'grammar corrector online',
-      'sentence enhancer',
-      'text rephraser',
-      'spelling checker AI'
-    ],
-    faqs: [
-      {
-        question: 'How does the AI Grammar checker improve writing?',
-        answer: 'It corrects spelling, grammar, and punctuation mistakes while offering stylistic adjustments to make sentences concise and professional.'
-      }
-    ]
-  },
-
   // 24. SIGN PDF DOCUMENT
   {
     id: 'sign_pdf',

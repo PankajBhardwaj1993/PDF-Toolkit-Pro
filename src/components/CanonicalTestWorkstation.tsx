@@ -66,7 +66,6 @@ export default function CanonicalTestWorkstation({ onBackToTools }: CanonicalTes
     { name: 'Split PDF Tool', path: '/tools/split_pdf' },
     { name: 'Compress PDF Tool', path: '/tools/compress_pdf' },
     { name: 'Text to Speech (TTS)', path: '/tools/text_to_speech' },
-    { name: 'AI Grammar & Polish', path: '/tools/ai_grammar' },
     { name: 'Passport Photo Maker', path: '/tools/passport_photo' },
   ];
 

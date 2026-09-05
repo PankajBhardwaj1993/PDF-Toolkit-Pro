@@ -486,7 +486,7 @@ export const officeToolsSeo: Record<string, ToolSeoContent> = {
     ],
     tipsTitle: 'Tips for Online Word Processing',
     tips: [
-      'Use the AI Grammar Checker tool to polish your writing for grammar and clarity before exporting.',
+      'Proofread your writing for clarity and concise formatting before exporting.',
       'Export directly to PDF if you plan to email the document to clients to lock in formatting.'
     ],
     securityTitle: 'Privacy and Confidentiality',
@@ -499,7 +499,7 @@ export const officeToolsSeo: Record<string, ToolSeoContent> = {
     ],
     relatedTools: [
       { id: 'word_to_pdf', title: 'Word to PDF', anchor: 'Convert completed Word documents to standard PDF' },
-      { id: 'ai_grammar', title: 'AI Grammar Checker', anchor: 'Check your text for grammar and clarity errors' },
+      { id: 'text_to_speech', title: 'Text to Speech', anchor: 'Listen to your documents read aloud' },
       { id: 'markdown_editor', title: 'Markdown Editor', anchor: 'Write and preview Markdown documents' },
       { id: 'excel_editor', title: 'Excel Editor Online', anchor: 'Edit and manage spreadsheet data online' }
     ]
@@ -612,7 +612,7 @@ export const officeToolsSeo: Record<string, ToolSeoContent> = {
     relatedTools: [
       { id: 'word_editor', title: 'Online Word Editor', anchor: 'Rich text Word document editor' },
       { id: 'json_formatter', title: 'JSON Formatter', anchor: 'Validate and format JSON data structures' },
-      { id: 'ai_grammar', title: 'AI Grammar Checker', anchor: 'Polish your technical writing and documentation' },
+      { id: 'pdf_ocr', title: 'PDF OCR', anchor: 'Extract text from scanned documents' },
       { id: 'text_to_speech', title: 'Text to Speech', anchor: 'Listen to your Markdown notes read aloud' }
     ]
   },

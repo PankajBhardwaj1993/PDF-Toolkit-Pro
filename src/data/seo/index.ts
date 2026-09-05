@@ -52,7 +52,6 @@ const ID_ALIASES: Record<string, string> = {
   'convert-image': 'convert_image',
   'passport-photo': 'passport_photo',
   'remove-bg': 'remove_bg',
-  'ai-grammar': 'ai_grammar',
   'qr-generator': 'qr_generator',
   'password-generator': 'password_generator',
   'online-pdf-editor': 'online_pdf_editor'
