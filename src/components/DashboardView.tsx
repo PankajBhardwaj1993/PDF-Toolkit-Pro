@@ -176,11 +176,6 @@ export default function DashboardView({
                             {t.name}
                           </p>
                           {t.id === 'remove_bg' && (
-                            <span className="inline-block px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wider bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
-                              BETA
-                            </span>
-                          )}
-                          {t.id === 'remove_bg' && (
                             <span className="inline-block px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wider bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20">
                               TEMP DISABLED
                             </span>

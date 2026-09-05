@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { 
   FileText, Image as ImageIcon, FileSignature, Sparkles, Sliders, Type, Star, 
-  Search, ArrowRight, Zap, TrendingUp, Cpu, Compass, Briefcase, Layers, FileSpreadsheet
+  Search, ArrowRight, Zap, TrendingUp, Cpu, Compass, Briefcase, Layers, FileSpreadsheet, ArrowLeftRight
 } from 'lucide-react';
 import { Tool, ToolCategory } from '../types';
 
@@ -23,10 +23,11 @@ export default function ToolGrid({
   onToggleFavorite,
   allToolsList,
 }: ToolGridProps) {
-  const [activeCategory, setActiveCategory] = useState<ToolCategory | 'all'>('all');
+  const [activeCategory, setActiveCategory] = useState<ToolCategory | 'all' | 'converter'>('all');
 
-  const categories: Array<{ id: ToolCategory | 'all'; name: string; icon: any }> = [
+  const categories: Array<{ id: ToolCategory | 'all' | 'converter'; name: string; icon: any }> = [
     { id: 'all', name: 'Explore All', icon: Compass },
+    { id: 'converter', name: 'Converter Tools', icon: ArrowLeftRight },
     { id: 'pdf', name: 'PDF Document Tools', icon: FileText },
     { id: 'office', name: 'Office Tools', icon: Briefcase },
     { id: 'image', name: 'Image Processing', icon: ImageIcon },
@@ -35,11 +36,26 @@ export default function ToolGrid({
     { id: 'utilities', name: 'Extra Utilities', icon: Sliders },
   ];
 
+  const isConverterTool = (tool: Tool) => {
+    return (
+      (tool.id.includes('_to_') && tool.id !== 'text_to_speech') ||
+      tool.id.includes('converter') ||
+      tool.name.toLowerCase().includes('converter') ||
+      tool.id === 'convert_image' ||
+      tool.id === 'batch_processor'
+    );
+  };
+
   const filteredTools = allToolsList.filter((tool) => {
     if (tool.hidden || tool.adminOnly) return false;
     const matchesSearch = tool.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           tool.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = activeCategory === 'all' || tool.category === activeCategory;
+    const matchesCategory = 
+      activeCategory === 'all' 
+        ? true 
+        : activeCategory === 'converter'
+        ? isConverterTool(tool)
+        : tool.category === activeCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -217,32 +233,19 @@ export default function ToolGrid({
                       </div>
 
                       <div className="flex items-center gap-1 shrink-0">
-                        {((tool.id.includes('_to_') && tool.id !== 'text_to_speech') || tool.id.includes('converter') || tool.name.toLowerCase().includes('converter')) && (
-                          <span className="inline-block px-1.5 py-0.5 rounded-md text-[8px] font-black uppercase tracking-wider bg-red-600 text-white shadow-md shadow-red-500/50 border border-red-400 animate-beta-pop shrink-0">
-                            BETA
-                          </span>
-                        )}
-                        {tool.id === 'scanned_pdf' && (
-                          <span className="inline-block px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wider bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/20 animate-pulse shrink-0">
-                            BETA
-                          </span>
-                        )}
                         {tool.id === 'remove_bg' ? (
-                          <div className="flex flex-col items-end gap-0.5">
-                            <span className="inline-block px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wider bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 shrink-0">
-                              BETA VERSION
-                            </span>
-                            <span className="inline-block px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wider bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20 animate-pulse shrink-0">
-                              TEMP DISABLED
-                            </span>
-                          </div>
+                          <span className="inline-block px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wider bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20 animate-pulse shrink-0">
+                            TEMP DISABLED
+                          </span>
                         ) : (
                           <span className={`inline-block px-1.5 py-0.5 rounded text-[8px] uppercase tracking-wider shrink-0 ${
                             tool.id === 'online_pdf_editor' ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-extrabold border border-emerald-500/30' :
+                            tool.id.includes('_to_') || tool.id.includes('converter') || tool.name.toLowerCase().includes('converter') ? 'bg-indigo-100 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 font-bold' :
                             tool.category === 'ai' ? 'bg-purple-100 dark:bg-purple-500/10 text-purple-700 dark:text-purple-300 font-bold' :
                             'bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 font-bold'
                           }`}>
-                            {tool.id === 'online_pdf_editor' ? 'editor pro' : tool.category}
+                            {tool.id === 'online_pdf_editor' ? 'editor pro' : 
+                             (tool.id.includes('_to_') || tool.id.includes('converter') || tool.name.toLowerCase().includes('converter')) ? 'converter' : tool.category}
                           </span>
                         )}
 
@@ -266,11 +269,6 @@ export default function ToolGrid({
                           ? 'font-bold text-slate-700 dark:text-zinc-400'
                           : 'font-bold text-slate-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400'
                       }`}>
-                        {((tool.id.includes('_to_') && tool.id !== 'text_to_speech') || tool.id.includes('converter') || tool.name.toLowerCase().includes('converter')) && (
-                          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider bg-red-600 text-white shadow-md shadow-red-500/40 border border-red-400 animate-beta-pop shrink-0">
-                            BETA
-                          </span>
-                        )}
                         <span className="truncate">{tool.name}</span>
                         {tool.id !== 'remove_bg' && (
                           <ArrowRight className={`h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transform translate-x-[-4px] group-hover:translate-x-0 transition-all shrink-0 ${

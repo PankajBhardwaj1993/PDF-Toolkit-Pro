@@ -959,19 +959,14 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
                 {tool.h1 || `${cleanToolName(toolId)} Workstation`}
               </h1>
               {toolId === 'remove_bg' && (
-                <div className="flex flex-col items-start gap-1 sm:flex-row sm:items-center">
-                  <span className="inline-block px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wider bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
-                    BETA VERSION
-                  </span>
-                  <span className="inline-block px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wider bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20 animate-pulse">
-                    TEMP DISABLED
-                  </span>
-                </div>
+                <span className="inline-block px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wider bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20 animate-pulse">
+                  TEMP DISABLED
+                </span>
               )}
             </div>
             <p className="text-xs text-slate-500 dark:text-zinc-400">
               {toolId === 'remove_bg'
-                ? 'This workstation is temporarily disabled during our beta testing phase.'
+                ? 'This workstation is temporarily disabled for ongoing maintenance and engine optimizations.'
                 : 'Drag and drop files below to run conversions and processing safely in your browser.'}
             </p>
           </div>
@@ -986,7 +981,7 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
                 Workstation Temporarily Disabled
               </p>
               <p className="text-xs text-slate-500 dark:text-zinc-400 max-w-md mx-auto leading-relaxed">
-                The Remove Bg features are temporarily suspended for optimization in this beta version. It will return fully optimized shortly.
+                The Remove Bg features are temporarily suspended for engine optimization and updates. It will return fully operational shortly.
               </p>
             </div>
           ) : (

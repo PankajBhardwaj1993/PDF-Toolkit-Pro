@@ -119,21 +119,6 @@ export default function Navbar({
             </button>
 
             <button
-              id="nav-converter-tab"
-              onClick={() => handleNavClick('converter')}
-              className={`text-xs lg:text-sm font-medium px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
-                activeTab === 'converter' 
-                  ? 'text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-500/10 font-bold' 
-                  : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200'
-              }`}
-            >
-              <span>Converter</span>
-              <span className="px-1.5 py-0.5 text-[8px] font-black uppercase tracking-wider bg-red-600 text-white rounded-md border border-red-400 shadow-sm shadow-red-500/50 animate-beta-pop">
-                Beta
-              </span>
-            </button>
-
-            <button
               id="nav-blog-tab"
               onClick={() => handleNavClick('blog')}
               className={`text-xs lg:text-sm font-medium px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
@@ -389,23 +374,6 @@ export default function Navbar({
                   <span>All Tools Directory</span>
                 </div>
                 <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
-              </button>
-
-              <button
-                onClick={() => handleNavClick('converter')}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer ${
-                  activeTab === 'converter' 
-                    ? 'bg-blue-50 dark:bg-blue-500/15 text-blue-600 dark:text-blue-400 font-bold' 
-                    : 'text-slate-700 dark:text-zinc-200 hover:bg-slate-50 dark:hover:bg-zinc-800/50'
-                }`}
-              >
-                <div className="flex items-center gap-2.5">
-                  <Layers className="h-4.5 w-4.5 text-indigo-500" />
-                  <span>Document Converter</span>
-                </div>
-                <span className="px-1.5 py-0.5 text-[8px] font-black uppercase tracking-wider bg-red-600 text-white rounded-md border border-red-400 shadow-xs">
-                  Beta
-                </span>
               </button>
 
               <button

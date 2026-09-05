@@ -1306,9 +1306,6 @@ export default function ConverterView({ onBackToTools, onAddRecentFile, initialT
                     <div className="flex items-start justify-between gap-2">
                       <div className="space-y-1">
                         <h4 className="text-xs font-bold text-slate-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1.5 flex-wrap">
-                          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider bg-red-600 text-white shadow-md shadow-red-500/40 border border-red-400 animate-beta-pop shrink-0">
-                            BETA
-                          </span>
                           <span>{tool.name}</span>
                         </h4>
                         <p className="text-[10px] text-slate-500 dark:text-zinc-400 line-clamp-2">
