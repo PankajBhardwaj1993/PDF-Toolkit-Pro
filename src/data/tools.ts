@@ -559,32 +559,7 @@ export const allToolsList: Tool[] = [
     ]
   },
 
-  // 20. REMOVE BACKGROUND
-  {
-    id: 'remove_bg',
-    name: 'Remove Background',
-    description: 'Extract clear subjects from photos while discarding backing colors into transparent fields.',
-    category: 'image',
-    icon: 'ImageIcon',
-    h1: 'Remove Image Background Online',
-    seoTitle: 'Remove Background from Image Online – Transparent PNG | PDF Toolkit Pro',
-    seoDescription: 'Remove background from photos and images online for free. Download high-quality transparent PNG cutouts instantly.',
-    seoKeywords: [
-      'remove background',
-      'background remover online',
-      'transparent PNG',
-      'remove photo background',
-      'cutout maker free'
-    ],
-    faqs: [
-      {
-        question: 'How do I download an image with a transparent background?',
-        answer: 'Upload your portrait or product photo, let the tool isolate the subject, and download the resulting transparent PNG cutout.'
-      }
-    ]
-  },
-
-  // 21. PASSPORT PHOTO MAKER
+  // 20. PASSPORT PHOTO MAKER
   {
     id: 'passport_photo',
     name: 'Passport Photo Maker',

@@ -954,58 +954,35 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
         {/* Left Side: Dynamic Workspace Workbench Controls */}
         <div className="lg:col-span-7 bg-white dark:bg-zinc-950 rounded-2xl border border-slate-200 dark:border-zinc-800 p-6 sm:p-8 shadow-xl space-y-6">
           <div className="flex flex-col gap-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <h1 className="font-display text-2xl font-bold text-slate-900 dark:text-zinc-50">
-                {tool.h1 || `${cleanToolName(toolId)} Workstation`}
-              </h1>
-              {toolId === 'remove_bg' && (
-                <span className="inline-block px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wider bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20 animate-pulse">
-                  TEMP DISABLED
-                </span>
-              )}
-            </div>
+            <h1 className="font-display text-2xl font-bold text-slate-900 dark:text-zinc-50">
+              {tool.h1 || `${cleanToolName(toolId)} Workstation`}
+            </h1>
             <p className="text-xs text-slate-500 dark:text-zinc-400">
-              {toolId === 'remove_bg'
-                ? 'This workstation is temporarily disabled for ongoing maintenance and engine optimizations.'
-                : 'Drag and drop files below to run conversions and processing safely in your browser.'}
+              Drag and drop files below to run conversions and processing safely in your browser.
             </p>
           </div>
 
           {/* 1. Drag & Drop File Upload Field */}
-          {toolId === 'remove_bg' ? (
-            <div className="border-2 border-dashed border-rose-200 dark:border-rose-900/30 rounded-2xl p-10 text-center bg-rose-50/10 dark:bg-rose-950/5 relative space-y-3">
-              <div className="h-12 w-12 rounded-full bg-rose-100 dark:bg-rose-950/30 flex items-center justify-center mx-auto mb-2 text-rose-600 dark:text-rose-400">
-                <AlertCircle className="h-6 w-6" />
-              </div>
-              <p className="text-sm font-bold text-slate-700 dark:text-zinc-300">
-                Workstation Temporarily Disabled
+          {toolId !== 'draw_signature' && toolId !== 'password_generator' && toolId !== 'qr_generator' && (
+            <div 
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={handleFileDrop}
+              className="border-2 border-dashed border-slate-200 dark:border-zinc-800 rounded-2xl p-8 text-center bg-slate-50/50 dark:bg-zinc-900/10 hover:border-blue-500 hover:bg-slate-50 transition-all cursor-pointer relative"
+            >
+              <input
+                type="file"
+                multiple={toolId === 'merge_pdf'}
+                onChange={handleFileSelect}
+                className="absolute inset-0 opacity-0 cursor-pointer"
+              />
+              <Upload className="h-10 w-10 text-slate-300 mx-auto mb-3" />
+              <p className="text-sm font-bold text-slate-700 dark:text-zinc-300 mb-1">
+                Drag & Drop or Click to Upload
               </p>
-              <p className="text-xs text-slate-500 dark:text-zinc-400 max-w-md mx-auto leading-relaxed">
-                The Remove Bg features are temporarily suspended for engine optimization and updates. It will return fully operational shortly.
+              <p className="text-xs text-slate-400 dark:text-zinc-500">
+                {toolId === 'merge_pdf' ? 'Supports multiple PDF files.' : 'Supports PDF, JPEG, PNG, or WEBP up to 2GB.'}
               </p>
             </div>
-          ) : (
-            toolId !== 'draw_signature' && toolId !== 'password_generator' && toolId !== 'qr_generator' && (
-              <div 
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={handleFileDrop}
-                className="border-2 border-dashed border-slate-200 dark:border-zinc-800 rounded-2xl p-8 text-center bg-slate-50/50 dark:bg-zinc-900/10 hover:border-blue-500 hover:bg-slate-50 transition-all cursor-pointer relative"
-              >
-                <input
-                  type="file"
-                  multiple={toolId === 'merge_pdf'}
-                  onChange={handleFileSelect}
-                  className="absolute inset-0 opacity-0 cursor-pointer"
-                />
-                <Upload className="h-10 w-10 text-slate-300 mx-auto mb-3" />
-                <p className="text-sm font-bold text-slate-700 dark:text-zinc-300 mb-1">
-                  Drag & Drop or Click to Upload
-                </p>
-                <p className="text-xs text-slate-400 dark:text-zinc-500">
-                  {toolId === 'merge_pdf' ? 'Supports multiple PDF files.' : 'Supports PDF, JPEG, PNG, or WEBP up to 2GB.'}
-                </p>
-              </div>
-            )
           )}
 
           {/* List of currently uploaded files */}
@@ -1399,14 +1376,10 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
           <button
             id="workstation-process-btn"
             onClick={handleProcess}
-            disabled={isProcessing || toolId === 'remove_bg'}
+            disabled={isProcessing}
             className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:dark:bg-zinc-800 text-white font-semibold py-3 rounded-xl cursor-pointer transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 shadow-lg shadow-blue-500/15"
           >
-            {toolId === 'remove_bg' ? (
-              <>
-                Temporarily Disabled
-              </>
-            ) : isProcessing ? (
+            {isProcessing ? (
               <>
                 <Loader2 className="h-4.5 w-4.5 animate-spin" />
                 Generating Bytes on Server...

@@ -165,33 +165,19 @@ export default function ToolGrid({
               return (
                 <div
                   key={tool.id}
-                  onClick={(e) => {
-                    if (tool.id === 'remove_bg') {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      return;
-                    }
-                    onSelectTool(tool.id);
-                  }}
-                  className={`group relative flex flex-col justify-between p-3 sm:p-3.5 bg-white dark:bg-[#0f172a]/15 border rounded-xl transition-all duration-200 min-w-0 ${
-                    tool.id === 'remove_bg'
-                      ? 'opacity-60 cursor-not-allowed border-slate-200 dark:border-white/5'
-                      : 'hover:shadow-md hover:-translate-y-0.5 cursor-pointer ' + (
-                          tool.id === 'online_pdf_editor' 
-                            ? 'border-emerald-500/70 bg-gradient-to-br from-emerald-50/50 via-emerald-50/10 to-transparent dark:from-emerald-950/30 shadow-md ring-1 ring-emerald-500/30' 
-                            : 'border-slate-200 dark:border-white/5'
-                        )
-                  } ${
-                    tool.id === 'remove_bg' ? '' : (
-                      tool.id === 'online_pdf_editor' ? 'hover:border-emerald-600/50' :
-                      tool.category === 'office' ? 'hover:border-blue-600/50 dark:hover:border-blue-500/50' :
-                      tool.category === 'pdf' ? 'hover:border-rose-500/30 dark:hover:border-rose-500/30' :
-                      tool.category === 'image' ? 'hover:border-sky-500/30 dark:hover:border-sky-500/30' :
-                      tool.category === 'ai' ? 'hover:border-purple-500/30 dark:hover:border-purple-500/30' :
-                      tool.category === 'signature' ? 'hover:border-emerald-500/30 dark:hover:border-emerald-500/30' :
-                      tool.category === 'text' ? 'hover:border-amber-500/30 dark:hover:border-amber-500/30' :
-                      'hover:border-blue-500/30 dark:hover:border-blue-500/30'
-                    )
+                  onClick={() => onSelectTool(tool.id)}
+                  className={`group relative flex flex-col justify-between p-3 sm:p-3.5 bg-white dark:bg-[#0f172a]/15 border rounded-xl transition-all duration-200 min-w-0 hover:shadow-md hover:-translate-y-0.5 cursor-pointer ${
+                    tool.id === 'online_pdf_editor' 
+                      ? 'border-emerald-500/70 bg-gradient-to-br from-emerald-50/50 via-emerald-50/10 to-transparent dark:from-emerald-950/30 shadow-md ring-1 ring-emerald-500/30 hover:border-emerald-600/50' 
+                      : 'border-slate-200 dark:border-white/5 ' + (
+                        tool.category === 'office' ? 'hover:border-blue-600/50 dark:hover:border-blue-500/50' :
+                        tool.category === 'pdf' ? 'hover:border-rose-500/30 dark:hover:border-rose-500/30' :
+                        tool.category === 'image' ? 'hover:border-sky-500/30 dark:hover:border-sky-500/30' :
+                        tool.category === 'ai' ? 'hover:border-purple-500/30 dark:hover:border-purple-500/30' :
+                        tool.category === 'signature' ? 'hover:border-emerald-500/30 dark:hover:border-emerald-500/30' :
+                        tool.category === 'text' ? 'hover:border-amber-500/30 dark:hover:border-amber-500/30' :
+                        'hover:border-blue-500/30 dark:hover:border-blue-500/30'
+                      )
                   }`}
                 >
                   
@@ -233,21 +219,15 @@ export default function ToolGrid({
                       </div>
 
                       <div className="flex items-center gap-1 shrink-0">
-                        {tool.id === 'remove_bg' ? (
-                          <span className="inline-block px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wider bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20 animate-pulse shrink-0">
-                            TEMP DISABLED
-                          </span>
-                        ) : (
-                          <span className={`inline-block px-1.5 py-0.5 rounded text-[8px] uppercase tracking-wider shrink-0 ${
-                            tool.id === 'online_pdf_editor' ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-extrabold border border-emerald-500/30' :
-                            tool.id.includes('_to_') || tool.id.includes('converter') || tool.name.toLowerCase().includes('converter') ? 'bg-indigo-100 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 font-bold' :
-                            tool.category === 'ai' ? 'bg-purple-100 dark:bg-purple-500/10 text-purple-700 dark:text-purple-300 font-bold' :
-                            'bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 font-bold'
-                          }`}>
-                            {tool.id === 'online_pdf_editor' ? 'editor pro' : 
-                             (tool.id.includes('_to_') || tool.id.includes('converter') || tool.name.toLowerCase().includes('converter')) ? 'converter' : tool.category}
-                          </span>
-                        )}
+                        <span className={`inline-block px-1.5 py-0.5 rounded text-[8px] uppercase tracking-wider shrink-0 ${
+                          tool.id === 'online_pdf_editor' ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-extrabold border border-emerald-500/30' :
+                          tool.id.includes('_to_') || tool.id.includes('converter') || tool.name.toLowerCase().includes('converter') ? 'bg-indigo-100 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 font-bold' :
+                          tool.category === 'ai' ? 'bg-purple-100 dark:bg-purple-500/10 text-purple-700 dark:text-purple-300 font-bold' :
+                          'bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 font-bold'
+                        }`}>
+                          {tool.id === 'online_pdf_editor' ? 'editor pro' : 
+                           (tool.id.includes('_to_') || tool.id.includes('converter') || tool.name.toLowerCase().includes('converter')) ? 'converter' : tool.category}
+                        </span>
 
                         {/* Star Toggle Favorite */}
                         <button
@@ -265,16 +245,12 @@ export default function ToolGrid({
                       <h3 className={`font-display text-xs sm:text-sm leading-snug flex items-center gap-1.5 flex-wrap min-w-0 ${
                         tool.id === 'online_pdf_editor'
                           ? 'font-black text-emerald-800 dark:text-emerald-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-300 tracking-tight'
-                          : tool.id === 'remove_bg'
-                          ? 'font-bold text-slate-700 dark:text-zinc-400'
                           : 'font-bold text-slate-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400'
                       }`}>
                         <span className="truncate">{tool.name}</span>
-                        {tool.id !== 'remove_bg' && (
-                          <ArrowRight className={`h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transform translate-x-[-4px] group-hover:translate-x-0 transition-all shrink-0 ${
-                            tool.id === 'online_pdf_editor' ? 'text-emerald-600 dark:text-emerald-400' : 'text-blue-600 dark:text-blue-400'
-                          }`} />
-                        )}
+                        <ArrowRight className={`h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transform translate-x-[-4px] group-hover:translate-x-0 transition-all shrink-0 ${
+                          tool.id === 'online_pdf_editor' ? 'text-emerald-600 dark:text-emerald-400' : 'text-blue-600 dark:text-blue-400'
+                        }`} />
                       </h3>
                       <p className="text-[11px] text-slate-500 dark:text-zinc-400 leading-normal line-clamp-2 mt-0.5">
                         {tool.description}

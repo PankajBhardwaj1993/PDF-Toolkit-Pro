@@ -221,67 +221,11 @@ export const imageAiToolsSeo: Record<string, ToolSeoContent> = {
       { id: 'resize_image', title: 'Resize Image', anchor: 'Scale image dimensions after cropping' },
       { id: 'compress_image', title: 'Compress Image', anchor: 'Reduce image file size' },
       { id: 'passport_photo', title: 'Passport Photo Maker', anchor: 'Crop and format photos to official passport standards' },
-      { id: 'remove_bg', title: 'Remove Background', anchor: 'Remove image backgrounds with AI' }
+      { id: 'convert_image', title: 'Convert Image', anchor: 'Convert image formats with ease' }
     ]
   },
 
-  // 30. REMOVE BACKGROUND
-  remove_bg: {
-    id: 'remove_bg',
-    primaryKeyword: 'remove background',
-    secondaryKeywords: ['background remover online', 'remove image background free', 'transparent background maker', 'cut out background AI', 'erase photo background'],
-    seoTitle: 'Remove Background from Image Online – Free AI Background Remover',
-    seoDescription: 'Remove backgrounds from photos online automatically in seconds. Create clean, transparent PNG images for products, portraits, and logos for free.',
-    canonicalUrl: 'https://pdftoolkitpro.online/tools/remove_bg',
-    h1: 'Remove Background from Image Online',
-    intro: 'Erase photo backgrounds automatically in seconds. Isolate portraits, products, animals, and logos onto transparent PNG backgrounds with clean, crisp edges for free.',
-    whatIsTitle: 'What Is an AI Background Remover?',
-    whatIsContent: [
-      'An AI background remover uses computer vision neural networks to detect foreground subjects (such as people, products, vehicles, or pets) and cleanly separate them from their background scenery.',
-      'The result is an isolated cutout saved as a transparent PNG that you can place onto any new background, marketing flyer, or eCommerce product catalog.'
-    ],
-    howToTitle: 'How to Remove Background from a Photo Online',
-    howToSteps: [
-      { step: 1, title: 'Upload Photo', description: 'Drag and drop your image containing a clear foreground subject.' },
-      { step: 2, title: 'Automatic Segmentation', description: 'The AI segmentation engine automatically detects subject contours and isolates edges.' },
-      { step: 3, title: 'Preview Transparent Cutout', description: 'Inspect the transparent cutout on the checkerboard preview canvas.' },
-      { step: 4, title: 'Download Transparent PNG', description: 'Download your high-resolution cutout image ready for design projects.' }
-    ],
-    featuresTitle: 'Features of Our Background Remover',
-    features: [
-      { title: 'Instant Automated Edge Detection', description: 'Accurately traces fine hair, clothing contours, and intricate product edges.' },
-      { title: 'Transparent PNG Export', description: 'Exports clean alpha-channel PNG files ready for layer compositing.' },
-      { title: 'Works on Portraits & Products', description: 'Optimized for headshots, eCommerce merchandise, pet photos, and company logos.' },
-      { title: 'Zero Subscription Fees', description: 'Unlimited free background removals with no forced subscriptions or credit cards.' }
-    ],
-    useCasesTitle: 'When to Remove Photo Backgrounds',
-    useCases: [
-      { title: 'E-Commerce Product Listings', description: 'Create clean white or transparent backgrounds for Amazon, Shopify, and eBay listings.' },
-      { title: 'Marketing Graphic Design', description: 'Place founder portraits and team photos into sleek website banners, flyers, and posters.' },
-      { title: 'ID Cards & Passport Photos', description: 'Isolate facial headshots for government badges and official document applications.' }
-    ],
-    tipsTitle: 'Tips for Clean Background Removal',
-    tips: [
-      'Photos with good lighting and clear contrast between the subject and background produce the sharpest cutouts.',
-      'Use our Passport Photo Maker if you need to place a white or light-blue background for official visas.'
-    ],
-    securityTitle: 'Privacy and Processing Safety',
-    securityContent: 'All segmentation is processed securely with immediate memory cleanup. Your personal and commercial photos remain private.',
-    faqs: [
-      { question: 'Is this background remover free?', answer: 'Yes! PDF Toolkit Pro provides free background removal with no hidden fees or watermarks.' },
-      { question: 'What file format is the cutout downloaded in?', answer: 'Your cutout is saved as a transparent PNG file so you can place it onto any background.' },
-      { question: 'Does it work well with complex hair and fur?', answer: 'Yes, our edge segmentation algorithms are trained to handle fine hair and detailed contours.' },
-      { question: 'Are my uploaded photos stored on your server?', answer: 'No. Files are processed securely and discarded immediately.' }
-    ],
-    relatedTools: [
-      { id: 'passport_photo', title: 'Passport Photo Maker', anchor: 'Create official passport photos with white backgrounds' },
-      { id: 'crop_image', title: 'Crop Image Online', anchor: 'Crop photo boundaries before removing background' },
-      { id: 'compress_image', title: 'Compress Image', anchor: 'Optimize PNG file weight of your transparent cutout' },
-      { id: 'online_pdf_editor', title: 'Online PDF Editor', anchor: 'Insert your transparent image stamp into PDF contracts' }
-    ]
-  },
-
-  // 31. PASSPORT PHOTO MAKER
+  // 30. PASSPORT PHOTO MAKER
   passport_photo: {
     id: 'passport_photo',
     primaryKeyword: 'passport photo maker',
@@ -331,7 +275,7 @@ export const imageAiToolsSeo: Record<string, ToolSeoContent> = {
       { question: 'Are my biometric photos saved online?', answer: 'No. All photo processing occurs locally inside your web browser sandbox.' }
     ],
     relatedTools: [
-      { id: 'remove_bg', title: 'Remove Background', anchor: 'Clean up photo backgrounds for passport headshots' },
+      { id: 'resize_image', title: 'Resize Image', anchor: 'Scale image dimensions after cropping' },
       { id: 'crop_image', title: 'Crop Image Online', anchor: 'Crop photo framing before passport alignment' },
       { id: 'compress_image', title: 'Compress Image', anchor: 'Optimize digital visa photo file weight' },
       { id: 'image_to_pdf', title: 'JPG to PDF', anchor: 'Bundle passport photos and ID scans into a single PDF' }

@@ -155,37 +155,16 @@ export default function DashboardView({
                   {favoriteTools.map((t) => (
                     <button
                       key={t.id}
-                      disabled={t.id === 'remove_bg'}
-                      onClick={() => {
-                        if (t.id === 'remove_bg') return;
-                        onSelectTool(t.id);
-                      }}
-                      className={`w-full flex items-center justify-between text-left p-3 rounded-xl border transition-all group ${
-                        t.id === 'remove_bg'
-                          ? 'opacity-65 cursor-not-allowed border-slate-100 dark:border-zinc-900/50'
-                          : 'border-slate-100 dark:border-zinc-900/50 hover:bg-slate-50 dark:hover:bg-zinc-900 cursor-pointer'
-                      }`}
+                      onClick={() => onSelectTool(t.id)}
+                      className="w-full flex items-center justify-between text-left p-3 rounded-xl border border-slate-100 dark:border-zinc-900/50 hover:bg-slate-50 dark:hover:bg-zinc-900 cursor-pointer transition-all group"
                     >
                       <div className="min-w-0 flex-1">
-                        <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                          <p className={`text-xs font-bold ${
-                            t.id === 'remove_bg'
-                              ? 'text-slate-500 dark:text-zinc-400'
-                              : 'text-slate-800 dark:text-zinc-200 group-hover:text-blue-600 dark:group-hover:text-blue-400'
-                          }`}>
-                            {t.name}
-                          </p>
-                          {t.id === 'remove_bg' && (
-                            <span className="inline-block px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase tracking-wider bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20">
-                              TEMP DISABLED
-                            </span>
-                          )}
-                        </div>
+                        <p className="text-xs font-bold text-slate-800 dark:text-zinc-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 mb-1">
+                          {t.name}
+                        </p>
                         <p className="text-[10px] text-slate-400 truncate max-w-[200px]">{t.description}</p>
                       </div>
-                      {t.id !== 'remove_bg' && (
-                        <ArrowRight className="h-3.5 w-3.5 text-slate-300 group-hover:text-blue-500 transition-colors" />
-                      )}
+                      <ArrowRight className="h-3.5 w-3.5 text-slate-300 group-hover:text-blue-500 transition-colors" />
                     </button>
                   ))}
                 </div>
