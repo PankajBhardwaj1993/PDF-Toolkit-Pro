@@ -84,18 +84,42 @@ export default function Footer({ setActiveTab, setSelectedToolId, isDonationDisa
               </li>
               <li>
                 <button 
-                  onClick={() => navigateToTool('pdf_ocr')} 
+                  onClick={() => navigateToTool('resize_image')} 
                   className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer text-left transition-colors"
                 >
-                  AI Document OCR Scanner
+                  Resize & Compress Image
                 </button>
               </li>
               <li>
                 <button 
-                  onClick={() => navigateToTool('draw_signature')} 
+                  onClick={() => navigateToTool('compress_pdf')} 
                   className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer text-left transition-colors"
                 >
-                  Create Digital Signature
+                  Compress PDF Online
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => navigateToTool('rotate_pdf')} 
+                  className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer text-left transition-colors"
+                >
+                  Rotate PDF Pages
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => navigateToTool('delete_pdf')} 
+                  className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer text-left transition-colors"
+                >
+                  Delete PDF Pages
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => navigateToTool('extract_pdf')} 
+                  className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer text-left transition-colors"
+                >
+                  Extract PDF Pages Online
                 </button>
               </li>
               <li>
@@ -103,7 +127,23 @@ export default function Footer({ setActiveTab, setSelectedToolId, isDonationDisa
                   onClick={() => navigateToTool('compress_image')} 
                   className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer text-left transition-colors"
                 >
-                  Resize & Compress Image
+                  Compress Images Online
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => navigateToTool('convert_image')} 
+                  className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer text-left transition-colors"
+                >
+                  Convert Image Format Online
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => navigateToTool('batch_processor')} 
+                  className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer text-left transition-colors"
+                >
+                  Batch Processor Multi-File Engine
                 </button>
               </li>
             </ul>
