@@ -166,7 +166,7 @@ export default function Footer({ setActiveTab, setSelectedToolId, isDonationDisa
                 </li>
               )}
               <li>
-                <button onClick={() => navigateTo('contact')} className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
+                <button onClick={() => navigateTo('tickets')} className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
                   Support & Tickets
                 </button>
               </li>
@@ -195,6 +195,11 @@ export default function Footer({ setActiveTab, setSelectedToolId, isDonationDisa
               <li>
                 <button onClick={() => navigateTo('disclaimer')} className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
                   Disclaimer
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigateTo('contact')} className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
+                  Contact Us
                 </button>
               </li>
             </ul>

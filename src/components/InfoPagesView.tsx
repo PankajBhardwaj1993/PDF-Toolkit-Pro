@@ -623,15 +623,21 @@ export default function InfoPagesView({ initialSection = 'about', onNavigateToTi
                     </p>
                   </div>
 
-                  <div className="pt-4">
-                    <button
-                      onClick={onNavigateToTickets}
-                      className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition-colors"
-                    >
-                      Open Tickets Dashboard
-                      <ChevronRight className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
+                    <div className="pt-4">
+                      <button
+                        onClick={() => {
+                          if (onNavigateToTickets) {
+                            onNavigateToTickets();
+                          } else {
+                            navigate('/tickets');
+                          }
+                        }}
+                        className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition-colors"
+                      >
+                        <span>Submit / Open Tickets Dashboard</span>
+                        <ChevronRight className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
                 </div>
               </div>
             </div>

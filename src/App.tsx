@@ -75,6 +75,9 @@ function AppContent() {
     'donation',
     'pricing',
     'blog',
+    'tickets',
+    'support',
+    'support-tickets',
     'contact',
     'about',
     'privacy',
@@ -282,9 +285,9 @@ function AppContent() {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [location.pathname, selectedToolId, activeTab]);
 
-  // Redirect admin from 'contact' tab to 'admin' tab
+  // Redirect admin from 'tickets' tab to 'admin' tab (admin manages tickets in admin portal)
   useEffect(() => {
-    if (activeTab === 'contact' && user?.role === 'admin') {
+    if ((activeTab === 'tickets' || activeTab === 'support' || activeTab === 'support-tickets') && user?.role === 'admin') {
       navigate('/admin');
     }
   }, [activeTab, user]);
@@ -737,7 +740,7 @@ function AppContent() {
           )
         ) : activeTab === 'blog' ? (
           <BlogView user={user} postId={pathSegments[1]} />
-        ) : activeTab === 'contact' ? (
+        ) : (activeTab === 'tickets' || activeTab === 'support' || activeTab === 'support-tickets') ? (
           <ContactView
             user={user}
             onLoginRequest={() => {
@@ -745,10 +748,10 @@ function AppContent() {
               setShowAuthModal(true);
             }}
           />
-        ) : (activeTab === 'about' || activeTab === 'privacy' || activeTab === 'terms' || activeTab === 'disclaimer') ? (
+        ) : (activeTab === 'about' || activeTab === 'privacy' || activeTab === 'terms' || activeTab === 'disclaimer' || activeTab === 'contact') ? (
           <InfoPagesView
-            initialSection={activeTab}
-            onNavigateToTickets={() => navigate('/contact')}
+            initialSection={activeTab as 'about' | 'privacy' | 'terms' | 'disclaimer' | 'contact'}
+            onNavigateToTickets={() => navigate('/tickets')}
           />
         ) : activeTab === 'docs' ? (
           <DocumentationView />
