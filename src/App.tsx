@@ -277,6 +277,11 @@ function AppContent() {
     }
   }, [darkMode]);
 
+  // Always scroll to top when changing routes, opening a tool, or switching tabs
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [path, selectedToolId, activeTab]);
+
   // Redirect admin from 'contact' tab to 'admin' tab
   useEffect(() => {
     if (activeTab === 'contact' && user?.role === 'admin') {

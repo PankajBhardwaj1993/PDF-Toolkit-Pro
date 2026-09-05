@@ -51,6 +51,11 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
   const [error, setError] = useState<string | null>(null);
   const [successResult, setSuccessResult] = useState<any>(null); // holds bytes or base64 urls or text
 
+  // Scroll to top immediately when any tool workspace is opened
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [toolId]);
+
   // Tool specific configurations
   const [rotation, setRotation] = useState(90);
   const [pagesToDelete, setPagesToDelete] = useState('');

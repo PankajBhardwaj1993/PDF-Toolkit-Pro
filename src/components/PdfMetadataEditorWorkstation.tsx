@@ -70,6 +70,11 @@ export default function PdfMetadataEditorWorkstation({
   const [activeViewMode, setActiveViewMode] = useState<'editor' | 'diff'>('editor');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, []);
+
   // Load Metadata when file is selected
   const handleFileChange = async (selectedFile: File) => {
     if (!selectedFile.name.toLowerCase().endsWith('.pdf') && selectedFile.type !== 'application/pdf') {
