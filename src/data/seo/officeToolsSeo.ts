@@ -500,7 +500,7 @@ export const officeToolsSeo: Record<string, ToolSeoContent> = {
     relatedTools: [
       { id: 'word_to_pdf', title: 'Word to PDF', anchor: 'Convert completed Word documents to standard PDF' },
       { id: 'text_to_speech', title: 'Text to Speech', anchor: 'Listen to your documents read aloud' },
-      { id: 'markdown_editor', title: 'Markdown Editor', anchor: 'Write and preview Markdown documents' },
+      { id: 'pdf_ocr', title: 'PDF OCR', anchor: 'Extract text from scanned documents' },
       { id: 'excel_editor', title: 'Excel Editor Online', anchor: 'Edit and manage spreadsheet data online' }
     ]
   },
@@ -557,119 +557,7 @@ export const officeToolsSeo: Record<string, ToolSeoContent> = {
       { id: 'excel_to_pdf', title: 'Excel to PDF', anchor: 'Convert finished spreadsheets into formatted PDF reports' },
       { id: 'pdf_to_excel', title: 'PDF to Excel', anchor: 'Extract tables from PDF documents into editable spreadsheets' },
       { id: 'word_editor', title: 'Online Word Editor', anchor: 'Draft and edit Word documents in your browser' },
-      { id: 'json_formatter', title: 'JSON Formatter', anchor: 'Format and validate JSON datasets' }
-    ]
-  },
-
-  // 24. MARKDOWN EDITOR
-  markdown_editor: {
-    id: 'markdown_editor',
-    primaryKeyword: 'Markdown editor',
-    secondaryKeywords: ['online Markdown editor', 'Markdown preview', 'edit Markdown online', 'Markdown to HTML', 'Markdown live editor'],
-    seoTitle: 'Markdown Editor Online – Live Markdown Preview & Export Free',
-    seoDescription: 'Write and preview Markdown (.md) online with live split-screen rendering. Support for tables, code highlighting, and instant export to HTML or PDF.',
-    canonicalUrl: 'https://pdftoolkitpro.online/tools/markdown_editor',
-    h1: 'Online Markdown Editor',
-    intro: 'Draft, preview, and format Markdown files with instant live rendering. Write documentation, README files, and blog articles with support for tables, code blocks, checklists, and export to HTML, MD, or PDF.',
-    whatIsTitle: 'What Is a Markdown Editor?',
-    whatIsContent: [
-      'A Markdown editor is a specialized writing tool designed for lightweight markup syntax (# headings, **bold**, - lists, `code`).',
-      'Our live split-screen editor provides an interactive side-by-side view where you type raw Markdown on the left and see perfectly formatted HTML rendering on the right in real time.'
-    ],
-    howToTitle: 'How to Use the Online Markdown Editor',
-    howToSteps: [
-      { step: 1, title: 'Type or Paste Markdown', description: 'Start typing Markdown syntax or paste existing text into the left editor pane.' },
-      { step: 2, title: 'Review Live Preview', description: 'Watch the right-hand panel instantly render formatted typography, tables, and code snippets.' },
-      { step: 3, title: 'Use Formatting Shortcuts', description: 'Click toolbar buttons to quickly insert headers, tables, links, blockquotes, and code blocks.' },
-      { step: 4, title: 'Export File', description: 'Download your document as Markdown (.md), clean HTML (.html), or compiled PDF.' }
-    ],
-    featuresTitle: 'Features of Our Markdown Editor',
-    features: [
-      { title: 'Live Split-Screen Preview', description: 'Instant, real-time synchronized rendering as you type with zero lag.' },
-      { title: 'GitHub Flavored Markdown (GFM)', description: 'Supports task checklists, strike-through text, fenced code blocks, and structured tables.' },
-      { title: 'Multi-Format Export', description: 'Export your work as raw Markdown (.md), clean HTML, or printable PDF.' },
-      { title: 'Completely Local Execution', description: 'Your technical documentation and notes remain private on your computer.' }
-    ],
-    useCasesTitle: 'Who Uses a Markdown Editor?',
-    useCases: [
-      { title: 'Software Developers & DevOps', description: 'Write GitHub README.md files, API documentation, and release changelogs.' },
-      { title: 'Technical Bloggers & Content Creators', description: 'Draft blog posts and documentation for static site generators like Jekyll, Hugo, and Astro.' },
-      { title: 'Students & Researchers', description: 'Take rapid lecture notes and format structured study summaries quickly.' }
-    ],
-    tipsTitle: 'Tips for Writing in Markdown',
-    tips: [
-      'Use backticks (```) with a language identifier (e.g. ```javascript) for syntax-highlighted code blocks.',
-      'Export directly to HTML to paste formatted content into content management systems.'
-    ],
-    securityTitle: 'Privacy Guarantee',
-    securityContent: 'All Markdown parsing and rendering occur in your browser. Your notes, code snippets, and proprietary documentation are never stored remotely.',
-    faqs: [
-      { question: 'Is this Markdown editor completely free?', answer: 'Yes! PDF Toolkit Pro offers a 100% free Markdown workstation with no word limits or subscriptions.' },
-      { question: 'Does it support GitHub Flavored Markdown (GFM)?', answer: 'Yes, tables, task lists, code blocks, and standard GFM extensions are fully supported.' },
-      { question: 'Can I export my Markdown to PDF or HTML?', answer: 'Yes, you can export your rendered work as clean HTML or compile directly into a formatted PDF.' },
-      { question: 'Is my text stored anywhere online?', answer: 'No. Everything is rendered locally inside your web browser sandbox.' }
-    ],
-    relatedTools: [
-      { id: 'word_editor', title: 'Online Word Editor', anchor: 'Rich text Word document editor' },
-      { id: 'json_formatter', title: 'JSON Formatter', anchor: 'Validate and format JSON data structures' },
-      { id: 'pdf_ocr', title: 'PDF OCR', anchor: 'Extract text from scanned documents' },
-      { id: 'text_to_speech', title: 'Text to Speech', anchor: 'Listen to your Markdown notes read aloud' }
-    ]
-  },
-
-  // 25. JSON FORMATTER
-  json_formatter: {
-    id: 'json_formatter',
-    primaryKeyword: 'JSON formatter',
-    secondaryKeywords: ['JSON validator', 'format JSON online', 'JSON prettifier', 'beautify JSON', 'JSON tree viewer', 'JSON parser'],
-    seoTitle: 'JSON Formatter & Validator Online – Beautify JSON for Free',
-    seoDescription: 'Format, validate, prettify, and minify JSON data online for free. Fix syntax errors, inspect interactive tree hierarchies, and copy clean JSON.',
-    canonicalUrl: 'https://pdftoolkitpro.online/tools/json_formatter',
-    h1: 'JSON Formatter & Validator',
-    intro: 'Format, validate, prettify, and inspect JSON data structures in seconds. Fix syntax errors, explore collapsible object trees, and convert minified API payloads into human-readable code.',
-    whatIsTitle: 'What Is a JSON Formatter?',
-    whatIsContent: [
-      'A JSON (JavaScript Object Notation) formatter is a developer utility that parses raw or minified JSON strings, validates syntax against standards, and indents elements with clean spacing.',
-      'Whether you are debugging REST API responses, configuring application files, or analyzing database payloads, our formatter helps you instantly spot missing commas, unmatched brackets, and invalid data types.'
-    ],
-    howToTitle: 'How to Format JSON Online',
-    howToSteps: [
-      { step: 1, title: 'Paste or Upload JSON', description: 'Paste raw JSON text into the editor or upload a .json file.' },
-      { step: 2, title: 'Automatic Validation', description: 'The parser instantly validates syntax and highlights any line errors.' },
-      { step: 3, title: 'Choose Formatting (2 or 4 Spaces)', description: 'Select your preferred indentation depth (2 spaces, 4 spaces, or compact minify).' },
-      { step: 4, title: 'Copy or Download', description: 'Copy the beautified JSON to your clipboard or download as a clean .json file.' }
-    ],
-    featuresTitle: 'Features of Our JSON Formatter',
-    features: [
-      { title: 'Real-Time Syntax Error Detection', description: 'Pinpoints exact line and column numbers for syntax issues like trailing commas or unquoted keys.' },
-      { title: 'Collapsible Tree View', description: 'Inspect deeply nested objects and arrays with interactive expand and collapse nodes.' },
-      { title: 'Prettify & Minify Modes', description: 'Switch between human-readable indented format and compact, zero-whitespace minified output.' },
-      { title: '100% Client-Side Parsing', description: 'Confidential API tokens and user payloads never leave your browser.' }
-    ],
-    useCasesTitle: 'Who Needs a JSON Formatter?',
-    useCases: [
-      { title: 'Software Engineers & API Developers', description: 'Debug webhook payloads, REST endpoints, and GraphQL responses during application development.' },
-      { title: 'Data Engineers & Analysts', description: 'Clean and inspect raw JSON data exports from NoSQL databases and log aggregators.' },
-      { title: 'System Administrators', description: 'Format and validate server configuration files and Docker daemon schemas.' }
-    ],
-    tipsTitle: 'Tips for Formatting JSON',
-    tips: [
-      'Remember that standard JSON requires double quotes ("") around both property keys and string values.',
-      'Use the Minify feature to reduce payload sizes before sending JSON strings across network sockets.'
-    ],
-    securityTitle: 'Data Privacy & Security',
-    securityContent: 'All JSON parsing runs locally in your browser JavaScript engine. We never log, store, or transmit your proprietary data structures or API tokens.',
-    faqs: [
-      { question: 'Is this JSON formatter completely free?', answer: 'Yes! PDF Toolkit Pro offers an unlimited free JSON validator and formatter with no usage caps.' },
-      { question: 'Can this tool handle large JSON files?', answer: 'Yes, our parser is optimized to handle multi-megabyte JSON payloads with smooth rendering.' },
-      { question: 'Does the formatter detect syntax errors?', answer: 'Yes! If your JSON is invalid, the editor highlights the exact line and explains the syntax issue.' },
-      { question: 'Is my JSON data sent to an external server?', answer: 'No. All parsing and formatting occur strictly inside your local browser.' }
-    ],
-    relatedTools: [
-      { id: 'markdown_editor', title: 'Markdown Editor', anchor: 'Write and preview technical documentation' },
-      { id: 'excel_editor', title: 'Excel Editor Online', anchor: 'Edit and manage tabular spreadsheet data' },
-      { id: 'qr_generator', title: 'QR Code Generator', anchor: 'Generate QR codes from JSON data or links' },
-      { id: 'password_generator', title: 'Password Generator', anchor: 'Create secure API keys and random tokens' }
+      { id: 'qr_generator', title: 'QR Code Generator', anchor: 'Generate QR codes from links or text' }
     ]
   }
 };

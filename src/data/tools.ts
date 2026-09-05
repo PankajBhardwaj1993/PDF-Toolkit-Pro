@@ -682,56 +682,6 @@ export const allToolsList: Tool[] = [
     ]
   },
 
-  // 26. JSON FORMATTER
-  {
-    id: 'json_formatter',
-    name: 'JSON Beautifier',
-    description: 'Parse, validate, format, and minify structured JSON data snippets seamlessly.',
-    category: 'text',
-    icon: 'Type',
-    h1: 'Online JSON Formatter & Beautifier',
-    seoTitle: 'JSON Formatter & Validator Online – Beautify JSON Data | PDF Toolkit Pro',
-    seoDescription: 'Format, beautify, validate, and minify JSON data online. Syntax-highlighted tree view, error detection, and one-click copy.',
-    seoKeywords: [
-      'JSON formatter',
-      'JSON beautifier',
-      'validate JSON online',
-      'JSON parser',
-      'minify JSON online'
-    ],
-    faqs: [
-      {
-        question: 'Does the JSON formatter highlight syntax errors?',
-        answer: 'Yes, it pinpoints syntax errors with exact line numbers and error descriptions, and formats valid JSON with customizable 2-space or 4-space indentation.'
-      }
-    ]
-  },
-
-  // 27. MARKDOWN EDITOR
-  {
-    id: 'markdown_editor',
-    name: 'Markdown Workspace',
-    description: 'Draft paragraphs in rich Markdown syntax with side by side responsive HTML previews.',
-    category: 'text',
-    icon: 'Type',
-    h1: 'Online Markdown Editor with Live Preview',
-    seoTitle: 'Online Markdown Editor – Real-Time HTML Preview | PDF Toolkit Pro',
-    seoDescription: 'Write and edit Markdown with side-by-side real-time HTML preview. Export as HTML, Markdown, or styled document.',
-    seoKeywords: [
-      'online Markdown editor',
-      'Markdown preview',
-      'MD editor online',
-      'write Markdown',
-      'convert Markdown to HTML'
-    ],
-    faqs: [
-      {
-        question: 'Can I export my Markdown documents as HTML or PDF?',
-        answer: 'Yes, write in Markdown and instantly copy rendered HTML, export raw MD, or print to a formatted PDF.'
-      }
-    ]
-  },
-
   // 28. PASSWORD GENERATOR
   {
     id: 'password_generator',

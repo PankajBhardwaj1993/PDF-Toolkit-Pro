@@ -32,7 +32,6 @@ export default function ToolGrid({
     { id: 'image', name: 'Image Processing', icon: ImageIcon },
     { id: 'ai', name: 'AI & Voice Tools', icon: Sparkles },
     { id: 'signature', name: 'Sign & Forms', icon: FileSignature },
-    { id: 'text', name: 'Structured Text Tools', icon: Type },
     { id: 'utilities', name: 'Extra Utilities', icon: Sliders },
   ];
 

@@ -557,7 +557,7 @@ export const imageAiToolsSeo: Record<string, ToolSeoContent> = {
     relatedTools: [
       { id: 'pdf_ocr', title: 'PDF OCR', anchor: 'Extract text from scanned PDFs to read with text to speech' },
       { id: 'word_editor', title: 'Online Word Editor', anchor: 'Draft and edit articles before listening' },
-      { id: 'markdown_editor', title: 'Markdown Editor', anchor: 'Write and preview technical notes' },
+      { id: 'pdf_to_word', title: 'PDF to Word', anchor: 'Convert documents into editable text files' },
       { id: 'online_pdf_editor', title: 'Online PDF Editor', anchor: 'Add text directly onto PDF pages' }
     ]
   },
@@ -615,7 +615,7 @@ export const imageAiToolsSeo: Record<string, ToolSeoContent> = {
       { id: 'protect_pdf', title: 'Protect PDF', anchor: 'Encrypt your PDF documents with a strong password' },
       { id: 'unlock_pdf', title: 'Unlock PDF', anchor: 'Remove passwords from authorized PDF files' },
       { id: 'qr_generator', title: 'QR Code Generator', anchor: 'Generate QR codes for Wi-Fi credentials and links' },
-      { id: 'json_formatter', title: 'JSON Formatter', anchor: 'Validate and format developer data tokens' }
+      { id: 'rotate_pdf', title: 'Rotate PDF', anchor: 'Rotate pages in secure PDF documents' }
     ]
   },
 
