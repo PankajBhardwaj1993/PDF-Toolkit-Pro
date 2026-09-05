@@ -183,45 +183,115 @@ export default function InfoPagesView({ initialSection = 'about', onNavigateToTi
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-slate-900 dark:text-zinc-50 font-display">Privacy Policy</h2>
-                  <p className="text-xs text-slate-400 dark:text-zinc-500">Effective Date: 2026</p>
+                  <p className="text-xs text-slate-400 dark:text-zinc-500">Last Updated: September 2026 • Data Protection &amp; Cookie Policy</p>
                 </div>
               </div>
 
-              <div className="prose prose-slate dark:prose-invert max-w-none text-xs leading-relaxed text-slate-600 dark:text-zinc-300 space-y-5">
-                <p className="text-sm font-semibold text-slate-800 dark:text-zinc-100">
-                  At PDFToolkitPro.in, we value your privacy and are committed to protecting your information.
-                </p>
+              <div className="prose prose-slate dark:prose-invert max-w-none text-xs leading-relaxed text-slate-600 dark:text-zinc-300 space-y-6">
+                <div className="bg-emerald-50 dark:bg-emerald-950/20 p-4 rounded-xl border border-emerald-500/20 text-emerald-900 dark:text-emerald-200">
+                  <p className="font-semibold text-sm mb-1">
+                    Your Privacy and Document Confidentiality Are Guaranteed
+                  </p>
+                  <p className="text-xs text-slate-700 dark:text-zinc-300">
+                    At <strong>PDF Toolkit Pro (pdftoolkitpro.online)</strong>, accessible from <span className="font-mono text-blue-600 dark:text-blue-400">https://pdftoolkitpro.online</span>, the privacy of our visitors and the confidentiality of their files are paramount priorities. This Privacy Policy outlines the types of information we collect and how we safeguard it.
+                  </p>
+                </div>
 
-                <div className="bg-slate-50 dark:bg-zinc-900/40 p-5 rounded-2xl border border-slate-100 dark:border-zinc-900/80 space-y-4">
+                {/* Core Privacy Guarantees */}
+                <div className="bg-slate-50 dark:bg-zinc-900/40 p-5 rounded-2xl border border-slate-100 dark:border-zinc-900/80 space-y-3">
+                  <h3 className="text-xs font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide">Key Privacy Guarantees</h3>
+                  
                   <div className="flex items-start gap-3">
                     <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0" />
-                    <p>We do not permanently store your uploaded PDF files.</p>
+                    <p><strong>Zero Permanent Server Retention:</strong> All uploaded files and converted outputs are processed in-browser or purged automatically immediately upon task completion.</p>
                   </div>
                   
                   <div className="flex items-start gap-3">
                     <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0" />
-                    <p>Files are processed temporarily and are automatically deleted after processing.</p>
+                    <p><strong>No Selling or Sharing:</strong> We never sell, rent, monetize, or disclose your documents, images, or personal details to third parties.</p>
                   </div>
 
                   <div className="flex items-start gap-3">
                     <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0" />
-                    <p>We do not sell, rent, or share your documents with third parties.</p>
+                    <p><strong>End-to-End HTTPS Encryption:</strong> All data transmissions between your browser and our servers are encrypted via industry-grade TLS/SSL certificates.</p>
                   </div>
 
                   <div className="flex items-start gap-3">
                     <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0" />
-                    <p>We use industry-standard HTTPS encryption to secure data transmission.</p>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0" />
-                    <p>Cookies and Google Analytics may be used to improve website performance and user experience.</p>
+                    <p><strong>Client-Side Processing:</strong> Wherever possible, document manipulation executes directly on your device via compiled WebAssembly.</p>
                   </div>
                 </div>
 
-                <p className="font-semibold text-slate-700 dark:text-zinc-200 mt-6 border-t border-slate-100 dark:border-zinc-900 pt-4">
-                  By using our website, you agree to this Privacy Policy.
-                </p>
+                {/* Section: Log Files */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    1. Log Files &amp; Technical Telemetry
+                  </h3>
+                  <p>
+                    PDF Toolkit Pro follows a standard procedure of utilizing log files. These files log visitors when they visit websites. The information collected by log files includes internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any personally identifiable information and are used solely for analyzing trends, administering the site, and defending against automated DDoS attacks.
+                  </p>
+                </div>
+
+                {/* Section: Cookies and Web Beacons */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    2. Cookies and Web Beacons
+                  </h3>
+                  <p>
+                    Like any other website, PDF Toolkit Pro uses 'cookies'. These cookies are used to store information including visitors' preferences, dark/light theme choice, and the pages on the website that the visitor accessed or visited. The information is used to optimize the users' experience by customizing our web page content based on visitors' browser type and/or other information.
+                  </p>
+                </div>
+
+                {/* Section: Google AdSense & DoubleClick DART Cookie */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    3. Google DoubleClick DART Cookie &amp; Advertising Partners
+                  </h3>
+                  <p className="mb-2">
+                    Google is one of the third-party vendors on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors based upon their visit to pdftoolkitpro.online and other sites on the internet.
+                  </p>
+                  <ul className="list-disc pl-5 space-y-1.5 mt-2 text-slate-700 dark:text-zinc-300">
+                    <li>
+                      Third-party ad servers or ad networks use technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on PDF Toolkit Pro, which are sent directly to users' browsers.
+                    </li>
+                    <li>
+                      They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on websites that you visit.
+                    </li>
+                    <li>
+                      Visitors may choose to decline the use of DART cookies by visiting the Google ad and content network Privacy Policy at the following URL: <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline font-mono">https://policies.google.com/technologies/ads</a>.
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Section: CCPA & GDPR */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    4. CCPA &amp; GDPR Data Protection Rights
+                  </h3>
+                  <p>
+                    We would like to make sure you are fully aware of all of your data protection rights. Every user is entitled to the following: the right to access, rectification, erasure, restrict processing, object to processing, and data portability. If you make a request, we have one month to respond to you. If you would like to exercise any of these rights, please contact us.
+                  </p>
+                </div>
+
+                {/* Section: Children's Information */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    5. Children's Information
+                  </h3>
+                  <p>
+                    Another part of our priority is adding protection for children while using the internet. We encourage parents and guardians to observe, participate in, and/or monitor and guide their online activity. PDF Toolkit Pro does not knowingly collect any Personal Identifiable Information from children under the age of 13.
+                  </p>
+                </div>
+
+                {/* Section: Contact */}
+                <div className="pt-2 border-t border-slate-100 dark:border-zinc-800">
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    6. Contacting Us
+                  </h3>
+                  <p>
+                    If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us at <a href="mailto:support@pdftoolkitpro.online" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">support@pdftoolkitpro.online</a>.
+                  </p>
+                </div>
               </div>
             </div>
           )}
@@ -234,35 +304,147 @@ export default function InfoPagesView({ initialSection = 'about', onNavigateToTi
                   <Scale className="h-5 w-5" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900 dark:text-zinc-50 font-display">Terms & Conditions</h2>
-                  <p className="text-xs text-slate-400 dark:text-zinc-500">Usage agreement and user guidelines</p>
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-zinc-50 font-display">Terms of Service</h2>
+                  <p className="text-xs text-slate-400 dark:text-zinc-500">Last Updated: September 2026 • Official Terms &amp; Conditions</p>
                 </div>
               </div>
 
-              <div className="prose prose-slate dark:prose-invert max-w-none text-xs leading-relaxed text-slate-600 dark:text-zinc-300 space-y-5">
-                <p>
-                  Welcome to <strong>pdftoolkitpro.online</strong>. By accessing our tools, website, and services, you explicitly agree to comply with and be bound by the following Terms & Conditions.
-                </p>
+              <div className="prose prose-slate dark:prose-invert max-w-none text-xs leading-relaxed text-slate-600 dark:text-zinc-300 space-y-6">
+                <div className="bg-slate-50 dark:bg-zinc-900/60 p-4 rounded-xl border border-slate-200/70 dark:border-zinc-800">
+                  <p className="font-semibold text-slate-800 dark:text-zinc-200 mb-1">
+                    Welcome to PDF Toolkit Pro!
+                  </p>
+                  <p className="text-slate-600 dark:text-zinc-400">
+                    These Terms of Service ("Terms", "Agreement") govern your access to and use of <strong>pdftoolkitpro.online</strong> ("Website", "Platform", "we", "our", or "us"), including all online PDF tools, image compressors, document editors, OCR extractors, and related digital utilities. By accessing, browsing, or using any part of this Website, you acknowledge that you have read, understood, and agree to be bound by these Terms. If you do not agree to these Terms, please do not use our services.
+                  </p>
+                </div>
 
-                <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide">1. Acceptable Use Policy</h3>
-                <p>
-                  You agree to use our website only for lawful purposes. You are strictly forbidden from uploading files containing malicious scripts, viruses, or illegal document types. Any attempt to reverse-engineer our backend endpoints or automate scraping requests will result in instant account ban.
-                </p>
+                {/* Section 1 */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    1. Eligibility &amp; User Accounts
+                  </h3>
+                  <p>
+                    By using this Website, you represent and warrant that you are at least 13 years of age (or 16 years of age in the European Economic Area) or have obtained parental/guardian consent to use the Platform. If you register an account, you are responsible for maintaining the confidentiality of your login credentials and for all activities conducted under your account.
+                  </p>
+                </div>
 
-                <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide">2. Membership & Accounts</h3>
-                <p>
-                  Free accounts are allocated limits (up to 10MB per upload and 5 conversions daily). Premium plans (Pro, Enterprise) unlock larger buffers and continuous throughput. Accounts are single-user only and cannot be shared.
-                </p>
+                {/* Section 2 */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    2. Acceptable Use Policy &amp; Prohibited Activities
+                  </h3>
+                  <p>
+                    You agree to utilize our tools solely for lawful, authorized purposes. You strictly agree NOT to:
+                  </p>
+                  <ul className="list-disc pl-5 space-y-1.5 mt-2 text-slate-700 dark:text-zinc-300">
+                    <li>Upload or process any document containing malware, viruses, worms, trojan horses, malicious scripts, or harmful executable code.</li>
+                    <li>Upload or process content that infringes upon third-party copyrights, trademarks, patents, trade secrets, or privacy rights.</li>
+                    <li>Engage in automated scraping, mass data harvesting, denial-of-service (DoS/DDoS) attacks, or attempt to bypass rate limiters or security firewalls.</li>
+                    <li>Decompile, reverse-engineer, disassemble, or derive the source code of the Platform's client or server infrastructure.</li>
+                    <li>Utilize the services to generate or distribute fraudulent, deceptive, defamatory, or unlawful materials.</li>
+                  </ul>
+                </div>
 
-                <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide">3. Content Ownership</h3>
-                <p>
-                  We claim zero ownership or intellectual property over the documents and images you process through our services. You retain complete and absolute rights over all inputs and outputs.
-                </p>
+                {/* Section 3 */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    3. Content Ownership &amp; Intellectual Property
+                  </h3>
+                  <p className="mb-2">
+                    <strong>Your Content:</strong> You retain 100% full and exclusive ownership, copyright, and intellectual property rights over all documents, images, text, and files that you upload, process, or download via PDF Toolkit Pro. We do not claim any ownership rights over your content.
+                  </p>
+                  <p>
+                    <strong>Our Platform:</strong> The visual interfaces, graphic design, custom icons, source code, compilation algorithms, database structures, and trademarks of PDF Toolkit Pro are the intellectual property of PDF Toolkit Pro and are protected by applicable intellectual property and copyright laws.
+                  </p>
+                </div>
 
-                <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide">4. Termination and Modifications</h3>
-                <p>
-                  We reserve the right to modify, adjust, or discontinue parts of the toolset or subscription guidelines with prior notice.
-                </p>
+                {/* Section 4 - Crucial for Google AdSense */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    4. Third-Party Advertisements &amp; Google AdSense
+                  </h3>
+                  <p className="mb-2">
+                    PDF Toolkit Pro displays third-party advertisements, primarily through <strong>Google AdSense</strong>, to help finance free, publicly accessible document utilities for users worldwide.
+                  </p>
+                  <ul className="list-disc pl-5 space-y-1.5 mt-2 text-slate-700 dark:text-zinc-300">
+                    <li>Google, as a third-party vendor, uses cookies (including the DoubleClick DART cookie) to serve ads based on users' prior visits to this Website or other websites across the Internet.</li>
+                    <li>Users may opt out of personalized advertising by visiting Google's <a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">Ads Settings</a> or by visiting <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">aboutads.info</a>.</li>
+                    <li>We strictly prohibit artificial ad clicks, misleading ad placements, or unauthorized automated interactions in compliance with Google AdSense Publisher Policies.</li>
+                  </ul>
+                </div>
+
+                {/* Section 5 */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    5. Privacy &amp; Data Security
+                  </h3>
+                  <p>
+                    Your privacy is our core priority. Most document processing (such as page rotation, splitting, local merging, and metadata inspection) is executed entirely within your local browser sandbox via WebAssembly and JavaScript. When files require temporary server processing, they are held in ephemeral memory and automatically purged immediately upon task completion. For full details on data collection and analytics, please refer to our <a href="/privacy" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">Privacy Policy</a>.
+                  </p>
+                </div>
+
+                {/* Section 6 */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    6. Disclaimer of Warranties
+                  </h3>
+                  <p>
+                    PDF Toolkit Pro is provided on an <strong>"AS IS"</strong> and <strong>"AS AVAILABLE"</strong> basis without warranties of any kind, whether express, implied, statutory, or otherwise. We make no guarantees that the services will be uninterrupted, error-free, timely, secure, or that conversion outputs will be 100% defect-free across all legacy formats. Users are advised to keep original backups of important files.
+                  </p>
+                </div>
+
+                {/* Section 7 */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    7. Limitation of Liability
+                  </h3>
+                  <p>
+                    To the maximum extent permitted by applicable law, in no event shall PDF Toolkit Pro, its founders, operators, employees, or affiliates be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of data, loss of business revenue, or work interruption arising out of or related to your use of the Platform.
+                  </p>
+                </div>
+
+                {/* Section 8 */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    8. Indemnification
+                  </h3>
+                  <p>
+                    You agree to defend, indemnify, and hold harmless PDF Toolkit Pro and its representatives from and against any claims, damages, liabilities, costs, and expenses (including reasonable attorney fees) arising from your violation of these Terms, your unauthorized use of the services, or any unlawful material you process.
+                  </p>
+                </div>
+
+                {/* Section 9 */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    9. Modifications to Services &amp; Terms
+                  </h3>
+                  <p>
+                    We reserve the right to modify, enhance, or discontinue any feature or service at our discretion with or without notice. We may update these Terms periodically. Continued use of the Platform following any posted modifications constitutes your binding acceptance of the revised Terms.
+                  </p>
+                </div>
+
+                {/* Section 10 */}
+                <div className="pt-2 border-t border-slate-100 dark:border-zinc-800">
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    10. Contact Information
+                  </h3>
+                  <p>
+                    If you have any questions, clarifications, or concerns regarding these Terms of Service, please contact us:
+                  </p>
+                  <div className="mt-2.5 p-3.5 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200/60 dark:border-zinc-800 flex flex-wrap gap-6 text-xs text-slate-600 dark:text-zinc-300">
+                    <div>
+                      <span className="font-semibold text-slate-800 dark:text-zinc-200">Email: </span>
+                      <a href="mailto:support@pdftoolkitpro.online" className="text-blue-600 dark:text-blue-400 hover:underline">
+                        support@pdftoolkitpro.online
+                      </a>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-slate-800 dark:text-zinc-200">Website: </span>
+                      <span className="text-slate-800 dark:text-zinc-300 font-mono">https://pdftoolkitpro.online</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
