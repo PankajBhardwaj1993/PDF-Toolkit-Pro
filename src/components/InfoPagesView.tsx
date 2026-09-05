@@ -276,30 +276,103 @@ export default function InfoPagesView({ initialSection = 'about', onNavigateToTi
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-slate-900 dark:text-zinc-50 font-display">Disclaimer</h2>
-                  <p className="text-xs text-slate-400 dark:text-zinc-500">Important limitations of liability and service terms</p>
+                  <p className="text-xs text-slate-400 dark:text-zinc-500">Important limitations of liability, non-affiliation disclosures, and terms of service</p>
                 </div>
               </div>
 
               <div className="prose prose-slate dark:prose-invert max-w-none text-xs leading-relaxed text-slate-600 dark:text-zinc-300 space-y-6">
-                <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-500/20 p-5 rounded-2xl text-amber-800 dark:text-amber-300">
-                  <p className="font-bold mb-2 flex items-center gap-2 text-sm text-amber-900 dark:text-amber-200">
-                    <AlertTriangle className="h-4 w-4" />
-                    Important Notice / Disclaimer
+                {/* Important Notice Callout Box */}
+                <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-500/20 p-5 rounded-2xl text-amber-900 dark:text-amber-200">
+                  <p className="font-bold mb-2.5 flex items-center gap-2 text-sm text-amber-900 dark:text-amber-200">
+                    <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                    Important Notice &amp; Legal Disclosures
                   </p>
-                  <ul className="list-disc pl-5 space-y-3.5 text-xs font-medium text-slate-700 dark:text-zinc-300">
+                  <ul className="list-disc pl-5 space-y-2 text-xs font-medium text-slate-700 dark:text-zinc-300">
                     <li>
-                      <strong>PDFToolkitPro.in</strong> ek independent online PDF utility platform hai.
+                      <strong>PDF Toolkit Pro (pdftoolkitpro.online)</strong> is an independent online document utility and productivity platform.
                     </li>
                     <li>
-                      Hum kisi government organization ya Adobe se affiliated nahi hain.
+                      We are not affiliated with, endorsed by, sponsored by, or connected to <strong>Adobe Inc.</strong>, <strong>Microsoft Corporation</strong>, <strong>Google LLC</strong>, or any government authority.
                     </li>
                     <li>
-                      Processing ke baad files automatically delete kar di jaati hain.
+                      All file operations run in-browser or with instant ephemeral memory cleanup. Your documents are never permanently stored or shared.
                     </li>
                     <li>
-                      Hum document ke content ki accuracy ya legal validity ki guarantee nahi dete.
+                      We do not provide legal, financial, or tax advice, and make no representations regarding the legal validity or admissibility of modified files in specific jurisdictions.
                     </li>
                   </ul>
+                </div>
+
+                {/* Section 1: Non-Affiliation and Trademarks */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    1. Independent Service &amp; Trademark Disclosures
+                  </h3>
+                  <p>
+                    PDF Toolkit Pro (hosted at <span className="font-semibold text-blue-600 dark:text-blue-400">pdftoolkitpro.online</span>) is a privately developed, independent productivity suite. All third-party trademarks, product names, logos, and brands mentioned on this website—including but not limited to <em>Adobe®, Acrobat®, Portable Document Format (PDF), Microsoft® Word, Microsoft® Excel, PowerPoint®, and Google®</em>—are the property of their respective trademark holders. Reference to these trademarks is strictly for descriptive and compatibility identification purposes and does not imply any sponsorship, endorsement, or commercial association.
+                  </p>
+                </div>
+
+                {/* Section 2: No Legal or Professional Advice */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    2. No Legal, Financial, or Professional Advice
+                  </h3>
+                  <p>
+                    The tools, workflows, document editors, OCR extractors, and electronic signature pads provided on this website are designed solely for general administrative convenience and digital productivity. PDF Toolkit Pro does not provide legal, contractual, compliance, or regulatory advice. It is the sole responsibility of the user to verify whether digital signatures and electronic records generated on this site fulfill statutory compliance requirements (such as the ESIGN Act, UETA, eIDAS, or local contract law) for their specific use case.
+                  </p>
+                </div>
+
+                {/* Section 3: "As-Is" Warranty & Accuracy Disclaimer */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    3. "As-Is" Provision &amp; Accuracy Disclaimer
+                  </h3>
+                  <p>
+                    All services, functions, algorithms, and content on PDF Toolkit Pro are provided on an <strong>"as is"</strong> and <strong>"as available"</strong> basis, without warranties of any kind, either express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, accuracy, or non-infringement. While we endeavor to maintain high-fidelity conversions and precise OCR transcriptions, we cannot guarantee that output files will be completely error-free, uninterrupted, or fully compatible with every legacy viewer.
+                  </p>
+                </div>
+
+                {/* Section 4: Data Security & Backup Responsibility */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    4. Data Security &amp; User Backup Responsibility
+                  </h3>
+                  <p>
+                    We prioritize document confidentiality by employing browser-native WebAssembly processing where available. In situations where temporary server processing is utilized, files are strictly ephemeral and automatically purged. Users are strongly advised to always maintain original, unedited backup copies of essential documents prior to executing conversion, compression, metadata editing, or page deletion operations.
+                  </p>
+                </div>
+
+                {/* Section 5: Limitation of Liability */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    5. Limitation of Liability
+                  </h3>
+                  <p>
+                    To the maximum extent permitted by applicable law, PDF Toolkit Pro, its operators, contributors, and service partners shall not be held liable for any direct, indirect, incidental, special, consequential, or punitive damages—including without limitation, loss of data, corrupted documents, business interruption, or financial loss—arising out of or in connection with your access to, use of, or inability to use our tools and services.
+                  </p>
+                </div>
+
+                {/* Section 6: Contact for Legal Inquiries */}
+                <div className="pt-2 border-t border-slate-100 dark:border-zinc-800">
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    6. Contact for Inquiries &amp; Legal Notices
+                  </h3>
+                  <p>
+                    If you have questions, feedback, or legal inquiries regarding this Disclaimer or our Terms of Service, please reach out to our dedicated support desk:
+                  </p>
+                  <div className="mt-2.5 p-3.5 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200/60 dark:border-zinc-800 flex flex-wrap gap-6 text-xs text-slate-600 dark:text-zinc-300">
+                    <div>
+                      <span className="font-semibold text-slate-800 dark:text-zinc-200">Email: </span>
+                      <a href="mailto:support@pdftoolkitpro.online" className="text-blue-600 dark:text-blue-400 hover:underline">
+                        support@pdftoolkitpro.online
+                      </a>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-slate-800 dark:text-zinc-200">Website: </span>
+                      <span className="text-slate-800 dark:text-zinc-300 font-mono">https://pdftoolkitpro.online</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
