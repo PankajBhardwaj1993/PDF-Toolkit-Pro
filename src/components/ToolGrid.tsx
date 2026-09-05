@@ -27,13 +27,13 @@ export default function ToolGrid({
 
   const categories: Array<{ id: ToolCategory | 'all' | 'converter'; name: string; icon: any }> = [
     { id: 'all', name: 'Explore All', icon: Compass },
-    { id: 'converter', name: 'Converter Tools', icon: ArrowLeftRight },
     { id: 'pdf', name: 'PDF Document Tools', icon: FileText },
     { id: 'office', name: 'Office Tools', icon: Briefcase },
     { id: 'image', name: 'Image Processing', icon: ImageIcon },
     { id: 'ai', name: 'AI & Voice Tools', icon: Sparkles },
     { id: 'signature', name: 'Sign & Forms', icon: FileSignature },
     { id: 'utilities', name: 'Extra Utilities', icon: Sliders },
+    { id: 'converter', name: 'Converter Tools', icon: ArrowLeftRight },
   ];
 
   const isConverterTool = (tool: Tool) => {
