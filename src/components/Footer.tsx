@@ -25,6 +25,11 @@ export default function Footer({ setActiveTab, setSelectedToolId, isDonationDisa
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const navigateToTool = (toolId: string) => {
+    setSelectedToolId(toolId);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <footer className="border-t border-slate-200 dark:border-zinc-900 bg-slate-50 dark:bg-zinc-950/40 pt-16 pb-8 text-sm">
       <div className="mx-auto w-full max-w-[1850px] px-4 sm:px-6 lg:px-8 xl:px-12">
@@ -55,40 +60,48 @@ export default function Footer({ setActiveTab, setSelectedToolId, isDonationDisa
             <ul className="space-y-2.5">
               <li>
                 <button 
-                  onClick={() => { navigateTo('tools'); }} 
-                  className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
+                  onClick={() => navigateToTool('online_pdf_editor')} 
+                  className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer text-left transition-colors"
+                >
+                  Online PDF Editor
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => navigateToTool('merge_pdf')} 
+                  className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer text-left transition-colors"
                 >
                   Merge PDF Documents
                 </button>
               </li>
               <li>
                 <button 
-                  onClick={() => { navigateTo('tools'); }} 
-                  className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
+                  onClick={() => navigateToTool('split_pdf')} 
+                  className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer text-left transition-colors"
                 >
                   Split PDF into Pages
                 </button>
               </li>
               <li>
                 <button 
-                  onClick={() => { navigateTo('tools'); }} 
-                  className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
+                  onClick={() => navigateToTool('pdf_ocr')} 
+                  className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer text-left transition-colors"
                 >
-                  AI Document Summarizer
+                  AI Document OCR Scanner
                 </button>
               </li>
               <li>
                 <button 
-                  onClick={() => { navigateTo('tools'); }} 
-                  className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
+                  onClick={() => navigateToTool('draw_signature')} 
+                  className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer text-left transition-colors"
                 >
                   Create Digital Signature
                 </button>
               </li>
               <li>
                 <button 
-                  onClick={() => { navigateTo('tools'); }} 
-                  className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
+                  onClick={() => navigateToTool('compress_image')} 
+                  className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer text-left transition-colors"
                 >
                   Resize & Compress Image
                 </button>
