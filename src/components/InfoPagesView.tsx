@@ -1,5 +1,6 @@
 import SEO from './SEO';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Info, ShieldCheck, Scale, AlertTriangle, Mail, MapPin, 
   MessageSquare, ExternalLink, Calendar, CheckCircle2, ChevronRight,
@@ -12,11 +13,11 @@ interface InfoPagesViewProps {
 }
 
 export default function InfoPagesView({ initialSection = 'about', onNavigateToTickets }: InfoPagesViewProps) {
-  const [activeTab, setActiveTab] = useState<'about' | 'privacy' | 'terms' | 'disclaimer' | 'contact'>(initialSection);
+  const navigate = useNavigate();
+  const activeTab = initialSection;
 
   useEffect(() => {
-    setActiveTab(initialSection);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [initialSection]);
 
   const tabs = [
@@ -95,8 +96,8 @@ export default function InfoPagesView({ initialSection = 'about', onNavigateToTi
               <button
                 key={tab.id}
                 onClick={() => {
-                  setActiveTab(tab.id);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  navigate('/' + tab.id);
+                  window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
                 }}
                 className={`w-full flex items-center gap-3.5 px-3 py-3 rounded-xl text-left transition-all ${
                   isActive 
