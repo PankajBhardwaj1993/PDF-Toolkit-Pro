@@ -1,0 +1,84 @@
+# PDF Toolkit Pro - Full Documentation & Tool Reference
+
+> Comprehensive API, workflow, and feature reference for PDF Toolkit Pro (https://pdftoolkitpro.online).
+
+PDF Toolkit Pro is a client-side, privacy-first PDF and document manipulation suite designed to handle PDF editing, conversions, compression, security, OCR, and AI document workflows directly inside the user's browser.
+
+## Privacy Architecture
+- **Zero Server Uploads for Standard Tools**: PDF manipulation (editing, merging, splitting, rotating, watermarking, signing) runs locally in client WebAssembly and JavaScript engines.
+- **Auto-Deletion of Temporary Files**: Any server-side conversions or OCR workflows are processed in ephemeral memory sandboxes and permanently deleted immediately after processing.
+
+## Complete List of Available Tools
+
+### 1. Online PDF Editor
+- **URL**: https://pdftoolkitpro.online/tools/online-pdf-editor
+- **Capabilities**: Add text with 29+ Unicode fonts (including Arabic, Devanagari, Hebrew, Thai, Cyrillic, Greek, Japanese), freehand drawing, geometric shapes, signature stamps, image overlay, whiteout, text redaction, and multi-page reorganizing.
+
+### 2. Merge PDF
+- **URL**: https://pdftoolkitpro.online/tools/merge-pdf
+- **Capabilities**: Reorder, drag-and-drop, and merge unlimited PDF files into a single unified document with vector fidelity.
+
+### 3. Split PDF
+- **URL**: https://pdftoolkitpro.online/tools/split-pdf
+- **Capabilities**: Extract custom page ranges, split by individual page, or extract odd/even pages.
+
+### 4. Compress PDF
+- **URL**: https://pdftoolkitpro.online/tools/compress-pdf
+- **Capabilities**: Reduce PDF file size with selectable compression levels (Extreme, Recommended, High Quality).
+
+### 5. Rotate PDF
+- **URL**: https://pdftoolkitpro.online/tools/rotate-pdf
+- **Capabilities**: Visual interactive grid to rotate individual or all pages by 90°, 180°, or 270°.
+
+### 6. Delete PDF Pages
+- **URL**: https://pdftoolkitpro.online/tools/delete-pdf-pages
+- **Capabilities**: Select and delete individual or multiple pages with real-time rendered thumbnail previews.
+
+### 7. Reorder PDF Pages
+- **URL**: https://pdftoolkitpro.online/tools/reorder-pdf
+- **Capabilities**: Drag-and-drop page reorganization with instant export.
+
+### 8. Protect & Encrypt PDF
+- **URL**: https://pdftoolkitpro.online/tools/protect-pdf
+- **Capabilities**: Add user password and owner permissions encryption (copying, printing restrictions).
+
+### 9. Unlock PDF
+- **URL**: https://pdftoolkitpro.online/tools/unlock-pdf
+- **Capabilities**: Decrypt password-protected PDF files to remove restrictions.
+
+### 10. Add Watermark
+- **URL**: https://pdftoolkitpro.online/tools/watermark-pdf
+- **Capabilities**: Text watermarks with opacity, rotation, font size, and color adjustments or image watermark overlay.
+
+### 11. Sign PDF
+- **URL**: https://pdftoolkitpro.online/tools/sign-pdf
+- **Capabilities**: Electronic signature generation via stylus/finger drawing, custom typed calligraphy, or uploaded PNG signatures.
+
+### 12. OCR PDF (Optical Character Recognition)
+- **URL**: https://pdftoolkitpro.online/tools/ocr-pdf
+- **Capabilities**: Extract searchable and copyable text from scanned PDFs and photos across English, Hindi, Arabic, Spanish, French, German, and 20+ other languages.
+
+### 13. Word Document Editor
+- **URL**: https://pdftoolkitpro.online/tools/word-editor
+- **Capabilities**: Full browser-based rich text editor supporting formatting, headings, lists, tables, and export to DOCX/PDF.
+
+### 14. Excel Spreadsheet Editor
+- **URL**: https://pdftoolkitpro.online/tools/excel-editor
+- **Capabilities**: Multi-sheet grid editor with formula evaluation (SUM, AVERAGE, VLOOKUP, IF, etc.), cell styling, filtering, and XLSX export.
+
+### 15. PDF to Word (DOCX)
+- **URL**: https://pdftoolkitpro.online/tools/pdf-to-word
+- **Capabilities**: Convert PDF text and layout into editable Microsoft Word DOCX files.
+
+### 16. PDF to Excel (XLSX)
+- **URL**: https://pdftoolkitpro.online/tools/pdf-to-excel
+- **Capabilities**: Detect table structures inside PDF files and convert them into structured XLSX worksheets.
+
+### 17. Passport Photo Maker
+- **URL**: https://pdftoolkitpro.online/tools/passport-photo
+- **Capabilities**: Crop images to standard US (2x2 inch), India, UK, Schengen passport sizes with background replacement.
+
+## Contact & Developer Details
+- **Platform**: PDF Toolkit Pro
+- **Website**: https://pdftoolkitpro.online
+- **Support**: https://pdftoolkitpro.online/contact

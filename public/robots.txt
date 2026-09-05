@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Sitemap: https://pdftoolkitpro.online/sitemap.xml
+# LLM & AI Search Index
+# https://pdftoolkitpro.online/llms.txt

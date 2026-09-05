@@ -1,0 +1,6 @@
+{
+  "name": "PDF Toolkit Pro",
+  "description": "An all-in-one, lightning-fast PDF, image, text, and AI utility suite. Merge, split, compress, edit, secure, sign, and convert documents, with advanced Gemini-powered AI features.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

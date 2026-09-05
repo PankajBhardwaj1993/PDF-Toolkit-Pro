@@ -1,0 +1,53 @@
+# PDF Toolkit Pro
+
+> Free online PDF tools, document editors, OCR scanners, and AI utilities. Fast, privacy-focused, client-side document processing with no server storage risks.
+
+PDF Toolkit Pro (https://pdftoolkitpro.online) is a comprehensive web-based document productivity platform providing browser-native utilities to edit, convert, compress, merge, split, sign, protect, and OCR documents securely.
+
+## Core PDF Utilities
+
+- [Online PDF Editor](https://pdftoolkitpro.online/tools/online-pdf-editor): Free full-featured browser PDF editor to add text, annotations, shapes, images, freehand drawings, whiteouts, and digital signatures.
+- [Merge PDF](https://pdftoolkitpro.online/tools/merge-pdf): Combine multiple PDF documents into a single organized file in seconds.
+- [Split PDF](https://pdftoolkitpro.online/tools/split-pdf): Split PDF documents into individual pages or extract custom page ranges.
+- [Compress PDF](https://pdftoolkitpro.online/tools/compress-pdf): Reduce PDF file size with high visual quality retention.
+- [Rotate PDF](https://pdftoolkitpro.online/tools/rotate-pdf): Rotate individual or all pages of a PDF clockwise, counter-clockwise, or 180 degrees.
+- [Delete PDF Pages](https://pdftoolkitpro.online/tools/delete-pdf-pages): Remove unwanted pages from any PDF document with visual thumbnail preview.
+- [Reorder PDF Pages](https://pdftoolkitpro.online/tools/reorder-pdf): Reorganize and rearrange PDF page sequence via drag-and-drop.
+- [Protect PDF](https://pdftoolkitpro.online/tools/protect-pdf): Encrypt and password-protect sensitive PDF documents with secure algorithms.
+- [Unlock PDF](https://pdftoolkitpro.online/tools/unlock-pdf): Remove passwords and restrictions from authorized PDF files.
+- [Add Watermark](https://pdftoolkitpro.online/tools/watermark-pdf): Add customized text or image watermarks to all PDF pages.
+- [Sign PDF](https://pdftoolkitpro.online/tools/sign-pdf): Sign PDF documents with typed, drawn, or uploaded digital signatures and stamps.
+- [Crop PDF](https://pdftoolkitpro.online/tools/crop-pdf): Crop margins and page boundaries in PDF documents.
+- [Extract PDF Images](https://pdftoolkitpro.online/tools/extract-images): Extract embedded high-resolution images from any PDF file.
+- [PDF Metadata Editor](https://pdftoolkitpro.online/tools/edit-pdf-metadata): View and edit PDF metadata properties (title, author, subject, keywords).
+
+## Conversion Tools
+
+- [Document Converter](https://pdftoolkitpro.online/converter): Universal document converter supporting 20+ file formats.
+- [PDF to Word (DOCX)](https://pdftoolkitpro.online/tools/pdf-to-word): Convert PDF documents into editable Microsoft Word DOCX files.
+- [Word to PDF](https://pdftoolkitpro.online/tools/word-to-pdf): Convert Word DOC/DOCX files into high-quality PDF format.
+- [PDF to Excel (XLSX)](https://pdftoolkitpro.online/tools/pdf-to-excel): Extract data tables from PDFs into structured Microsoft Excel spreadsheets.
+- [Excel to PDF](https://pdftoolkitpro.online/tools/excel-to-pdf): Convert XLSX/XLS spreadsheets into formatted PDF documents.
+- [PDF to JPG / PNG](https://pdftoolkitpro.online/tools/pdf-to-jpg): Convert PDF pages into crisp JPG or PNG images.
+- [JPG / PNG to PDF](https://pdftoolkitpro.online/tools/jpg-to-pdf): Convert images into single or multi-page PDF documents.
+- [PDF to Text](https://pdftoolkitpro.online/tools/pdf-to-text): Extract plain text content from PDF documents.
+- [Text to PDF](https://pdftoolkitpro.online/tools/text-to-pdf): Convert raw text files into clean PDF documents.
+
+## AI & Office Productivity Tools
+
+- [AI PDF OCR Scanner](https://pdftoolkitpro.online/tools/ocr-pdf): Extract text from scanned PDFs and images with multi-language optical character recognition.
+- [AI PDF Summarizer](https://pdftoolkitpro.online/tools/ai-pdf-summarizer): Generate instant executive summaries, key takeaways, and question-answering from long documents.
+- [AI Grammar & Style Corrector](https://pdftoolkitpro.online/tools/grammar-corrector): Proofread and improve text documents with AI grammar checking.
+- [AI Text to Speech](https://pdftoolkitpro.online/tools/text-to-speech): Convert text and document contents into natural-sounding voice audio.
+- [Online Word Document Editor](https://pdftoolkitpro.online/tools/word-editor): Browser-based rich document editor for Word (.docx) files.
+- [Online Excel Spreadsheet Editor](https://pdftoolkitpro.online/tools/excel-editor): Browser-based spreadsheet editor for Excel (.xlsx) files with formulas and grid calculation.
+- [Passport Photo Maker](https://pdftoolkitpro.online/tools/passport-photo): Create standardized passport and visa photos with background replacement and size presets.
+- [Batch File Processor](https://pdftoolkitpro.online/tools/batch-processor): Process, compress, convert, or watermark multiple files simultaneously.
+
+## Information & Resources
+
+- [Blog & Guides](https://pdftoolkitpro.online/blog): In-depth tutorials and guides on PDF management, security, and document workflows.
+- [About Us](https://pdftoolkitpro.online/about): Information about PDF Toolkit Pro mission, architecture, and technology.
+- [Privacy Policy](https://pdftoolkitpro.online/privacy): Details on our client-side zero-knowledge privacy architecture.
+- [Terms of Service](https://pdftoolkitpro.online/terms): Usage terms and conditions.
+- [Contact Support](https://pdftoolkitpro.online/contact): Support desk and feedback channels.
