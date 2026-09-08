@@ -6,10 +6,12 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import SEO from './components/SEO';
 import Breadcrumbs from './components/Breadcrumbs';
+import ErrorBoundary from './components/ErrorBoundary';
+import PageSkeleton from './components/PageSkeleton';
 
 import ToolGrid from './components/ToolGrid';
-import ToolActiveView from './components/ToolActiveView';
-import BlogView from './components/BlogView';
+const ToolActiveView = React.lazy(() => import('./components/ToolActiveView'));
+const BlogView = React.lazy(() => import('./components/BlogView'));
 const DashboardView = React.lazy(() => import('./components/DashboardView'));
 const PricingView = React.lazy(() => import('./components/PricingView'));
 const DonationView = React.lazy(() => import('./components/DonationView'));
@@ -480,7 +482,8 @@ function AppContent() {
             </div>
           </div>
         )}
-        <Suspense fallback={<div className="flex justify-center items-center h-64"><Loader2 className="h-8 w-8 animate-spin text-blue-500" /></div>}>
+        <ErrorBoundary>
+          <Suspense fallback={<PageSkeleton />}>
         {is404 ? (
           <NotFoundView allToolsList={allToolsList} />
         ) : selectedToolId ? (
@@ -768,7 +771,8 @@ function AppContent() {
             }}
           />
         ) : null}
-              </Suspense>
+          </Suspense>
+        </ErrorBoundary>
       </main>
 
       {/* Shared Footer panel */}

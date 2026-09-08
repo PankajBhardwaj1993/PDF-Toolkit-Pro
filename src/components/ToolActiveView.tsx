@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, Suspense } from 'react';
 import JSZip from 'jszip';
 import SEO from './SEO';
+import PageSkeleton from './PageSkeleton';
 import { 
   ArrowLeft, Upload, FileText, Download, CheckCircle, AlertCircle, 
   RotateCw, Trash2, Sliders, Sparkles, Languages, HelpCircle, FileSignature, 
@@ -10,24 +11,25 @@ import {
   mergePDFs, splitPDF, rotatePDF, deletePDFPages, 
   extractPDFPages, addPageNumbers, addWatermark, addSignatureToPDF 
 } from '../utils/pdfUtils';
-import OnlinePdfEditor from './OnlinePdfEditor';
-import InteractiveSignPdf from './InteractiveSignPdf';
-import InteractiveDeletePdf from './InteractiveDeletePdf';
-import InteractiveRotatePdf from './InteractiveRotatePdf';
-import CropImageWorkstation from './CropImageWorkstation';
-import PassportPhotoWorkstation from './PassportPhotoWorkstation';
-import TextToSpeechWorkstation from './TextToSpeechWorkstation';
-import GrammarWorkstation from './GrammarWorkstation';
-import MergePdfWorkstation from './MergePdfWorkstation';
-import CanonicalTestWorkstation from './CanonicalTestWorkstation';
-import WordEditorWorkstation from './WordEditorWorkstation';
-import ExcelEditorWorkstation from './ExcelEditorWorkstation';
-import PdfMetadataEditorWorkstation from './PdfMetadataEditorWorkstation';
-import BatchProcessorWorkstation from './BatchProcessorWorkstation';
-import PdfOcrWorkstation from './PdfOcrWorkstation';
 import ToolSeoFooter from './ToolSeoFooter';
 import { allToolsList } from '../data/tools';
 import { Tool } from '../types';
+
+const OnlinePdfEditor = React.lazy(() => import('./OnlinePdfEditor'));
+const InteractiveSignPdf = React.lazy(() => import('./InteractiveSignPdf'));
+const InteractiveDeletePdf = React.lazy(() => import('./InteractiveDeletePdf'));
+const InteractiveRotatePdf = React.lazy(() => import('./InteractiveRotatePdf'));
+const CropImageWorkstation = React.lazy(() => import('./CropImageWorkstation'));
+const PassportPhotoWorkstation = React.lazy(() => import('./PassportPhotoWorkstation'));
+const TextToSpeechWorkstation = React.lazy(() => import('./TextToSpeechWorkstation'));
+const GrammarWorkstation = React.lazy(() => import('./GrammarWorkstation'));
+const MergePdfWorkstation = React.lazy(() => import('./MergePdfWorkstation'));
+const CanonicalTestWorkstation = React.lazy(() => import('./CanonicalTestWorkstation'));
+const WordEditorWorkstation = React.lazy(() => import('./WordEditorWorkstation'));
+const ExcelEditorWorkstation = React.lazy(() => import('./ExcelEditorWorkstation'));
+const PdfMetadataEditorWorkstation = React.lazy(() => import('./PdfMetadataEditorWorkstation'));
+const BatchProcessorWorkstation = React.lazy(() => import('./BatchProcessorWorkstation'));
+const PdfOcrWorkstation = React.lazy(() => import('./PdfOcrWorkstation'));
 
 interface ToolActiveViewProps {
   toolId: string;
@@ -681,7 +683,9 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
             Interactive Editor Mode
           </span>
         </div>
-        <OnlinePdfEditor onAddRecentFile={onAddRecentFile} user={user} />
+        <Suspense fallback={<PageSkeleton />}>
+          <OnlinePdfEditor onAddRecentFile={onAddRecentFile} user={user} />
+        </Suspense>
         <ToolSeoFooter tool={tool} />
       </div>
     );
@@ -702,7 +706,9 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
             Interactive Editor Mode
           </span>
         </div>
-        <MergePdfWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        <Suspense fallback={<PageSkeleton />}>
+          <MergePdfWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        </Suspense>
         <ToolSeoFooter tool={tool} />
       </div>
     );
@@ -723,7 +729,9 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
             Interactive Editor Mode
           </span>
         </div>
-        <InteractiveRotatePdf onAddRecentFile={onAddRecentFile} user={user} />
+        <Suspense fallback={<PageSkeleton />}>
+          <InteractiveRotatePdf onAddRecentFile={onAddRecentFile} user={user} />
+        </Suspense>
         <ToolSeoFooter tool={tool} />
       </div>
     );
@@ -744,7 +752,9 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
             Interactive Editor Mode
           </span>
         </div>
-        <InteractiveDeletePdf onAddRecentFile={onAddRecentFile} user={user} />
+        <Suspense fallback={<PageSkeleton />}>
+          <InteractiveDeletePdf onAddRecentFile={onAddRecentFile} user={user} />
+        </Suspense>
         <ToolSeoFooter tool={tool} />
       </div>
     );
@@ -765,7 +775,9 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
             Interactive Editor Mode
           </span>
         </div>
-        <InteractiveSignPdf onAddRecentFile={onAddRecentFile} user={user} />
+        <Suspense fallback={<PageSkeleton />}>
+          <InteractiveSignPdf onAddRecentFile={onAddRecentFile} user={user} />
+        </Suspense>
         <ToolSeoFooter tool={tool} />
       </div>
     );
@@ -786,7 +798,9 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
             Interactive Editor Mode
           </span>
         </div>
-        <CropImageWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        <Suspense fallback={<PageSkeleton />}>
+          <CropImageWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        </Suspense>
         <ToolSeoFooter tool={tool} />
       </div>
     );
@@ -807,7 +821,9 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
             Interactive Editor Mode
           </span>
         </div>
-        <PassportPhotoWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        <Suspense fallback={<PageSkeleton />}>
+          <PassportPhotoWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        </Suspense>
         <ToolSeoFooter tool={tool} />
       </div>
     );
@@ -816,7 +832,9 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
   if (toolId === 'excel_editor' || toolId === 'excel-editor' || toolId === 'excel' || toolId === 'ms_excel' || toolId === 'ms-excel' || toolId === 'spreadsheet' || toolId === 'spreadsheet_editor') {
     return (
       <div className="py-4 px-2 sm:px-4 lg:px-6 xl:px-10 w-full max-w-[1850px] mx-auto space-y-4">
-        <ExcelEditorWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        <Suspense fallback={<PageSkeleton />}>
+          <ExcelEditorWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        </Suspense>
         <ToolSeoFooter tool={tool} />
       </div>
     );
@@ -825,7 +843,9 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
   if (toolId === 'word_editor' || toolId === 'word-editor' || toolId === 'ms_word' || toolId === 'ms-word' || toolId === 'doc_tool' || toolId === 'word') {
     return (
       <div className="py-6 px-4 sm:px-6 lg:px-8 xl:px-12 w-full max-w-[1850px] mx-auto space-y-4">
-        <WordEditorWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        <Suspense fallback={<PageSkeleton />}>
+          <WordEditorWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        </Suspense>
         <ToolSeoFooter tool={tool} />
       </div>
     );
@@ -834,7 +854,9 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
   if (toolId === 'ai_grammar') {
     return (
       <div className="py-6 px-4 sm:px-6 lg:px-8 xl:px-12 w-full max-w-[1850px] mx-auto space-y-4">
-        <GrammarWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        <Suspense fallback={<PageSkeleton />}>
+          <GrammarWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        </Suspense>
         <ToolSeoFooter tool={tool} />
       </div>
     );
@@ -843,7 +865,9 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
   if (toolId === 'text_to_speech' || toolId === 'ai_tts' || toolId === 'text-to-speech') {
     return (
       <div className="py-6 px-4 sm:px-6 lg:px-8 xl:px-12 w-full max-w-[1850px] mx-auto space-y-4">
-        <TextToSpeechWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        <Suspense fallback={<PageSkeleton />}>
+          <TextToSpeechWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        </Suspense>
         <ToolSeoFooter tool={tool} />
       </div>
     );
@@ -899,7 +923,9 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
             Admin Diagnostic Tool
           </span>
         </div>
-        <CanonicalTestWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        <Suspense fallback={<PageSkeleton />}>
+          <CanonicalTestWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        </Suspense>
         <ToolSeoFooter tool={tool} />
       </div>
     );
@@ -908,7 +934,9 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
   if (toolId === 'edit_pdf_metadata' || toolId === 'pdf_metadata' || toolId === 'pdf_metadata_editor' || toolId === 'pdf-metadata-editor' || toolId === 'edit-pdf-metadata') {
     return (
       <div className="py-6 px-4 sm:px-6 lg:px-8 xl:px-12 w-full max-w-[1850px] mx-auto space-y-4 animate-fade-in">
-        <PdfMetadataEditorWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        <Suspense fallback={<PageSkeleton />}>
+          <PdfMetadataEditorWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        </Suspense>
         <ToolSeoFooter tool={tool} />
       </div>
     );
@@ -917,7 +945,9 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
   if (toolId === 'batch_processor' || toolId === 'batch-processor' || toolId === 'batch' || toolId === 'batch_process') {
     return (
       <div className="py-6 px-4 sm:px-6 lg:px-8 xl:px-12 w-full max-w-[1850px] mx-auto space-y-4 animate-fade-in">
-        <BatchProcessorWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        <Suspense fallback={<PageSkeleton />}>
+          <BatchProcessorWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        </Suspense>
         <ToolSeoFooter tool={tool} />
       </div>
     );
@@ -926,7 +956,9 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
   if (toolId === 'pdf_ocr' || toolId === 'pdf-ocr' || toolId === 'ocr' || toolId === 'pdf_ocr_editor') {
     return (
       <div className="py-6 px-4 sm:px-6 lg:px-8 xl:px-12 w-full max-w-[1850px] mx-auto space-y-4 animate-fade-in">
-        <PdfOcrWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        <Suspense fallback={<PageSkeleton />}>
+          <PdfOcrWorkstation onAddRecentFile={onAddRecentFile} user={user} onBackToTools={onBack} />
+        </Suspense>
         <ToolSeoFooter tool={tool} />
       </div>
     );
