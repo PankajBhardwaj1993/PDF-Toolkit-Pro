@@ -16,7 +16,7 @@ export async function mergePDFs(files: File[]): Promise<Uint8Array> {
   
   for (const file of files) {
     const pdfBytes = await fileToArrayBuffer(file);
-    const pdfDoc = await PDFDocument.load(pdfBytes);
+    const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
     const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
     copiedPages.forEach((page) => mergedPdf.addPage(page));
   }
@@ -27,7 +27,7 @@ export async function mergePDFs(files: File[]): Promise<Uint8Array> {
 // 2. Split PDF into individual pages or groups
 export async function splitPDF(file: File): Promise<Array<{ pageNum: number; bytes: Uint8Array }>> {
   const pdfBytes = await fileToArrayBuffer(file);
-  const pdfDoc = await PDFDocument.load(pdfBytes);
+  const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
   const pageCount = pdfDoc.getPageCount();
   const results = [];
   
@@ -45,7 +45,7 @@ export async function splitPDF(file: File): Promise<Array<{ pageNum: number; byt
 // 3. Rotate PDF pages (90, 180, 270 degrees)
 export async function rotatePDF(file: File, rotationAngle: number): Promise<Uint8Array> {
   const pdfBytes = await fileToArrayBuffer(file);
-  const pdfDoc = await PDFDocument.load(pdfBytes);
+  const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
   const pages = pdfDoc.getPages();
   
   pages.forEach((page) => {
@@ -59,7 +59,7 @@ export async function rotatePDF(file: File, rotationAngle: number): Promise<Uint
 // 4. Delete PDF Pages
 export async function deletePDFPages(file: File, pageNumbersToDelete: number[]): Promise<Uint8Array> {
   const pdfBytes = await fileToArrayBuffer(file);
-  const pdfDoc = await PDFDocument.load(pdfBytes);
+  const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
   
   // Sort in descending order to avoid offset issues when removing pages
   const sortedIndices = pageNumbersToDelete
@@ -77,7 +77,7 @@ export async function deletePDFPages(file: File, pageNumbersToDelete: number[]):
 // 5. Extract PDF Pages
 export async function extractPDFPages(file: File, pageNumbersToExtract: number[]): Promise<Uint8Array> {
   const pdfBytes = await fileToArrayBuffer(file);
-  const pdfDoc = await PDFDocument.load(pdfBytes);
+  const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
   const extractedPdf = await PDFDocument.create();
   
   const validIndices = pageNumbersToExtract
@@ -97,7 +97,7 @@ export async function extractPDFPages(file: File, pageNumbersToExtract: number[]
 // 6. Add Page Numbers
 export async function addPageNumbers(file: File, position: 'bottom-center' | 'bottom-right' | 'top-right' = 'bottom-center'): Promise<Uint8Array> {
   const pdfBytes = await fileToArrayBuffer(file);
-  const pdfDoc = await PDFDocument.load(pdfBytes);
+  const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
   const pages = pdfDoc.getPages();
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
   const pageCount = pages.length;
@@ -165,7 +165,7 @@ export function sanitizeForWinAnsi(text: string): string {
 // 7. Add Watermark
 export async function addWatermark(file: File, text: string, opacity: number = 0.3): Promise<Uint8Array> {
   const pdfBytes = await fileToArrayBuffer(file);
-  const pdfDoc = await PDFDocument.load(pdfBytes);
+  const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
   const pages = pdfDoc.getPages();
   const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
   const safeText = sanitizeForWinAnsi(text) || 'WATERMARK';
@@ -200,7 +200,7 @@ export async function addSignatureToPDF(
   scale: number = 0.5
 ): Promise<Uint8Array> {
   const pdfBytes = await fileToArrayBuffer(file);
-  const pdfDoc = await PDFDocument.load(pdfBytes);
+  const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
   const pages = pdfDoc.getPages();
   
   if (pageNum < 1 || pageNum > pages.length) {
@@ -227,7 +227,7 @@ export async function addSignatureToPDF(
 
 export async function rotatePDFPages(file: File, pageRotations: { [pageNum: number]: number }): Promise<Uint8Array> {
   const pdfBytes = await fileToArrayBuffer(file);
-  const pdfDoc = await PDFDocument.load(pdfBytes);
+  const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
   const pages = pdfDoc.getPages();
   
   pages.forEach((page, index) => {

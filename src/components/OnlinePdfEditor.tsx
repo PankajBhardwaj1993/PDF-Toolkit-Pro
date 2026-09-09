@@ -3079,7 +3079,7 @@ export default function OnlinePdfEditor({ onAddRecentFile, user }: OnlinePdfEdit
       setHistory(prev => [...prev, pdfSource.slice(0)]);
 
       const pdfBytes = new Uint8Array(pdfSource);
-      const doc = await PDFDocument.load(pdfBytes);
+      const doc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
       const pagesList = doc.getPages();
       const font = await doc.embedFont(StandardFonts.HelveticaBold);
       const { r, g, b } = hexToRgb(watermarkColor);
@@ -3222,7 +3222,7 @@ export default function OnlinePdfEditor({ onAddRecentFile, user }: OnlinePdfEdit
       setHistory(prev => [...prev, pdfSource.slice(0)]);
 
       const pdfBytes = new Uint8Array(pdfSource);
-      const pdfDoc = await PDFDocument.load(pdfBytes);
+      const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
       const pagesList = pdfDoc.getPages();
 
       for (const [pStr, annList] of Object.entries(annotations)) {
@@ -3610,7 +3610,7 @@ export default function OnlinePdfEditor({ onAddRecentFile, user }: OnlinePdfEdit
       setHistory(prev => [...prev, pdfSource.slice(0)]);
 
       const pdfBytes = new Uint8Array(pdfSource);
-      const doc = await PDFDocument.load(pdfBytes);
+      const doc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
       
       const pageW = currentPageDimensions.width || 595;
       const pageH = currentPageDimensions.height || 842;
@@ -3769,7 +3769,7 @@ export default function OnlinePdfEditor({ onAddRecentFile, user }: OnlinePdfEdit
       setHistory(prev => [...prev, pdfSource.slice(0)]);
 
       const pdfBytes = new Uint8Array(pdfSource);
-      const srcDoc = await PDFDocument.load(pdfBytes);
+      const srcDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
       const count = srcDoc.getPageCount();
 
       const indices = Array.from({ length: count }, (_, i) => i);
@@ -3964,7 +3964,7 @@ export default function OnlinePdfEditor({ onAddRecentFile, user }: OnlinePdfEdit
       setHistory(prev => [...prev, pdfSource.slice(0)]);
 
       const pdfBytes = new Uint8Array(pdfSource);
-      const pdfDoc = await PDFDocument.load(pdfBytes);
+      const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
       const pagesList = pdfDoc.getPages();
       const targetPageNum = blockToUse.page || currentPage || 1;
       const idx = targetPageNum - 1;

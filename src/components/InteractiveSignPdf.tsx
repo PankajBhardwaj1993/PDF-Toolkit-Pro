@@ -391,7 +391,7 @@ export default function InteractiveSignPdf({ onAddRecentFile, user }: Interactiv
     setError(null);
     setSuccessMsg(null);
     try {
-      const pdfDoc = await PDFDocument.load(pdfSource);
+      const pdfDoc = await PDFDocument.load(pdfSource, { ignoreEncryption: true });
       const pages = pdfDoc.getPages();
       
       for (const sig of signatures) {

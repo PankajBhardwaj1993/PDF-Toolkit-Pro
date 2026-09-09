@@ -130,7 +130,7 @@ async function editPdfTextWithPdfLib(
   italic: boolean
 ): Promise<string> {
   const pdfBytes = Uint8Array.from(Buffer.from(pdfBase64, 'base64'));
-  const pdfDoc = await PDFDocument.load(pdfBytes);
+  const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
   const pages = pdfDoc.getPages();
   const idx = pageNum - 1;
   if (idx < 0 || idx >= pages.length) {
