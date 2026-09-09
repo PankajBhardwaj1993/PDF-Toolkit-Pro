@@ -188,8 +188,21 @@ export default function Footer({ setActiveTab, setSelectedToolId, isDonationDisa
                 </button>
               </li>
               <li>
+                <button onClick={() => navigateTo('cookies')} className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
+                  Cookie Policy
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-cookie-settings'))} 
+                  className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
+                >
+                  Cookie Settings
+                </button>
+              </li>
+              <li>
                 <button onClick={() => navigateTo('terms')} className="text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
-                  Terms & Conditions
+                  Terms &amp; Conditions
                 </button>
               </li>
               <li>
@@ -250,7 +263,9 @@ export default function Footer({ setActiveTab, setSelectedToolId, isDonationDisa
           <div className="flex flex-wrap gap-x-4 gap-y-2 font-semibold text-slate-500 dark:text-slate-400 justify-center md:justify-end">
             <button onClick={() => navigateTo('about')} className="hover:text-blue-600 dark:hover:text-white cursor-pointer transition-colors">About Us</button>
             <button onClick={() => navigateTo('privacy')} className="hover:text-blue-600 dark:hover:text-white cursor-pointer transition-colors">Privacy Policy</button>
-            <button onClick={() => navigateTo('terms')} className="hover:text-blue-600 dark:hover:text-white cursor-pointer transition-colors">Terms & Conditions</button>
+            <button onClick={() => navigateTo('cookies')} className="hover:text-blue-600 dark:hover:text-white cursor-pointer transition-colors">Cookie Policy</button>
+            <button onClick={() => window.dispatchEvent(new CustomEvent('open-cookie-settings'))} className="hover:text-blue-600 dark:hover:text-white cursor-pointer transition-colors">Cookie Settings</button>
+            <button onClick={() => navigateTo('terms')} className="hover:text-blue-600 dark:hover:text-white cursor-pointer transition-colors">Terms &amp; Conditions</button>
             <button onClick={() => navigateTo('disclaimer')} className="hover:text-blue-600 dark:hover:text-white cursor-pointer transition-colors">Disclaimer</button>
             <button onClick={() => navigateTo('contact')} className="hover:text-blue-600 dark:hover:text-white cursor-pointer transition-colors">Contact Us</button>
           </div>

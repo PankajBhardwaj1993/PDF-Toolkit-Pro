@@ -8,6 +8,7 @@ import SEO from './components/SEO';
 import Breadcrumbs from './components/Breadcrumbs';
 import ErrorBoundary from './components/ErrorBoundary';
 import PageSkeleton from './components/PageSkeleton';
+import CookieConsent from './components/CookieConsent';
 
 import ToolGrid from './components/ToolGrid';
 const ToolActiveView = React.lazy(() => import('./components/ToolActiveView'));
@@ -83,6 +84,8 @@ function AppContent() {
     'contact',
     'about',
     'privacy',
+    'cookies',
+    'cookie-policy',
     'terms',
     'disclaimer',
     'docs',
@@ -751,9 +754,9 @@ function AppContent() {
               setShowAuthModal(true);
             }}
           />
-        ) : (activeTab === 'about' || activeTab === 'privacy' || activeTab === 'terms' || activeTab === 'disclaimer' || activeTab === 'contact') ? (
+        ) : (activeTab === 'about' || activeTab === 'privacy' || activeTab === 'cookies' || activeTab === 'cookie-policy' || activeTab === 'terms' || activeTab === 'disclaimer' || activeTab === 'contact') ? (
           <InfoPagesView
-            initialSection={activeTab as 'about' | 'privacy' | 'terms' | 'disclaimer' | 'contact'}
+            initialSection={(activeTab === 'cookie-policy' ? 'cookies' : activeTab) as 'about' | 'privacy' | 'terms' | 'disclaimer' | 'contact' | 'cookies'}
             onNavigateToTickets={() => navigate('/tickets')}
           />
         ) : activeTab === 'docs' ? (
@@ -1067,6 +1070,9 @@ function AppContent() {
           </div>
         </div>
       )}
+
+      {/* GDPR / CCPA / Google AdSense Cookie Consent Banner & Modal */}
+      <CookieConsent onOpenPolicy={() => navigate('/cookies')} />
 
     </div>
   );

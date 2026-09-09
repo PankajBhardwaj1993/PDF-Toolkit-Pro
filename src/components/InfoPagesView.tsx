@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Info, ShieldCheck, Scale, AlertTriangle, Mail, MapPin, 
   MessageSquare, ExternalLink, Calendar, CheckCircle2, ChevronRight,
-  Shield, Key, Sparkles, Building2, Globe
+  Shield, Key, Sparkles, Building2, Globe, Cookie, Sliders, Check
 } from 'lucide-react';
 
 interface InfoPagesViewProps {
-  initialSection?: 'about' | 'privacy' | 'terms' | 'disclaimer' | 'contact';
+  initialSection?: 'about' | 'privacy' | 'terms' | 'disclaimer' | 'contact' | 'cookies';
   onNavigateToTickets?: () => void;
 }
 
@@ -23,6 +23,7 @@ export default function InfoPagesView({ initialSection = 'about', onNavigateToTi
   const tabs = [
     { id: 'about', label: 'About Us', icon: Info, desc: 'Our mission and background' },
     { id: 'privacy', label: 'Privacy Policy', icon: ShieldCheck, desc: 'How we protect your data' },
+    { id: 'cookies', label: 'Cookie Policy', icon: Cookie, desc: 'AdSense & Cookie Consent' },
     { id: 'terms', label: 'Terms & Conditions', icon: Scale, desc: 'Rules and terms of usage' },
     { id: 'disclaimer', label: 'Disclaimer', icon: AlertTriangle, desc: 'Legal exclusions and liabilities' },
     { id: 'contact', label: 'Contact Us', icon: Mail, desc: 'Get in touch with support' },
@@ -42,6 +43,13 @@ export default function InfoPagesView({ initialSection = 'about', onNavigateToTi
       canonical: "https://pdftoolkitpro.online/privacy",
       h1: "Privacy Policy",
       keywords: ["PDF privacy policy", "secure PDF processing", "zero retention PDF"]
+    },
+    cookies: {
+      title: "Cookie Policy & AdSense Consent | PDF Toolkit Pro",
+      description: "Learn about how PDF Toolkit Pro uses cookies, Google AdSense, DoubleClick DART cookies, and manage your GDPR/CCPA privacy preferences.",
+      canonical: "https://pdftoolkitpro.online/cookies",
+      h1: "Cookie & Consent Policy",
+      keywords: ["Cookie policy", "Google AdSense cookies", "GDPR cookie consent", "CCPA privacy choices", "PDF toolkit pro cookies"]
     },
     terms: {
       title: "Terms of Service | PDF Toolkit Pro",
@@ -293,6 +301,212 @@ export default function InfoPagesView({ initialSection = 'about', onNavigateToTi
                     If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us at <a href="mailto:support@pdftoolkitpro.online" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">support@pdftoolkitpro.online</a>.
                   </p>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* ================= COOKIE POLICY & ADSENSE CONSENT TAB ================= */}
+          {activeTab === 'cookies' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="flex items-center gap-3 border-b border-slate-100 dark:border-zinc-900 pb-4">
+                <div className="h-10 w-10 bg-amber-50 dark:bg-amber-500/10 rounded-xl flex items-center justify-center text-amber-600 dark:text-amber-400">
+                  <Cookie className="h-5 w-5" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-zinc-50 font-display">Cookie Policy &amp; Consent Management</h2>
+                  <p className="text-xs text-slate-400 dark:text-zinc-500">Last Updated: September 2026 • GDPR, CCPA &amp; Google AdSense Compliant</p>
+                </div>
+              </div>
+
+              <div className="prose prose-slate dark:prose-invert max-w-none text-xs leading-relaxed text-slate-600 dark:text-zinc-300 space-y-6">
+                
+                {/* Highlights and Direct Action Box */}
+                <div className="bg-amber-500/10 border border-amber-500/20 p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <p className="font-bold text-sm text-slate-900 dark:text-zinc-100 flex items-center gap-2">
+                      <Sliders className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                      Manage Your Cookie Choices Anytime
+                    </p>
+                    <p className="text-xs text-slate-600 dark:text-zinc-400">
+                      You have full control over analytics and advertising cookies used on PDF Toolkit Pro.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      window.dispatchEvent(new CustomEvent('open-cookie-settings'));
+                    }}
+                    className="shrink-0 px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold shadow-md transition-all cursor-pointer flex items-center gap-2"
+                  >
+                    <Sliders className="h-3.5 w-3.5" />
+                    <span>Open Cookie Preferences</span>
+                  </button>
+                </div>
+
+                {/* Section 1: What Are Cookies */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    1. What Are Cookies and Tracking Technologies?
+                  </h3>
+                  <p>
+                    Cookies are small text data files placed on your computer, tablet, or mobile smartphone when you visit web pages. They are widely utilized by online software to make websites function properly, enhance navigation speed, remember user preferences, and provide analytical telemetry to site operators.
+                  </p>
+                  <p className="mt-2">
+                    In addition to standard HTTP cookies, we and our verified third-party partners (such as Google LLC) may use local storage, session storage, and web beacons (pixels) to support platform features and display relevant digital advertisements.
+                  </p>
+                </div>
+
+                {/* Section 2: Categories of Cookies */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-2">
+                    2. Categories of Cookies We Utilize
+                  </h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+                    <div className="p-4 bg-slate-50 dark:bg-zinc-900/60 rounded-xl border border-slate-100 dark:border-zinc-800 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-slate-900 dark:text-zinc-100 text-xs">Strictly Necessary</span>
+                        <span className="text-[9px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">Essential</span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 dark:text-zinc-400">
+                        Essential for site operation, remembering Dark/Light mode theme preferences, keeping local encryption keys, and executing in-browser WebAssembly PDF processing.
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-slate-50 dark:bg-zinc-900/60 rounded-xl border border-slate-100 dark:border-zinc-800 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-slate-900 dark:text-zinc-100 text-xs">Analytics &amp; Performance</span>
+                        <span className="text-[9px] font-bold text-blue-600 bg-blue-500/10 px-1.5 py-0.5 rounded">Optional</span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 dark:text-zinc-400">
+                        Collects aggregated, non-personally identifiable telemetry regarding page load speeds, active tool usage, and system crash diagnostics to maintain service quality.
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-slate-50 dark:bg-zinc-900/60 rounded-xl border border-slate-100 dark:border-zinc-800 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-slate-900 dark:text-zinc-100 text-xs">Advertising &amp; AdSense</span>
+                        <span className="text-[9px] font-bold text-purple-600 bg-purple-500/10 px-1.5 py-0.5 rounded">Ad Partners</span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 dark:text-zinc-400">
+                        Placed by Google AdSense &amp; certified advertising networks to display relevant ads that keep all PDF Toolkit Pro features 100% free of subscription fees.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Section 3: Google AdSense and DoubleClick DART Cookie */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    3. Google AdSense, DoubleClick DART Cookies &amp; Third-Party Vendors
+                  </h3>
+                  <p className="mb-2">
+                    Google is a primary third-party advertising vendor on <strong>PDF Toolkit Pro</strong> (<span className="font-mono text-blue-600 dark:text-blue-400">https://pdftoolkitpro.online</span>). Google's use of advertising cookies enables it and its partners to serve advertisements to our users based on their visits to our site and/or other sites across the Internet.
+                  </p>
+                  <ul className="list-disc pl-5 space-y-2 text-slate-700 dark:text-zinc-300">
+                    <li>
+                      <strong>DoubleClick DART Cookie:</strong> Google uses cookies (including the DART cookie) to serve ads based on your interest profile and prior browsing history.
+                    </li>
+                    <li>
+                      <strong>Personalized vs. Non-Personalized Ads:</strong> Depending on your consent choices under GDPR (European Economic Area &amp; UK) and CCPA (California), Google may serve personalized ads or contextual non-personalized ads.
+                    </li>
+                    <li>
+                      <strong>Opting Out of Google Personalized Ads:</strong> You can opt out of personalized advertising by visiting Google's official <a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">Google Ads Settings page</a>.
+                    </li>
+                    <li>
+                      <strong>Industry Opt-Out Portals:</strong> You may also opt out of third-party vendor cookies across multiple ad networks by visiting <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">www.aboutads.info/choices</a> or the Network Advertising Initiative at <a href="https://optout.networkadvertising.org/" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">optout.networkadvertising.org</a>.
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Section 4: GDPR & CCPA Compliance */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    4. GDPR, UK GDPR &amp; CCPA/CPRA Compliance Disclosures
+                  </h3>
+                  <p className="mb-2">
+                    We strictly adhere to global privacy frameworks and provide transparent consent mechanisms for all site visitors:
+                  </p>
+                  <ul className="list-disc pl-5 space-y-1.5 text-slate-700 dark:text-zinc-300">
+                    <li>
+                      <strong>For EEA &amp; UK Users (GDPR):</strong> Non-essential cookies (Analytics and Advertising) are not activated unless you explicitly provide consent via our Consent Banner or Preferences Modal. You may withdraw or modify consent at any time without restriction.
+                    </li>
+                    <li>
+                      <strong>For California &amp; US Users (CCPA / CPRA):</strong> We do not sell your personal data or document contents. You have the right to opt-out of cross-context behavioral advertising and request data disclosures.
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Section 5: How to Control Cookies in Your Browser */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    5. How to Disable or Clear Cookies in Your Web Browser
+                  </h3>
+                  <p className="mb-2">
+                    Most modern web browsers allow you to manage or block cookies through their application settings. Please consult the help guides below for instructions corresponding to your browser:
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+                    <a
+                      href="https://support.google.com/chrome/answer/95647"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2.5 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200/60 dark:border-zinc-800 text-center hover:border-blue-500 transition-colors"
+                    >
+                      <p className="font-bold text-xs text-slate-800 dark:text-zinc-200">Google Chrome</p>
+                      <span className="text-[10px] text-blue-600 dark:text-blue-400">Cookie Settings →</span>
+                    </a>
+                    <a
+                      href="https://support.mozilla.org/en-US/kb/enhanced-tracking-protection-firefox-desktop"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2.5 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200/60 dark:border-zinc-800 text-center hover:border-blue-500 transition-colors"
+                    >
+                      <p className="font-bold text-xs text-slate-800 dark:text-zinc-200">Mozilla Firefox</p>
+                      <span className="text-[10px] text-blue-600 dark:text-blue-400">Cookie Settings →</span>
+                    </a>
+                    <a
+                      href="https://support.apple.com/guide/safari/manage-cookies-sfri11471/mac"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2.5 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200/60 dark:border-zinc-800 text-center hover:border-blue-500 transition-colors"
+                    >
+                      <p className="font-bold text-xs text-slate-800 dark:text-zinc-200">Apple Safari</p>
+                      <span className="text-[10px] text-blue-600 dark:text-blue-400">Cookie Settings →</span>
+                    </a>
+                    <a
+                      href="https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2.5 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200/60 dark:border-zinc-800 text-center hover:border-blue-500 transition-colors"
+                    >
+                      <p className="font-bold text-xs text-slate-800 dark:text-zinc-200">Microsoft Edge</p>
+                      <span className="text-[10px] text-blue-600 dark:text-blue-400">Cookie Settings →</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Section 6: Inquiries */}
+                <div className="pt-2 border-t border-slate-100 dark:border-zinc-800">
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                    6. Questions &amp; Contact Information
+                  </h3>
+                  <p>
+                    If you have questions regarding our Cookie Policy, Google AdSense integration, or data protection practices, please contact us at:
+                  </p>
+                  <div className="mt-2.5 p-3.5 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200/60 dark:border-zinc-800 flex flex-wrap gap-6 text-xs text-slate-600 dark:text-zinc-300">
+                    <div>
+                      <span className="font-semibold text-slate-800 dark:text-zinc-200">Email: </span>
+                      <a href="mailto:support@pdftoolkitpro.online" className="text-blue-600 dark:text-blue-400 hover:underline">
+                        support@pdftoolkitpro.online
+                      </a>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-slate-800 dark:text-zinc-200">Website: </span>
+                      <span className="text-slate-800 dark:text-zinc-300 font-mono">https://pdftoolkitpro.online</span>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
           )}
