@@ -23,7 +23,9 @@ import {
   Save, 
   Eye, 
   SlidersHorizontal,
-  FileCheck
+  FileCheck,
+  BookOpen,
+  ArrowRight
 } from 'lucide-react';
 import { saveAs } from 'file-saver';
 import { PDFDocument } from 'pdf-lib';
@@ -295,58 +297,69 @@ export default function PdfMetadataEditorWorkstation({
           </div>
         </div>
 
-        {file && (
-          <div className="flex items-center gap-2 self-end sm:self-auto flex-wrap">
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-xs font-semibold text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
-              title="Upload different PDF"
-            >
-              <Upload className="h-3.5 w-3.5" />
-              <span>Change PDF</span>
-            </button>
-            <button
-              id="metadata-strip-btn"
-              onClick={handleStripAll}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-xs font-semibold text-slate-700 dark:text-zinc-300 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950/30 dark:hover:text-rose-400 transition-colors cursor-pointer"
-              title="Remove all identifying metadata fields"
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-              <span>Strip All</span>
-            </button>
-            <button
-              id="metadata-reset-btn"
-              onClick={handleReset}
-              disabled={!hasChanges}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-xs font-semibold transition-colors ${
-                hasChanges 
-                  ? 'text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/5 cursor-pointer' 
-                  : 'text-slate-400 dark:text-zinc-600 opacity-50 cursor-not-allowed'
-              }`}
-            >
-              <RefreshCw className="h-3.5 w-3.5" />
-              <span>Reset</span>
-            </button>
-            <button
-              id="metadata-save-btn"
-              onClick={handleSaveAndDownload}
-              disabled={isSaving}
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-sm transition-colors cursor-pointer disabled:opacity-50"
-            >
-              {isSaving ? (
-                <>
-                  <RefreshCw className="h-3.5 w-3.5 animate-spin" />
-                  <span>Saving...</span>
-                </>
-              ) : (
-                <>
-                  <Download className="h-3.5 w-3.5" />
-                  <span>Download PDF</span>
-                </>
-              )}
-            </button>
-          </div>
-        )}
+        <div className="flex items-center gap-2 self-end sm:self-auto flex-wrap">
+          <a
+            href="https://pdftoolkitpro.online/blog/how-to-edit-pdf-metadata-online-free"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-200 dark:border-rose-900/50 bg-rose-50/70 hover:bg-rose-100/80 dark:bg-rose-950/40 dark:hover:bg-rose-900/60 text-xs font-semibold text-rose-700 dark:text-rose-300 transition-colors cursor-pointer"
+            title="Read Complete Step-by-Step Tutorial"
+          >
+            <BookOpen className="h-3.5 w-3.5" />
+            <span>Tutorial Guide</span>
+          </a>
+
+          {file && (
+            <>
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-xs font-semibold text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                title="Upload different PDF"
+              >
+                <Upload className="h-3.5 w-3.5" />
+                <span>Change PDF</span>
+              </button>
+              <button
+                id="metadata-strip-btn"
+                onClick={handleStripAll}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-xs font-semibold text-slate-700 dark:text-zinc-300 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950/30 dark:hover:text-rose-400 transition-colors cursor-pointer"
+                title="Remove all identifying metadata fields"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                <span>Strip All</span>
+              </button>
+              <button
+                id="metadata-reset-btn"
+                onClick={handleReset}
+                disabled={!hasChanges}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-xs font-semibold transition-colors ${
+                  hasChanges 
+                    ? 'text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/5 cursor-pointer' 
+                    : 'text-slate-400 dark:text-zinc-600 opacity-50 cursor-not-allowed'
+                }`}
+              >
+                <RefreshCw className="h-3.5 w-3.5" />
+                <span>Reset</span>
+              </button>
+              <button
+                id="metadata-save-btn"
+                onClick={handleSaveAndDownload}
+                disabled={isSaving}
+                className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-sm transition-colors cursor-pointer disabled:opacity-50"
+              >
+                {isSaving ? (
+                  <>
+                    <RefreshCw className="h-3.5 w-3.5 animate-spin" />
+                    <span>Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <Download className="h-3.5 w-3.5" />
+                    <span>Download PDF</span>
+                  </>
+                )}
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Messages */}
@@ -456,6 +469,29 @@ export default function PdfMetadataEditorWorkstation({
               <span>•</span>
               <span>Total Privacy</span>
             </div>
+          </div>
+
+          <div className="mt-4 pt-4 border-t border-slate-100 dark:border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
+            <div className="flex items-center gap-2.5">
+              <div className="h-8 w-8 rounded-lg bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+                <BookOpen className="h-4 w-4" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-slate-800 dark:text-zinc-200">
+                  New Tutorial: How to View, Edit & Clean PDF Metadata Online
+                </p>
+                <p className="text-[11px] text-slate-500 dark:text-zinc-400">
+                  Learn how document properties work, why sanitizing author tags protects privacy, and step-by-step instructions.
+                </p>
+              </div>
+            </div>
+            <a
+              href="https://pdftoolkitpro.online/blog/how-to-edit-pdf-metadata-online-free"
+              className="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100/80 dark:bg-rose-950/40 dark:hover:bg-rose-900/60 text-rose-700 dark:text-rose-300 text-xs font-bold transition-all group"
+            >
+              <span>Read Blog Guide</span>
+              <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </a>
           </div>
         </div>
       ) : (

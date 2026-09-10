@@ -50,6 +50,21 @@ const toolBlogMap: Record<string, { id: string; title: string; desc: string }> =
     id: 'online-pdf-editor-how-to-edit-pdf-files-online-for-free',
     title: 'Online PDF Editor: How to Edit PDF Files Online for Free',
     desc: 'Add text, signatures, annotations, and form fields to your PDF files directly in your web browser.'
+  },
+  edit_pdf_metadata: {
+    id: 'how-to-edit-pdf-metadata-online-free',
+    title: 'How to View, Edit & Clean PDF Document Metadata Online for Free',
+    desc: 'Learn how to inspect, change, or anonymize document properties (Title, Author, Subject, Keywords) directly in your browser with 100% privacy.'
+  },
+  pdf_metadata: {
+    id: 'how-to-edit-pdf-metadata-online-free',
+    title: 'How to View, Edit & Clean PDF Document Metadata Online for Free',
+    desc: 'Learn how to inspect, change, or anonymize document properties (Title, Author, Subject, Keywords) directly in your browser with 100% privacy.'
+  },
+  pdf_metadata_editor: {
+    id: 'how-to-edit-pdf-metadata-online-free',
+    title: 'How to View, Edit & Clean PDF Document Metadata Online for Free',
+    desc: 'Learn how to inspect, change, or anonymize document properties (Title, Author, Subject, Keywords) directly in your browser with 100% privacy.'
   }
 };
 
