@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
   Download, Upload, RotateCw, RotateCcw, Image as ImageIcon, Loader2, 
   ArrowLeft, RefreshCw, Check, Maximize, Sliders, Crop, AlertCircle,
-  FlipHorizontal, FlipVertical, Grid, Trash2
+  FlipHorizontal, FlipVertical, Grid, Trash2, BookOpen, ArrowRight
 } from 'lucide-react';
 
 const formatBytes = (bytes: number) => {
@@ -437,6 +437,29 @@ export default function CropImageWorkstation({ onAddRecentFile, user, onBackToTo
           <p className="text-xs text-slate-400 dark:text-zinc-500 max-w-sm mx-auto">
             Supports high-resolution PNG, JPEG, WebP, GIF, or BMP image formats.
           </p>
+
+          <div className="mt-6 pt-4 border-t border-slate-200/60 dark:border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
+            <div className="flex items-center gap-2.5">
+              <div className="h-8 w-8 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                <BookOpen className="h-4 w-4" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-slate-800 dark:text-zinc-200">
+                  New Tutorial: How to Crop Images Online & Select Aspect Ratios
+                </p>
+                <p className="text-[11px] text-slate-500 dark:text-zinc-400">
+                  Learn how to trim photos, use 1:1, 16:9, 9:16 presets, and compose shots like a pro.
+                </p>
+              </div>
+            </div>
+            <a
+              href="https://pdftoolkitpro.online/blog/how-to-crop-image-online-free-custom-aspect-ratios"
+              className="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100/80 dark:bg-blue-950/40 dark:hover:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold transition-all group"
+            >
+              <span>Read Blog Guide</span>
+              <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </a>
+          </div>
         </div>
       ) : croppedResult ? (
         /* CROP SUCCESS PANEL */

@@ -1276,6 +1276,56 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
 
           {(toolId === 'compress_image' || toolId === 'resize_image' || toolId === 'convert_image') && (
             <div className="space-y-4">
+              {/* Tutorial Guide Link */}
+              {toolId === 'compress_image' && (
+                <div className="p-3 bg-blue-50/60 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-left">
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                    <span className="text-xs text-slate-700 dark:text-zinc-300 font-medium">
+                      New Guide: <strong>How to Compress Images Online Without Quality Loss</strong>
+                    </span>
+                  </div>
+                  <a
+                    href="https://pdftoolkitpro.online/blog/how-to-compress-image-online-free-without-losing-quality"
+                    className="shrink-0 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1"
+                  >
+                    Read Tutorial <ArrowRight className="h-3 w-3" />
+                  </a>
+                </div>
+              )}
+              {toolId === 'resize_image' && (
+                <div className="p-3 bg-blue-50/60 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-left">
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                    <span className="text-xs text-slate-700 dark:text-zinc-300 font-medium">
+                      New Guide: <strong>How to Resize Image Dimensions by Pixel & Percentage</strong>
+                    </span>
+                  </div>
+                  <a
+                    href="https://pdftoolkitpro.online/blog/how-to-resize-image-online-free-by-pixel-and-percentage"
+                    className="shrink-0 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1"
+                  >
+                    Read Tutorial <ArrowRight className="h-3 w-3" />
+                  </a>
+                </div>
+              )}
+              {toolId === 'convert_image' && (
+                <div className="p-3 bg-blue-50/60 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-left">
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                    <span className="text-xs text-slate-700 dark:text-zinc-300 font-medium">
+                      New Guide: <strong>How to Convert Image Formats (JPG, PNG, WebP)</strong>
+                    </span>
+                  </div>
+                  <a
+                    href="https://pdftoolkitpro.online/blog/how-to-convert-image-format-online-free-jpg-png-webp"
+                    className="shrink-0 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1"
+                  >
+                    Read Tutorial <ArrowRight className="h-3 w-3" />
+                  </a>
+                </div>
+              )}
+
               {/* Only show Width and Height fields for Resize or Convert tools, NOT for Compress Image */}
               {toolId !== 'compress_image' && (
                 <div className="grid grid-cols-2 gap-4">

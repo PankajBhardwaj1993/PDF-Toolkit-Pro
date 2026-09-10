@@ -65,6 +65,26 @@ const toolBlogMap: Record<string, { id: string; title: string; desc: string }> =
     id: 'how-to-edit-pdf-metadata-online-free',
     title: 'How to View, Edit & Clean PDF Document Metadata Online for Free',
     desc: 'Learn how to inspect, change, or anonymize document properties (Title, Author, Subject, Keywords) directly in your browser with 100% privacy.'
+  },
+  compress_image: {
+    id: 'how-to-compress-image-online-free-without-losing-quality',
+    title: 'How to Compress Image Online Free Without Losing Quality',
+    desc: 'Reduce JPG, PNG, and WebP file sizes by up to 85% with interactive compression presets and 100% in-browser privacy.'
+  },
+  resize_image: {
+    id: 'how-to-resize-image-online-free-by-pixel-and-percentage',
+    title: 'How to Resize Image Online Free by Pixel & Percentage',
+    desc: 'Scale image width and height with aspect ratio locking for social media, YouTube thumbnails, and website banners.'
+  },
+  convert_image: {
+    id: 'how-to-convert-image-format-online-free-jpg-png-webp',
+    title: 'How to Convert Image Formats Online for Free (JPG, PNG, WebP)',
+    desc: 'Easily switch image formats to preserve transparency or optimize website performance in seconds.'
+  },
+  crop_image: {
+    id: 'how-to-crop-image-online-free-custom-aspect-ratios',
+    title: 'How to Crop Image Online Free with Aspect Ratios',
+    desc: 'Trim unwanted borders or choose standard social aspect ratios (1:1, 16:9, 4:3, 9:16) with interactive visual canvas.'
   }
 };
 
