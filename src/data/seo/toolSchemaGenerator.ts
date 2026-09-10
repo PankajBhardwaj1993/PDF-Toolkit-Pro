@@ -59,10 +59,7 @@ export function generateToolSchema(tool: ToolBasicInfo, seoData?: ToolSeoContent
         "@type": "ImageObject",
         "url": `${siteUrl}/logo.png`,
         "caption": "PDF Toolkit Pro"
-      },
-      "sameAs": [
-        "https://github.com/PankajBhardwaj1993/PDF-Toolkit-Pro"
-      ]
+      }
     },
 
     // 3. WebPage definition

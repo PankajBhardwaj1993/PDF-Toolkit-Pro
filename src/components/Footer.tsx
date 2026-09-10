@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, ArrowRight, ShieldCheck, CheckCircle2, Globe, Sparkles, FileText, ExternalLink, Github, Heart } from 'lucide-react';
+import { Mail, ArrowRight, ShieldCheck, CheckCircle2, Globe, Sparkles, FileText, ExternalLink, Heart } from 'lucide-react';
 
 interface FooterProps {
   setActiveTab: (tab: string) => void;
@@ -497,21 +497,9 @@ export default function Footer({ setActiveTab, setSelectedToolId, isDonationDisa
             {/* External Authority & Standards Links */}
             <div className="mt-5 pt-4 border-t border-slate-200 dark:border-zinc-800">
               <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">
-                External Authority
+                Standards &amp; Feeds
               </h4>
               <ul className="space-y-1.5 text-[11px]">
-                <li>
-                  <a 
-                    href="https://github.com/PankajBhardwaj1993/PDF-Toolkit-Pro" 
-                    target="_blank" 
-                    rel="noopener"
-                    className="text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white inline-flex items-center gap-1 transition-colors"
-                  >
-                    <Github className="h-3 w-3" />
-                    <span>GitHub Repository</span>
-                    <ExternalLink className="h-2.5 w-2.5 opacity-60" />
-                  </a>
-                </li>
                 <li>
                   <a 
                     href="https://www.pdfa.org" 
