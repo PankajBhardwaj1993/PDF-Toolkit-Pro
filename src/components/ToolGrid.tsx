@@ -87,19 +87,31 @@ export default function ToolGrid({
             </div>
 
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 self-stretch sm:self-start lg:self-center shrink-0">
-              <button
-                onClick={() => setActiveCategory('signature')}
-                className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs sm:text-sm px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl shadow-md cursor-pointer transition-transform hover:-translate-y-0.5 active:translate-y-0"
+              <a
+                href="/tools/sign_pdf"
+                onClick={(e) => {
+                  if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                    e.preventDefault();
+                    onSelectTool('sign_pdf');
+                  }
+                }}
+                className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs sm:text-sm px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl shadow-md cursor-pointer transition-transform hover:-translate-y-0.5 active:translate-y-0 no-underline"
               >
                 <FileSignature className="h-4 w-4 shrink-0" />
                 <span>Sign & Fill PDFs</span>
-              </button>
-              <button
-                onClick={() => setActiveCategory('pdf')}
-                className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-white/10 hover:bg-white/15 text-white font-semibold text-xs sm:text-sm px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl border border-white/10 cursor-pointer transition-colors"
+              </a>
+              <a
+                href="/tools"
+                onClick={(e) => {
+                  if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                    e.preventDefault();
+                    setActiveCategory('pdf');
+                  }
+                }}
+                className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 bg-white/10 hover:bg-white/15 text-white font-semibold text-xs sm:text-sm px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl border border-white/10 cursor-pointer transition-colors no-underline"
               >
                 <span>Browse PDF Tools</span>
-              </button>
+              </a>
             </div>
           </div>
         </section>
@@ -163,10 +175,16 @@ export default function ToolGrid({
             {filteredTools.map((tool) => {
               const isFavorite = favorites.includes(tool.id);
               return (
-                <div
+                <a
                   key={tool.id}
-                  onClick={() => onSelectTool(tool.id)}
-                  className={`group relative flex flex-col justify-between p-3 sm:p-3.5 bg-white dark:bg-[#0f172a]/15 border rounded-xl transition-all duration-200 min-w-0 hover:shadow-md hover:-translate-y-0.5 cursor-pointer ${
+                  href={`/tools/${tool.id}`}
+                  onClick={(e) => {
+                    if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                      e.preventDefault();
+                      onSelectTool(tool.id);
+                    }
+                  }}
+                  className={`group relative flex flex-col justify-between p-3 sm:p-3.5 bg-white dark:bg-[#0f172a]/15 border rounded-xl transition-all duration-200 min-w-0 hover:shadow-md hover:-translate-y-0.5 cursor-pointer no-underline text-inherit ${
                     tool.id === 'online_pdf_editor' 
                       ? 'border-emerald-500/70 bg-gradient-to-br from-emerald-50/50 via-emerald-50/10 to-transparent dark:from-emerald-950/30 shadow-md ring-1 ring-emerald-500/30 hover:border-emerald-600/50' 
                       : 'border-slate-200 dark:border-white/5 ' + (
@@ -258,7 +276,7 @@ export default function ToolGrid({
                     </div>
                   </div>
 
-                </div>
+                </a>
               );
             })}
           </div>

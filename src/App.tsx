@@ -778,8 +778,8 @@ function AppContent() {
         </ErrorBoundary>
       </main>
 
-      {/* Shared Footer panel */}
-      {activeTab === 'tools' && selectedToolId === null && !is404 && (
+      {/* Shared Footer panel across all pages */}
+      {!is404 && (
         <Footer setActiveTab={(tab) => navigate('/' + (tab === 'tools' ? '' : tab))} setSelectedToolId={(id) => navigate(id ? '/tools/' + id : '/')} isDonationDisabled={isDonationDisabled} />
       )}
 

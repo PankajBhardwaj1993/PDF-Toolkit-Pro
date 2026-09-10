@@ -1489,6 +1489,24 @@ OCR TEXT:
     '/sitemaps.xml'
   ], serveSitemap);
 
+  // Serve RSS 2.0 Syndication Feed
+  app.get(['/rss.xml', '/feed.xml', '/rss', '/feed'], (req, res) => {
+    res.status(200);
+    res.setHeader('Content-Type', 'application/rss+xml; charset=utf-8');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    
+    const publicRss = path.join(process.cwd(), 'public', 'rss.xml');
+    const distRss = path.join(process.cwd(), 'dist', 'rss.xml');
+    
+    if (fs.existsSync(publicRss)) {
+      return res.send(fs.readFileSync(publicRss, 'utf-8'));
+    }
+    if (fs.existsSync(distRss)) {
+      return res.send(fs.readFileSync(distRss, 'utf-8'));
+    }
+    res.status(404).send('RSS feed not found');
+  });
+
   // Serve LLMs.txt for AI Search Engines (ChatGPT, Perplexity, Gemini, Claude)
   const serveLlmsTxt = (req: express.Request, res: express.Response) => {
     res.setHeader('Content-Type', 'text/markdown; charset=utf-8');

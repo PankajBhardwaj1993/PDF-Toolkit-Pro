@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+
 Sitemap: https://pdftoolkitpro.online/sitemap.xml
-# LLM & AI Search Index
-# https://pdftoolkitpro.online/llms.txt
+Sitemap: https://pdftoolkitpro.online/sitemap-images.xml
+# Syndication Feed: https://pdftoolkitpro.online/rss.xml
+# LLM AI Context: https://pdftoolkitpro.online/llms.txt

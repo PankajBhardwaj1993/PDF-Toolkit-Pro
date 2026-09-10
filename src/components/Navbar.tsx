@@ -58,10 +58,16 @@ export default function Navbar({
       <div className="mx-auto flex h-16 w-full max-w-[1850px] items-center justify-between px-3 sm:px-6 lg:px-8 xl:px-12">
         
         {/* Brand Logo */}
-        <button 
+        <a 
           id="nav-logo-btn"
-          onClick={handleLogoClick}
-          className="flex items-center gap-2 text-left cursor-pointer focus:outline-none min-w-0 shrink-0"
+          href="/"
+          onClick={(e) => {
+            if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+              e.preventDefault();
+              handleLogoClick();
+            }
+          }}
+          className="flex items-center gap-2 text-left cursor-pointer focus:outline-none min-w-0 shrink-0 no-underline"
         >
           <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 via-blue-500 to-purple-500 text-white shadow-md shadow-blue-500/20 shrink-0">
             <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -74,7 +80,7 @@ export default function Navbar({
               High-Speed Utilities
             </span>
           </div>
-        </button>
+        </a>
 
         {/* Desktop Global Tools Search */}
         <div className="relative hidden md:block flex-1 max-w-xs lg:max-w-md xl:max-w-xl mx-4 lg:mx-6">
@@ -106,35 +112,53 @@ export default function Navbar({
         {/* Desktop Navigation Links & Actions */}
         <div className="hidden md:flex items-center gap-2 lg:gap-4 shrink-0">
           <nav className="flex items-center gap-1 lg:gap-1.5 py-1">
-            <button
+            <a
               id="nav-tools-tab"
-              onClick={() => handleNavClick('tools')}
-              className={`text-xs lg:text-sm font-medium px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
+              href="/tools"
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                  e.preventDefault();
+                  handleNavClick('tools');
+                }
+              }}
+              className={`text-xs lg:text-sm font-medium px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap no-underline ${
                 activeTab === 'tools' 
                   ? 'text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-500/10 font-bold' 
                   : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200'
               }`}
             >
               All Tools
-            </button>
+            </a>
 
-            <button
+            <a
               id="nav-blog-tab"
-              onClick={() => handleNavClick('blog')}
-              className={`text-xs lg:text-sm font-medium px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
+              href="/blog"
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                  e.preventDefault();
+                  handleNavClick('blog');
+                }
+              }}
+              className={`text-xs lg:text-sm font-medium px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap no-underline ${
                 activeTab === 'blog' 
                   ? 'text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-500/10 font-bold' 
                   : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200'
               }`}
             >
               Blog
-            </button>
+            </a>
 
             {user?.role === 'admin' && (
-              <button
+              <a
                 id="nav-admin-tab"
-                onClick={() => handleNavClick('admin')}
-                className={`text-xs lg:text-sm font-bold px-2.5 lg:px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shadow-xs ${
+                href="/admin"
+                onClick={(e) => {
+                  if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                    e.preventDefault();
+                    handleNavClick('admin');
+                  }
+                }}
+                className={`text-xs lg:text-sm font-bold px-2.5 lg:px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shadow-xs no-underline ${
                   activeTab === 'admin' 
                     ? 'text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-950/60 border border-purple-500/30 font-bold' 
                     : 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/30 hover:bg-purple-100 dark:hover:bg-purple-900/40 border border-purple-500/20 font-semibold'
@@ -142,14 +166,20 @@ export default function Navbar({
               >
                 <Laptop className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
                 <span>Admin</span>
-              </button>
+              </a>
             )}
 
             {(!isDonationDisabled || user?.role === 'admin') && (
-              <button
+              <a
                 id="nav-donation-tab"
-                onClick={() => handleNavClick('donation')}
-                className={`text-xs lg:text-sm font-medium px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors cursor-pointer relative flex items-center gap-1.5 whitespace-nowrap ${
+                href="/pricing"
+                onClick={(e) => {
+                  if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                    e.preventDefault();
+                    handleNavClick('pricing');
+                  }
+                }}
+                className={`text-xs lg:text-sm font-medium px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors cursor-pointer relative flex items-center gap-1.5 whitespace-nowrap no-underline ${
                   activeTab === 'donation' || activeTab === 'pricing'
                     ? 'text-rose-600 dark:text-rose-400 bg-rose-50/50 dark:bg-rose-500/10 font-bold' 
                     : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200'
@@ -167,7 +197,7 @@ export default function Navbar({
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
                   </span>
                 )}
-              </button>
+              </a>
             )}
           </nav>
 
@@ -361,9 +391,15 @@ export default function Navbar({
                 Navigation
               </p>
 
-              <button
-                onClick={() => handleNavClick('tools')}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer ${
+              <a
+                href="/tools"
+                onClick={(e) => {
+                  if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                    e.preventDefault();
+                    handleNavClick('tools');
+                  }
+                }}
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer no-underline ${
                   activeTab === 'tools' 
                     ? 'bg-blue-50 dark:bg-blue-500/15 text-blue-600 dark:text-blue-400 font-bold' 
                     : 'text-slate-700 dark:text-zinc-200 hover:bg-slate-50 dark:hover:bg-zinc-800/50'
@@ -374,11 +410,17 @@ export default function Navbar({
                   <span>All Tools Directory</span>
                 </div>
                 <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
-              </button>
+              </a>
 
-              <button
-                onClick={() => handleNavClick('blog')}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer ${
+              <a
+                href="/blog"
+                onClick={(e) => {
+                  if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                    e.preventDefault();
+                    handleNavClick('blog');
+                  }
+                }}
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer no-underline ${
                   activeTab === 'blog' 
                     ? 'bg-blue-50 dark:bg-blue-500/15 text-blue-600 dark:text-blue-400 font-bold' 
                     : 'text-slate-700 dark:text-zinc-200 hover:bg-slate-50 dark:hover:bg-zinc-800/50'
@@ -389,12 +431,18 @@ export default function Navbar({
                   <span>Blog & Guides</span>
                 </div>
                 <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
-              </button>
+              </a>
 
               {(!isDonationDisabled || user?.role === 'admin') && (
-                <button
-                  onClick={() => handleNavClick('donation')}
-                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer ${
+                <a
+                  href="/pricing"
+                  onClick={(e) => {
+                    if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                      e.preventDefault();
+                      handleNavClick('pricing');
+                    }
+                  }}
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer no-underline ${
                     activeTab === 'donation' || activeTab === 'pricing'
                       ? 'bg-rose-50 dark:bg-rose-500/15 text-rose-600 dark:text-rose-400 font-bold' 
                       : 'text-slate-700 dark:text-zinc-200 hover:bg-slate-50 dark:hover:bg-zinc-800/50'
@@ -413,20 +461,26 @@ export default function Navbar({
                       Help Us
                     </span>
                   )}
-                </button>
+                </a>
               )}
 
               {user?.role === 'admin' && (
-                <button
-                  onClick={() => handleNavClick('admin')}
-                  className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-extrabold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/40 border border-purple-500/20 cursor-pointer"
+                <a
+                  href="/admin"
+                  onClick={(e) => {
+                    if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                      e.preventDefault();
+                      handleNavClick('admin');
+                    }
+                  }}
+                  className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-extrabold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/40 border border-purple-500/20 cursor-pointer no-underline"
                 >
                   <div className="flex items-center gap-2.5">
                     <Laptop className="h-4.5 w-4.5 text-purple-600 dark:text-purple-400" />
                     <span>Admin SEO Console</span>
                   </div>
                   <ArrowRight className="h-3.5 w-3.5" />
-                </button>
+                </a>
               )}
             </div>
 
