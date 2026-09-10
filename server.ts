@@ -1466,7 +1466,9 @@ OCR TEXT:
       '/', '/tools', '/converter', '/blog', '/pricing', '/donation', '/docs', '/contact', '/about', '/privacy', '/cookies', '/terms', '/disclaimer'
     ];
     const toolUrls = allToolsList.filter(t => !t.hidden).map(t => '/tools/' + (t.slug || t.id));
-    const blogUrls = ['/blog/b_001', '/blog/b_002', '/blog/b_003'];
+    const blogUrls = (db.blogPosts && db.blogPosts.length > 0)
+      ? db.blogPosts.map(b => '/blog/' + b.id)
+      : ['/blog/how-to-extract-pdf-pages-online-free', '/blog/how-to-delete-pdf-pages-online-free', '/blog/how-to-rotate-pdf-pages-online-free-permanently', '/blog/how-to-compress-pdf-online-free-reduce-file-size', '/blog/how-to-split-pdf-online-free', '/blog/how-to-merge-pdf-files-online-free', '/blog/online-pdf-editor-how-to-edit-pdf-files-online-for-free', '/blog/b_001', '/blog/b_002', '/blog/b_003'];
     const urls = Array.from(new Set([...staticUrls, ...toolUrls, ...blogUrls]));
     const today = new Date().toISOString().split('T')[0];
     

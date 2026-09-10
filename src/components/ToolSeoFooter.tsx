@@ -5,7 +5,7 @@ import { getToolSeoContent } from '../data/seo';
 import { 
   ArrowRight, HelpCircle, Sparkles, CheckCircle2, ShieldCheck, 
   Lock, Lightbulb, Zap, ChevronDown, Check, ExternalLink,
-  Layers, Star, Shield, Smartphone
+  Layers, Star, Shield, Smartphone, BookOpen
 } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 
@@ -14,6 +14,44 @@ interface ToolSeoFooterProps {
 }
 
 export const getToolSlug = (t: { id: string; name?: string; slug?: string }) => t.slug || t.id;
+
+const toolBlogMap: Record<string, { id: string; title: string; desc: string }> = {
+  extract_pdf: {
+    id: 'how-to-extract-pdf-pages-online-free',
+    title: 'How to Extract PDF Pages Online for Free (Step-by-Step Guide)',
+    desc: 'Learn how to pull specific individual pages or custom page ranges from multi-page PDF documents and save them as a high-quality standalone PDF in seconds with 100% privacy.'
+  },
+  delete_pdf: {
+    id: 'how-to-delete-pdf-pages-online-free',
+    title: 'How to Delete PDF Pages Online for Free',
+    desc: 'Quickly remove blank, duplicate, or confidential pages from your PDF documents permanently.'
+  },
+  rotate_pdf: {
+    id: 'how-to-rotate-pdf-pages-online-free-permanently',
+    title: 'How to Rotate PDF Pages Online for Free Permanently',
+    desc: 'Fix sideways or upside-down scanned PDF pages and re-save them with permanent orientation.'
+  },
+  compress_pdf: {
+    id: 'how-to-compress-pdf-online-free-reduce-file-size',
+    title: 'How to Compress PDF Online to Reduce File Size',
+    desc: 'Shrink large PDF documents by up to 90% without losing visual clarity for easy email attachments.'
+  },
+  split_pdf: {
+    id: 'how-to-split-pdf-online-free',
+    title: 'How to Split PDF Pages Online for Free',
+    desc: 'Divide large PDF files into separate individual documents or chapters.'
+  },
+  merge_pdf: {
+    id: 'how-to-merge-pdf-files-online-free',
+    title: 'How to Merge PDF Files Online for Free',
+    desc: 'Combine multiple PDF files into one clean, well-organized single document.'
+  },
+  edit_pdf: {
+    id: 'online-pdf-editor-how-to-edit-pdf-files-online-for-free',
+    title: 'Online PDF Editor: How to Edit PDF Files Online for Free',
+    desc: 'Add text, signatures, annotations, and form fields to your PDF files directly in your web browser.'
+  }
+};
 
 export default function ToolSeoFooter({ tool }: ToolSeoFooterProps) {
   const toolId = tool.id;
@@ -365,7 +403,32 @@ export default function ToolSeoFooter({ tool }: ToolSeoFooterProps) {
         </div>
       </section>
 
-      {/* 8. Related Tools & Complete Production URL Cross-Linking */}
+      {/* 8. Dedicated Step-by-Step Tutorial & Blog Guide */}
+      {toolBlogMap[toolId] && (
+        <section className="p-6 bg-gradient-to-r from-blue-50/80 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/10 rounded-3xl border border-blue-200/80 dark:border-blue-900/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-1.5 max-w-2xl">
+            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-100/70 dark:bg-blue-900/40 px-2.5 py-0.5 rounded-md">
+              <BookOpen className="h-3.5 w-3.5" />
+              <span>Official Step-by-Step Guide</span>
+            </div>
+            <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-zinc-100">
+              {toolBlogMap[toolId].title}
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-zinc-300 leading-relaxed">
+              {toolBlogMap[toolId].desc}
+            </p>
+          </div>
+          <a
+            href={`https://pdftoolkitpro.online/blog/${toolBlogMap[toolId].id}`}
+            className="shrink-0 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all shadow-sm hover:shadow-md flex items-center gap-2 cursor-pointer"
+          >
+            <span>Read Complete Tutorial</span>
+            <ArrowRight className="h-4 w-4" />
+          </a>
+        </section>
+      )}
+
+      {/* 9. Related Tools & Complete Production URL Cross-Linking */}
       {dynamicRelatedTools.length > 0 && (
         <section className="space-y-6 pt-4 border-t border-slate-200 dark:border-zinc-800">
           <div className="space-y-2">

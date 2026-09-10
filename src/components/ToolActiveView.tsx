@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect, Suspense } from 'react';
+import { useNavigate } from 'react-router-dom';
 import JSZip from 'jszip';
 import SEO from './SEO';
 import PageSkeleton from './PageSkeleton';
 import { 
   ArrowLeft, Upload, FileText, Download, CheckCircle, AlertCircle, 
   RotateCw, Trash2, Sliders, Sparkles, Languages, HelpCircle, FileSignature, 
-  RefreshCw, Eraser, DownloadCloud, Loader2, Play, Table, Key, QrCode
+  RefreshCw, Eraser, DownloadCloud, Loader2, Play, Table, Key, QrCode,
+  BookOpen, ArrowRight
 } from 'lucide-react';
 import { 
   mergePDFs, splitPDF, rotatePDF, deletePDFPages, 
@@ -41,6 +43,7 @@ interface ToolActiveViewProps {
 export const getToolSlug = (t: { id: string; name?: string; slug?: string }) => t.slug || t.id;
 
 export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }: ToolActiveViewProps) {
+  const navigate = useNavigate();
   const tool: Tool = allToolsList.find(t => t.id === toolId || getToolSlug(t) === toolId || t.id.replace(/_/g, '-') === toolId) || { 
     name: 'PDF Tool', 
     description: 'Process PDF files.', 
@@ -1077,15 +1080,34 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
           )}
 
           {toolId === 'extract_pdf' && (
-            <div>
-              <label className="block text-xs font-semibold uppercase text-slate-400 mb-2">Page Numbers to Extract</label>
-              <input
-                type="text"
-                placeholder="e.g. 2, 4 (comma separated)"
-                value={pagesToExtract}
-                onChange={(e) => setPagesToExtract(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900/40 rounded-xl outline-none focus:border-blue-500 dark:text-zinc-100 font-mono text-xs"
-              />
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-semibold uppercase text-slate-400 mb-2">Page Numbers to Extract</label>
+                <input
+                  type="text"
+                  placeholder="e.g. 2, 4 (comma separated)"
+                  value={pagesToExtract}
+                  onChange={(e) => setPagesToExtract(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900/40 rounded-xl outline-none focus:border-blue-500 dark:text-zinc-100 font-mono text-xs"
+                />
+              </div>
+              <a
+                href="https://pdftoolkitpro.online/blog/how-to-extract-pdf-pages-online-free"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate('/blog/how-to-extract-pdf-pages-online-free');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="flex items-center justify-between p-3 bg-blue-50/70 hover:bg-blue-100/80 dark:bg-blue-950/30 dark:hover:bg-blue-900/40 border border-blue-200/80 dark:border-blue-800/60 rounded-xl text-xs text-blue-700 dark:text-blue-300 transition-colors group cursor-pointer"
+              >
+                <span className="flex items-center gap-2 font-medium">
+                  <BookOpen className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                  <span>Tutorial: How to Extract Pages from PDF</span>
+                </span>
+                <span className="font-bold inline-flex items-center gap-1 text-[11px] group-hover:translate-x-0.5 transition-transform">
+                  Read Blog <ArrowRight className="h-3.5 w-3.5" />
+                </span>
+              </a>
             </div>
           )}
 
