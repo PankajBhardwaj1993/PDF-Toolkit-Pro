@@ -17,6 +17,9 @@ export interface SEOProps {
   lang?: string;
   alternateLinks?: AlternateHreflang[];
   noHreflang?: boolean;
+  ogImage?: string;
+  ogType?: string;
+  author?: string;
 }
 
 const DEFAULT_KEYWORDS = [
@@ -153,7 +156,10 @@ export default function SEO({
   currentLanguage,
   lang,
   alternateLinks,
-  noHreflang = false
+  noHreflang = false,
+  ogImage,
+  ogType = 'website',
+  author = 'PDF Toolkit Pro'
 }: SEOProps) {
   const siteUrl = 'https://pdftoolkitpro.online';
   
@@ -185,6 +191,11 @@ export default function SEO({
     ? description.substring(0, 152).trim() + '...'
     : description;
 
+  // Resolve OpenGraph banner image
+  const resolvedOgImage = ogImage 
+    ? (ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage.startsWith('/') ? ogImage : '/' + ogImage}`)
+    : `${siteUrl}/og-image.svg?title=${encodeURIComponent(title)}`;
+
   // Generate hreflang items
   const hreflangItems: AlternateHreflang[] = alternateLinks && alternateLinks.length > 0
     ? alternateLinks
@@ -198,6 +209,13 @@ export default function SEO({
         }))
       ];
 
+  // Normalize Schema.org format
+  const schemaPayload = schema ? (
+    Array.isArray(schema) 
+      ? { "@context": "https://schema.org", "@graph": schema } 
+      : schema
+  ) : null;
+
   return (
     <Helmet>
       {/* HTML Tag Lang & Dir Attributes */}
@@ -206,6 +224,7 @@ export default function SEO({
       <title>{title}</title>
       <meta name="description" content={cleanDescription} />
       <meta name="keywords" content={keywordString} />
+      <meta name="author" content={author} />
       <link rel="canonical" href={fullCanonical} />
 
       {/* Multilingual Discovery: hreflang tags for all 29 supported languages */}
@@ -221,12 +240,18 @@ export default function SEO({
       {/* Content Language Meta */}
       <meta httpEquiv="content-language" content={activeLang} />
       
-      {/* OpenGraph */}
+      {/* OpenGraph Protocol Tags */}
+      <meta property="og:site_name" content="PDF Toolkit Pro" />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={cleanDescription} />
       <meta property="og:url" content={fullCanonical} />
-      <meta property="og:type" content="website" />
+      <meta property="og:type" content={ogType} />
       <meta property="og:locale" content={currentOgLocale} />
+      <meta property="og:image" content={resolvedOgImage} />
+      <meta property="og:image:alt" content={title} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:type" content="image/svg+xml" />
       {Object.entries(OG_LOCALE_MAP)
         .filter(([code]) => code !== activeLang)
         .slice(0, 6)
@@ -234,14 +259,18 @@ export default function SEO({
           <meta key={`og-alt-${code}`} property="og:locale:alternate" content={locale} />
         ))}
       
-      {/* Twitter Card */}
+      {/* Twitter Cards */}
       <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@PDFToolkitPro" />
+      <meta name="twitter:creator" content="@PDFToolkitPro" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={cleanDescription} />
+      <meta name="twitter:image" content={resolvedOgImage} />
+      <meta name="twitter:image:alt" content={title} />
 
-      {schema && (
+      {schemaPayload && (
         <script type="application/ld+json">
-          {JSON.stringify(schema)}
+          {JSON.stringify(schemaPayload)}
         </script>
       )}
     </Helmet>

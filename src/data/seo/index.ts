@@ -75,4 +75,5 @@ export function getToolSeoContent(toolId: string): ToolSeoContent | null {
 }
 
 export * from './types';
+export * from './toolSchemaGenerator';
 

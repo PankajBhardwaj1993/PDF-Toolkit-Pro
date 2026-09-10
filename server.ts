@@ -19,6 +19,7 @@ function escapeXml(unsafe: string): string {
 }
 
 import { allToolsList } from './src/data/tools';
+import { getToolSeoContent, generateToolSchema } from './src/data/seo';
 import express from 'express';
 import path from 'path';
 import { spawn, execFile } from 'child_process';
@@ -1561,16 +1562,20 @@ OCR TEXT:
         let title = "PDF Toolkit Pro | Free Online PDF Tools & AI Workspace";
         let desc = "Free online PDF tools to convert, merge, compress, edit, split, and sign PDFs securely in your browser. Fast, free, and no installation required.";
         let url = `https://pdftoolkitpro.online${req.url.split('?')[0]}`;
+        let matchedTool: any = null;
+        let matchedToolSeo: any = null;
         
         if (req.url === '/tools' || req.url === '/tools/' || req.url.startsWith('/tools?')) {
           title = "All Free Online PDF & Document Tools | PDF Toolkit Pro";
           desc = "Browse all 40+ free online PDF, image, and conversion tools. Merge, edit, convert, OCR, and sign PDF files directly in your browser.";
         } else if (req.url.startsWith('/tools/')) {
           const toolId = req.url.split('/')[2]?.split('?')[0];
-          const tool = allToolsList.find(t => getToolSlug(t) === toolId || t.id === toolId || t.id.replace(/_/g, '-') === toolId);
-          if (tool) {
-            title = tool.seoTitle || `${tool.name} - Free Online PDF Tool | PDF Toolkit Pro`;
-            desc = tool.seoDescription || tool.description;
+          matchedTool = allToolsList.find(t => getToolSlug(t) === toolId || t.id === toolId || t.id.replace(/_/g, '-') === toolId);
+          if (matchedTool) {
+            matchedToolSeo = getToolSeoContent(matchedTool.id);
+            title = matchedToolSeo?.seoTitle || matchedTool.seoTitle || `${matchedTool.name} - Free Online PDF Tool | PDF Toolkit Pro`;
+            desc = matchedToolSeo?.seoDescription || matchedTool.seoDescription || matchedTool.description;
+            url = matchedToolSeo?.canonicalUrl || `https://pdftoolkitpro.online/tools/${matchedTool.id}`;
           }
         } else if (req.url.startsWith('/dashboard')) {
           title = "My Dashboard | PDF Toolkit Pro";
@@ -1588,8 +1593,11 @@ OCR TEXT:
           const cleanPath = req.url.split('?')[0].replace(/^\/+|\/+$/g, '');
           const directTool = allToolsList.find(t => getToolSlug(t) === cleanPath || t.id === cleanPath || t.id.replace(/_/g, '-') === cleanPath);
           if (directTool) {
-            title = directTool.seoTitle || `${directTool.name} - Free Online PDF Tool | PDF Toolkit Pro`;
-            desc = directTool.seoDescription || directTool.description;
+            matchedTool = directTool;
+            matchedToolSeo = getToolSeoContent(directTool.id);
+            title = matchedToolSeo?.seoTitle || directTool.seoTitle || `${directTool.name} - Free Online PDF Tool | PDF Toolkit Pro`;
+            desc = matchedToolSeo?.seoDescription || directTool.seoDescription || directTool.description;
+            url = matchedToolSeo?.canonicalUrl || `https://pdftoolkitpro.online/tools/${directTool.id}`;
           }
         }
 
@@ -1599,6 +1607,13 @@ OCR TEXT:
         }
         
         const ogImage = `https://pdftoolkitpro.online/og-image.svg?title=${encodeURIComponent(title)}`;
+        
+        // Generate tool Schema.org structured data if on a tool page
+        let toolSchemaJson = '';
+        if (matchedTool) {
+          const schemaObj = generateToolSchema(matchedTool, matchedToolSeo);
+          toolSchemaJson = `\n    <script type="application/ld+json">${JSON.stringify(schemaObj)}</script>`;
+        }
         
         // Remove ALL existing title and meta description tags globally to prevent any duplicates
         template = template.replace(/<title[^>]*>[\s\S]*?<\/title>\s*/gi, '');
@@ -1616,26 +1631,56 @@ OCR TEXT:
     <title data-rh="true">${title}</title>
     <meta data-rh="true" name="description" content="${desc}" />
     <link rel="canonical" href="${url}" />
+    <meta property="og:site_name" content="PDF Toolkit Pro" />
     <meta property="og:title" content="${title}" />
     <meta property="og:description" content="${desc}" />
     <meta property="og:url" content="${url}" />
     <meta property="og:image" content="${ogImage}" />
+    <meta property="og:image:alt" content="${title}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@PDFToolkitPro" />
+    <meta name="twitter:creator" content="@PDFToolkitPro" />
     <meta name="twitter:title" content="${title}" />
     <meta name="twitter:description" content="${desc}" />
-    <meta name="twitter:image" content="${ogImage}" />`;
+    <meta name="twitter:image" content="${ogImage}" />
+    <meta name="twitter:image:alt" content="${title}" />${toolSchemaJson}`;
         
         template = template.replace('</head>', `${seoTags}\n  </head>`);
         
         // Inject page-specific noscript fallback for search engine bots (Bing / Google)
-        const noscriptBotContent = `
+        let noscriptBotContent = `
     <noscript>
       <div style="padding: 2rem; max-width: 1200px; margin: 0 auto; text-align: center; font-family: system-ui, -apple-system, sans-serif;">
         <h1 style="font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem;">${title}</h1>
         <p style="font-size: 1rem; color: #475569;">${desc}</p>
       </div>
     </noscript>`;
+
+        if (matchedTool) {
+          noscriptBotContent = `
+    <noscript>
+      <div style="padding: 2rem; max-width: 1200px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif;">
+        <nav aria-label="Breadcrumb" style="margin-bottom: 1rem; font-size: 0.9rem; color: #64748b;">
+          <a href="/" style="color: #2563eb;">Home</a> &gt; <a href="/tools" style="color: #2563eb;">Tools</a> &gt; <span>${matchedTool.name}</span>
+        </nav>
+        <h1 style="font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-bottom: 0.75rem;">${title}</h1>
+        <p style="font-size: 1.1rem; color: #475569; max-width: 850px; line-height: 1.6; margin-bottom: 1.5rem;">${desc}</p>
+        ${matchedToolSeo?.howToSteps && matchedToolSeo.howToSteps.length > 0 ? `
+        <div style="text-align: left; margin: 2rem 0; background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+          <h2 style="font-size: 1.3rem; font-weight: bold; color: #1e293b; margin-bottom: 0.75rem;">How to use ${matchedTool.name} Online for Free</h2>
+          <ol style="line-height: 1.8; color: #334155; padding-left: 1.25rem;">
+            ${matchedToolSeo.howToSteps.map((s: any) => `<li><strong>${s.title}:</strong> ${s.description}</li>`).join('')}
+          </ol>
+        </div>` : ''}
+        <div style="margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
+          <a href="/tools" style="color: #2563eb; text-decoration: underline; font-weight: 600;">&larr; Browse all free PDF &amp; image tools</a>
+        </div>
+      </div>
+    </noscript>`;
+        }
         template = template.replace(/<noscript>[\s\S]*?<\/noscript>/i, noscriptBotContent);
         
         res.send(template);

@@ -35,7 +35,7 @@ const NotFoundView = React.lazy(() => import('./components/NotFoundView'));
 
 
 import { allToolsList } from './data/tools';
-import { getToolSeoContent } from './data/seo';
+import { getToolSeoContent, generateToolSchema } from './data/seo';
 import { User, BlogPost } from './types';
 import { 
   Loader2,
@@ -501,12 +501,17 @@ function AppContent() {
                 const keywords = seoData?.secondaryKeywords 
                   ? [seoData.primaryKeyword, ...seoData.secondaryKeywords] 
                   : (currentTool?.seoKeywords || ['PDF tools', 'online converter']);
+                const toolSchema = currentTool ? generateToolSchema(currentTool, seoData) : null;
+                const ogImage = `https://pdftoolkitpro.online/og-image.svg?title=${encodeURIComponent(title)}`;
                 return (
                   <SEO
                     title={title}
                     description={description}
                     canonical={canonical}
                     keywords={keywords}
+                    schema={toolSchema}
+                    ogImage={ogImage}
+                    ogType="website"
                   />
                 );
               }
