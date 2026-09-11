@@ -18,7 +18,7 @@ function escapeXml(unsafe: string): string {
   });
 }
 
-import { allToolsList } from './src/data/tools';
+import { allToolsList, findToolByIdOrAlias } from './src/data/tools';
 import { getToolSeoContent, generateToolSchema } from './src/data/seo';
 import express from 'express';
 import path from 'path';
@@ -1570,7 +1570,7 @@ OCR TEXT:
           desc = "Browse all 40+ free online PDF, image, and conversion tools. Merge, edit, convert, OCR, and sign PDF files directly in your browser.";
         } else if (req.url.startsWith('/tools/')) {
           const toolId = req.url.split('/')[2]?.split('?')[0];
-          matchedTool = allToolsList.find(t => getToolSlug(t) === toolId || t.id === toolId || t.id.replace(/_/g, '-') === toolId);
+          matchedTool = findToolByIdOrAlias(toolId);
           if (matchedTool) {
             matchedToolSeo = getToolSeoContent(matchedTool.id);
             title = matchedToolSeo?.seoTitle || matchedTool.seoTitle || `${matchedTool.name} - Free Online PDF Tool | PDF Toolkit Pro`;
@@ -1591,7 +1591,7 @@ OCR TEXT:
           desc = "Get in touch with the PDF Toolkit Pro support team for inquiries, bug reports, and technical assistance.";
         } else {
           const cleanPath = req.url.split('?')[0].replace(/^\/+|\/+$/g, '');
-          const directTool = allToolsList.find(t => getToolSlug(t) === cleanPath || t.id === cleanPath || t.id.replace(/_/g, '-') === cleanPath);
+          const directTool = findToolByIdOrAlias(cleanPath);
           if (directTool) {
             matchedTool = directTool;
             matchedToolSeo = getToolSeoContent(directTool.id);

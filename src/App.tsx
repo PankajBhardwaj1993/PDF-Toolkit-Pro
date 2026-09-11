@@ -34,7 +34,7 @@ const NotFoundView = React.lazy(() => import('./components/NotFoundView'));
 
 
 
-import { allToolsList } from './data/tools';
+import { allToolsList, findToolByIdOrAlias } from './data/tools';
 import { getToolSeoContent, generateToolSchema } from './data/seo';
 import { User, BlogPost } from './types';
 import { 
@@ -46,11 +46,11 @@ import {
 import QRCode from 'qrcode';
 
 const CONVERTER_TOOL_IDS = [
-  'pdf_to_word', 'pdf_to_excel', 'pdf_to_powerpoint', 'pdf_to_image', 'pdf_to_text', 'pdf_to_html',
+  'pdf_to_word', 'pdf_to_excel', 'pdf_to_powerpoint', 'pdf_to_image', 'pdf_to_jpg', 'pdf_to_text', 'pdf_to_html',
   'word_to_pdf', 'word_to_image', 'word_to_text', 'word_to_html',
   'excel_to_pdf', 'excel_to_data',
   'powerpoint_to_pdf', 'powerpoint_to_images',
-  'image_to_pdf', 'image_to_image',
+  'image_to_pdf', 'jpg_to_pdf', 'image_to_image',
   'text_to_pdf', 'text_to_word', 'text_to_html',
   'html_to_pdf', 'html_to_word', 'html_to_image',
   'data_to_excel', 'data_to_word', 'data_to_powerpoint', 'data_to_image', 'data_to_data',
@@ -96,11 +96,7 @@ function AppContent() {
     if (pathSegments[0] === 'tools') {
       if (pathSegments[1]) {
         const routeId = pathSegments[1].toLowerCase();
-        const matchedTool = allToolsList.find(
-          t => t.id.toLowerCase() === routeId || 
-               t.id.replace(/_/g, '-').toLowerCase() === routeId ||
-               (t.slug && t.slug.toLowerCase() === routeId)
-        );
+        const matchedTool = findToolByIdOrAlias(routeId);
         if (matchedTool) {
           selectedToolId = matchedTool.id;
           activeTab = 'tools';
@@ -129,13 +125,9 @@ function AppContent() {
         }
       }
     } else {
-      // Check if root path matches any tool slug or id directly (e.g. /merge-pdf)
+      // Check if root path matches any tool slug or id directly (e.g. /merge-pdf, /jpg-to-pdf, /pdf-ocr)
       const routeId = pathSegments[0].toLowerCase();
-      const matchedTool = allToolsList.find(
-        t => t.id.toLowerCase() === routeId || 
-             t.id.replace(/_/g, '-').toLowerCase() === routeId ||
-             (t.slug && t.slug.toLowerCase() === routeId)
-      );
+      const matchedTool = findToolByIdOrAlias(routeId);
       if (matchedTool && pathSegments.length === 1) {
         selectedToolId = matchedTool.id;
         activeTab = 'tools';
@@ -492,7 +484,7 @@ function AppContent() {
         ) : selectedToolId ? (
           <>
             {(() => {
-              const currentTool = allToolsList.find(t => t.id === selectedToolId || t.id.replace(/_/g, '-') === selectedToolId);
+              const currentTool = findToolByIdOrAlias(selectedToolId);
               const seoData = getToolSeoContent(selectedToolId);
               if (currentTool || seoData) {
                 const title = seoData?.seoTitle || currentTool?.seoTitle || `${currentTool?.name || 'PDF Tool'} | Free Online PDF Toolkit Pro`;

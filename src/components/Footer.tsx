@@ -203,8 +203,8 @@ export default function Footer({ setActiveTab, setSelectedToolId, isDonationDisa
               </li>
               <li>
                 <a 
-                  href="/tools/watermark_pdf" 
-                  onClick={(e) => handleToolNav(e, 'watermark_pdf')}
+                  href="/tools/watermark" 
+                  onClick={(e) => handleToolNav(e, 'watermark')}
                   className="text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors no-underline"
                 >
                   Add PDF Watermark
@@ -284,8 +284,8 @@ export default function Footer({ setActiveTab, setSelectedToolId, isDonationDisa
               </li>
               <li>
                 <a 
-                  href="/tools/pdf_to_jpg" 
-                  onClick={(e) => handleToolNav(e, 'pdf_to_jpg')}
+                  href="/tools/pdf_to_image" 
+                  onClick={(e) => handleToolNav(e, 'pdf_to_image')}
                   className="text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors no-underline"
                 >
                   PDF to JPG Converter
@@ -293,8 +293,8 @@ export default function Footer({ setActiveTab, setSelectedToolId, isDonationDisa
               </li>
               <li>
                 <a 
-                  href="/tools/jpg_to_pdf" 
-                  onClick={(e) => handleToolNav(e, 'jpg_to_pdf')}
+                  href="/tools/image_to_pdf" 
+                  onClick={(e) => handleToolNav(e, 'image_to_pdf')}
                   className="text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors no-underline"
                 >
                   JPG to PDF Converter
@@ -302,8 +302,8 @@ export default function Footer({ setActiveTab, setSelectedToolId, isDonationDisa
               </li>
               <li>
                 <a 
-                  href="/tools/ocr_pdf" 
-                  onClick={(e) => handleToolNav(e, 'ocr_pdf')}
+                  href="/tools/pdf_ocr" 
+                  onClick={(e) => handleToolNav(e, 'pdf_ocr')}
                   className="text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors no-underline"
                 >
                   OCR Text Scanner

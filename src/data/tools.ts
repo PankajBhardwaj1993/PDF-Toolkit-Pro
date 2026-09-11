@@ -960,3 +960,109 @@ export const allToolsList: Tool[] = [
     seoKeywords: ['canonical tag test', 'seo canonical checker', 'verify canonical tags', 'check canonical link online']
   }
 ];
+
+export const TOOL_ALIASES: Record<string, string> = {
+  // OCR Text Scanner aliases
+  'ocr_pdf': 'pdf_ocr',
+  'ocr-pdf': 'pdf_ocr',
+  'ocr_text_scanner': 'pdf_ocr',
+  'ocr-text-scanner': 'pdf_ocr',
+  'ocr': 'pdf_ocr',
+  'pdf-ocr': 'pdf_ocr',
+  'scanned-pdf-to-text': 'pdf_ocr',
+
+  // JPG / JPEG to PDF aliases
+  'jpg_to_pdf': 'image_to_pdf',
+  'jpg-to-pdf': 'image_to_pdf',
+  'jpeg_to_pdf': 'image_to_pdf',
+  'jpeg-to-pdf': 'image_to_pdf',
+  'png_to_pdf': 'image_to_pdf',
+  'png-to-pdf': 'image_to_pdf',
+  'image-to-pdf': 'image_to_pdf',
+  'convert-photo-to-pdf': 'image_to_pdf',
+
+  // PDF to JPG / JPEG / PNG aliases
+  'pdf_to_jpg': 'pdf_to_image',
+  'pdf-to-jpg': 'pdf_to_image',
+  'pdf_to_jpeg': 'pdf_to_image',
+  'pdf-to-jpeg': 'pdf_to_image',
+  'pdf_to_png': 'pdf_to_image',
+  'pdf-to-png': 'pdf_to_image',
+  'pdf-to-image': 'pdf_to_image',
+
+  // Watermark aliases
+  'watermark_pdf': 'watermark',
+  'watermark-pdf': 'watermark',
+  'add-watermark': 'watermark',
+  'add_watermark': 'watermark',
+
+  // Other common hyphenated/alternative aliases
+  'online-pdf-editor': 'online_pdf_editor',
+  'pdf-editor': 'online_pdf_editor',
+  'pdf_editor': 'online_pdf_editor',
+  'edit-pdf': 'online_pdf_editor',
+  'edit_pdf': 'online_pdf_editor',
+  'merge-pdf': 'merge_pdf',
+  'split-pdf': 'split_pdf',
+  'compress-pdf': 'compress_pdf',
+  'rotate-pdf': 'rotate_pdf',
+  'delete-pdf': 'delete_pdf',
+  'extract-pdf': 'extract_pdf',
+  'page-numbers': 'page_numbers',
+  'add-page-numbers': 'page_numbers',
+  'protect-pdf': 'protect_pdf',
+  'unlock-pdf': 'unlock_pdf',
+  'edit-pdf-metadata': 'edit_pdf_metadata',
+  'excel-editor': 'excel_editor',
+  'word-editor': 'word_editor',
+  'compress-image': 'compress_image',
+  'resize-image': 'resize_image',
+  'convert-image': 'convert_image',
+  'crop-image': 'crop_image',
+  'passport-photo': 'passport_photo',
+  'text-to-speech': 'text_to_speech',
+  'tts': 'text_to_speech',
+  'sign-pdf': 'sign_pdf',
+  'draw-signature': 'draw_signature',
+  'password-generator': 'password_generator',
+  'qr-generator': 'qr_generator',
+  'pdf-to-word': 'pdf_to_word',
+  'pdf-to-excel': 'pdf_to_excel',
+  'word-to-pdf': 'word_to_pdf',
+  'excel-to-pdf': 'excel_to_pdf',
+  'powerpoint-to-pdf': 'powerpoint_to_pdf',
+  'pdf-to-powerpoint': 'pdf_to_powerpoint',
+  'batch-processor': 'batch_processor'
+};
+
+export function findToolByIdOrAlias(identifier: string | null | undefined): Tool | undefined {
+  if (!identifier) return undefined;
+  const clean = identifier.toLowerCase().trim();
+
+  // 1. Direct match by id or slug
+  const direct = allToolsList.find(
+    t => t.id.toLowerCase() === clean ||
+         t.id.replace(/_/g, '-').toLowerCase() === clean ||
+         (t.slug && t.slug.toLowerCase() === clean)
+  );
+  if (direct) return direct;
+
+  // 2. Lookup in aliases table
+  const aliasId = TOOL_ALIASES[clean];
+  if (aliasId) {
+    const aliased = allToolsList.find(t => t.id === aliasId);
+    if (aliased) return aliased;
+  }
+
+  // 3. Fallback normalization (replace hyphens/underscores)
+  const underscore = clean.replace(/-/g, '_');
+  const fromUnderscore = allToolsList.find(t => t.id === underscore);
+  if (fromUnderscore) return fromUnderscore;
+
+  const hyphen = clean.replace(/_/g, '-');
+  const fromHyphen = allToolsList.find(t => t.id.replace(/_/g, '-') === hyphen);
+  if (fromHyphen) return fromHyphen;
+
+  return undefined;
+}
+
