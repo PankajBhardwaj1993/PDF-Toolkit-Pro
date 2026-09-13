@@ -47,7 +47,12 @@ interface ExtractedContent {
   sourceType?: 'pdf' | 'spreadsheet' | 'html' | 'word' | 'image' | 'text';
   imageBuffer?: ArrayBuffer;
   imageType?: 'png' | 'jpg';
-  pagesContent?: { pageNum: number; title: string; lines: string[] }[];
+  pagesContent?: {
+    pageNum: number;
+    title: string;
+    lines: string[];
+    images?: { data: ArrayBuffer; width?: number; height?: number }[];
+  }[];
   pdfImages?: { data: ArrayBuffer; width?: number; height?: number }[];
 }
 
@@ -238,7 +243,7 @@ async function extractContentFromSourceFile(file: File): Promise<ExtractedConten
           const pdf = await loadingTask.promise;
           const paragraphs: string[] = [];
           const excelRows: any[][] = [];
-          const pagesContent: { pageNum: number; title: string; lines: string[] }[] = [];
+          const pagesContent: { pageNum: number; title: string; lines: string[]; images?: { data: ArrayBuffer; width?: number; height?: number }[] }[] = [];
           const pdfImages: { data: ArrayBuffer; width?: number; height?: number }[] = [];
 
           for (let i = 1; i <= pdf.numPages; i++) {
@@ -293,110 +298,173 @@ async function extractContentFromSourceFile(file: File): Promise<ExtractedConten
               }
             }
 
-            pagesContent.push({
-              pageNum: i,
-              title: pageLines[0] ? pageLines[0].substring(0, 60) : `Page ${i}`,
-              lines: pageLines.slice(pageLines[0] ? 1 : 0)
-            });
+            const pageImages: { data: ArrayBuffer; width?: number; height?: number }[] = [];
 
-            // Extract images from the first page (or up to 3 pages)
-            if (i <= 3) {
-              try {
-                const ops = await page.getOperatorList();
-                const imageNames: string[] = [];
-                for (let k = 0; k < ops.fnArray.length; k++) {
-                  const fn = ops.fnArray[k];
-                  if (
-                    fn === pdfjs.OPS.paintImageXObject ||
-                    fn === pdfjs.OPS.paintInlineImageXObject ||
-                    fn === pdfjs.OPS.paintJpegXObject
-                  ) {
-                    const imgName = ops.argsArray[k][0];
-                    if (imgName && !imageNames.includes(imgName)) {
-                      imageNames.push(imgName);
-                    }
+            // Extract embedded images from this page
+            try {
+              const ops = await page.getOperatorList();
+              const imageNames: string[] = [];
+              for (let k = 0; k < ops.fnArray.length; k++) {
+                const fn = ops.fnArray[k];
+                if (
+                  fn === pdfjs.OPS.paintImageXObject ||
+                  fn === pdfjs.OPS.paintInlineImageXObject ||
+                  fn === pdfjs.OPS.paintJpegXObject ||
+                  fn === pdfjs.OPS.paintImageMaskXObject
+                ) {
+                  const imgName = ops.argsArray[k]?.[0];
+                  if (imgName && !imageNames.includes(imgName)) {
+                    imageNames.push(imgName);
                   }
                 }
+              }
 
-                if (imageNames.length > 0) {
-                  const viewport = page.getViewport({ scale: 1.5 });
-                  const offCanvas = document.createElement('canvas');
-                  offCanvas.width = Math.round(viewport.width);
-                  offCanvas.height = Math.round(viewport.height);
-                  const offCtx = offCanvas.getContext('2d');
-                  if (offCtx) {
-                    await page.render({ canvasContext: offCtx, viewport }).promise;
-                  }
+              if (imageNames.length > 0) {
+                const viewport = page.getViewport({ scale: 1.5 });
+                const offCanvas = document.createElement('canvas');
+                offCanvas.width = Math.round(viewport.width);
+                offCanvas.height = Math.round(viewport.height);
+                const offCtx = offCanvas.getContext('2d');
+                if (offCtx) {
+                  await page.render({ canvasContext: offCtx, viewport }).promise;
+                }
 
-                  for (const name of imageNames) {
-                    try {
-                      const imgObj = (page.objs && page.objs.get ? page.objs.get(name) : null) ||
-                                     (page.commonObjs && page.commonObjs.get ? page.commonObjs.get(name) : null);
-                      if (imgObj) {
-                        const imgCanvas = document.createElement('canvas');
-                        let w = imgObj.width || 120;
-                        let h = imgObj.height || 120;
-                        if (w > 800) {
-                          h = Math.round(h * (800 / w));
-                          w = 800;
-                        }
-                        imgCanvas.width = w;
-                        imgCanvas.height = h;
-                        const imgCtx = imgCanvas.getContext('2d');
-                        if (imgCtx) {
-                          if (imgObj.bitmap) {
-                            imgCtx.drawImage(imgObj.bitmap, 0, 0, w, h);
-                          } else if (imgObj instanceof Image || imgObj instanceof HTMLImageElement) {
-                            imgCtx.drawImage(imgObj, 0, 0, w, h);
-                          } else if (imgObj.data) {
-                            const imgData = imgCtx.createImageData(w, h);
-                            if (imgObj.data.length === w * h * 3) {
-                              let s = 0, d = 0;
-                              while (s < imgObj.data.length && d < imgData.data.length) {
-                                imgData.data[d] = imgObj.data[s];
-                                imgData.data[d + 1] = imgObj.data[s + 1];
-                                imgData.data[d + 2] = imgObj.data[s + 2];
-                                imgData.data[d + 3] = 255;
-                                s += 3;
-                                d += 4;
-                              }
-                            } else if (imgObj.data.length === w * h * 4) {
-                              imgData.data.set(imgObj.data.subarray(0, imgData.data.length));
-                            } else if (imgObj.data.length === w * h) {
-                              let s = 0, d = 0;
-                              while (s < imgObj.data.length && d < imgData.data.length) {
-                                const val = imgObj.data[s];
-                                imgData.data[d] = val;
-                                imgData.data[d + 1] = val;
-                                imgData.data[d + 2] = val;
-                                imgData.data[d + 3] = 255;
-                                s++;
-                                d += 4;
-                              }
-                            } else {
-                              imgData.data.set(imgObj.data.subarray(0, imgData.data.length));
+                for (const name of imageNames) {
+                  try {
+                    const imgObj = (page.objs && page.objs.get ? page.objs.get(name) : null) ||
+                                   (page.commonObjs && page.commonObjs.get ? page.commonObjs.get(name) : null);
+                    if (imgObj) {
+                      const imgCanvas = document.createElement('canvas');
+                      let w = imgObj.width || 120;
+                      let h = imgObj.height || 120;
+                      if (w > 800) {
+                        h = Math.round(h * (800 / w));
+                        w = 800;
+                      }
+                      imgCanvas.width = w;
+                      imgCanvas.height = h;
+                      const imgCtx = imgCanvas.getContext('2d');
+                      if (imgCtx) {
+                        if (imgObj.bitmap) {
+                          imgCtx.drawImage(imgObj.bitmap, 0, 0, w, h);
+                        } else if (imgObj instanceof Image || imgObj instanceof HTMLImageElement) {
+                          imgCtx.drawImage(imgObj, 0, 0, w, h);
+                        } else if (imgObj.data) {
+                          const imgData = imgCtx.createImageData(w, h);
+                          if (imgObj.data.length === w * h * 3) {
+                            let s = 0, d = 0;
+                            while (s < imgObj.data.length && d < imgData.data.length) {
+                              imgData.data[d] = imgObj.data[s];
+                              imgData.data[d + 1] = imgObj.data[s + 1];
+                              imgData.data[d + 2] = imgObj.data[s + 2];
+                              imgData.data[d + 3] = 255;
+                              s += 3;
+                              d += 4;
                             }
-                            imgCtx.putImageData(imgData, 0, 0);
+                          } else if (imgObj.data.length === w * h * 4) {
+                            imgData.data.set(imgObj.data.subarray(0, imgData.data.length));
+                          } else if (imgObj.data.length === w * h) {
+                            let s = 0, d = 0;
+                            while (s < imgObj.data.length && d < imgData.data.length) {
+                              const val = imgObj.data[s];
+                              imgData.data[d] = val;
+                              imgData.data[d + 1] = val;
+                              imgData.data[d + 2] = val;
+                              imgData.data[d + 3] = 255;
+                              s++;
+                              d += 4;
+                            }
+                          } else {
+                            imgData.data.set(imgObj.data.subarray(0, imgData.data.length));
                           }
+                          imgCtx.putImageData(imgData, 0, 0);
+                        }
 
-                          const blob = await new Promise<Blob | null>(r => imgCanvas.toBlob(r, 'image/png'));
-                          if (blob) {
-                            const buf = await blob.arrayBuffer();
-                            if (buf.byteLength > 100) {
-                              pdfImages.push({ data: buf, width: w, height: h });
-                            }
+                        const blob = await new Promise<Blob | null>(r => imgCanvas.toBlob(r, 'image/png'));
+                        if (blob) {
+                          const buf = await blob.arrayBuffer();
+                          if (buf.byteLength > 100) {
+                            const imgEntry = { data: buf, width: w, height: h };
+                            pageImages.push(imgEntry);
+                            pdfImages.push(imgEntry);
                           }
                         }
                       }
-                    } catch (errImg) {
-                      console.warn('Error processing image object:', errImg);
                     }
+                  } catch (errImg) {
+                    console.warn('Error processing image object on page ' + i, errImg);
                   }
                 }
-              } catch (imgErr) {
-                console.warn('Image extraction from page skipped:', imgErr);
               }
+
+              // If page has an Output screenshot or visual element and no XObjects found:
+              if (pageImages.length === 0 && (pageLines.length <= 4 || pageLines.some(l => l.toLowerCase().startsWith('output')))) {
+                try {
+                  const viewport = page.getViewport({ scale: 2.0 });
+                  const snapCanvas = document.createElement('canvas');
+                  snapCanvas.width = Math.round(viewport.width);
+                  snapCanvas.height = Math.round(viewport.height);
+                  const snapCtx = snapCanvas.getContext('2d');
+                  if (snapCtx) {
+                    await page.render({ canvasContext: snapCtx, viewport }).promise;
+                    const imgData = snapCtx.getImageData(0, 0, snapCanvas.width, snapCanvas.height);
+                    const data = imgData.data;
+                    let minX = snapCanvas.width, minY = snapCanvas.height, maxX = 0, maxY = 0;
+                    let foundNonWhite = false;
+
+                    // Search for visual bounding box below the page header
+                    const startY = Math.round(snapCanvas.height * 0.08);
+                    for (let y = startY; y < snapCanvas.height; y += 4) {
+                      for (let x = 0; x < snapCanvas.width; x += 4) {
+                        const idx = (y * snapCanvas.width + x) * 4;
+                        const r = data[idx], g = data[idx + 1], b = data[idx + 2];
+                        if (r < 248 || g < 248 || b < 248) {
+                          foundNonWhite = true;
+                          if (x < minX) minX = x;
+                          if (x > maxX) maxX = x;
+                          if (y < minY) minY = y;
+                          if (y > maxY) maxY = y;
+                        }
+                      }
+                    }
+
+                    if (foundNonWhite && (maxX - minX > 50) && (maxY - minY > 50)) {
+                      const pad = 20;
+                      const cropX = Math.max(0, minX - pad);
+                      const cropY = Math.max(0, minY - pad);
+                      const cropW = Math.min(snapCanvas.width - cropX, (maxX - minX) + pad * 2);
+                      const cropH = Math.min(snapCanvas.height - cropY, (maxY - minY) + pad * 2);
+
+                      const cropCanvas = document.createElement('canvas');
+                      cropCanvas.width = cropW;
+                      cropCanvas.height = cropH;
+                      const cropCtx = cropCanvas.getContext('2d');
+                      if (cropCtx) {
+                        cropCtx.drawImage(snapCanvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
+                        const blob = await new Promise<Blob | null>(r => cropCanvas.toBlob(r, 'image/png'));
+                        if (blob) {
+                          const buf = await blob.arrayBuffer();
+                          const imgEntry = { data: buf, width: Math.round(cropW / 2), height: Math.round(cropH / 2) };
+                          pageImages.push(imgEntry);
+                          pdfImages.push(imgEntry);
+                        }
+                      }
+                    }
+                  }
+                } catch (snapErr) {
+                  console.warn('Snapshot crop fallback skipped for page ' + i, snapErr);
+                }
+              }
+            } catch (imgErr) {
+              console.warn('Image extraction from page skipped:', imgErr);
             }
+
+            pagesContent.push({
+              pageNum: i,
+              title: pageLines[0] ? pageLines[0].substring(0, 60) : `Page ${i}`,
+              lines: pageLines,
+              images: pageImages.length > 0 ? pageImages : undefined
+            });
           }
 
           // Fallback image extraction from raw PDF streams if needed
@@ -1076,35 +1144,6 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
 
   const children: any[] = [];
 
-  // Embed first-page avatar or image if available
-  if (content.pdfImages && content.pdfImages.length > 0) {
-    try {
-      const topImg = content.pdfImages[0];
-      const aspect = (topImg.width && topImg.height) ? topImg.width / topImg.height : 1;
-      let targetW = 110;
-      let targetH = Math.round(targetW / aspect);
-      if (targetH > 140) {
-        targetH = 140;
-        targetW = Math.round(targetH * aspect);
-      }
-      children.push(
-        new Paragraph({
-          alignment: AlignmentType.CENTER,
-          spacing: { before: 40, after: 120 },
-          children: [
-            new ImageRun({
-              data: topImg.data,
-              transformation: { width: targetW, height: targetH },
-              type: 'png' as any
-            } as any)
-          ]
-        })
-      );
-    } catch (e) {
-      console.warn("Avatar embedding skipped: ", e);
-    }
-  }
-
   // 1. If source is an actual spreadsheet, render spreadsheet table
   if (content.sourceType === 'spreadsheet' && content.excelRows && content.excelRows.length > 1) {
     const tableRows = content.excelRows.map((row, rIdx) => {
@@ -1140,170 +1179,142 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
         width: { size: 100, type: WidthType.PERCENTAGE }
       })
     );
-  } else {
-    // 2. Document mode (PDF, Word, HTML, or Plaintext)
+  } else if (content.sourceType === 'html') {
+    // 2. HTML source file: Parse HTML structure into styled Word elements
     const fullText = (content.paragraphs && content.paragraphs.length > 0)
       ? content.paragraphs.join('\n')
       : (content.text || '');
-
-    const hasHtml = containsHtmlMarkup(fullText);
-    let htmlParsedSuccess = false;
-
-    if (hasHtml) {
-      // Parse HTML structure into styled Word elements
-      const parsedElements = htmlToDocxElements(fullText, docxLib);
-      if (parsedElements.length > 0) {
-        children.push(...parsedElements);
-        htmlParsedSuccess = true;
-      }
+    const parsedElements = htmlToDocxElements(fullText, docxLib);
+    if (parsedElements.length > 0) {
+      children.push(...parsedElements);
     }
+  } else if (content.pagesContent && content.pagesContent.length > 0) {
+    // 3. PDF / Multi-Page Document: preserve exact page layout, exact text & code, and page images
+    for (let pIdx = 0; pIdx < content.pagesContent.length; pIdx++) {
+      const pageObj = content.pagesContent[pIdx];
+      const lines = pageObj.lines || [];
+      let imagesRenderedOnPage = false;
 
-    // If no HTML was parsed or standard document text, layout with MS Word alignment
-    if (!htmlParsedSuccess) {
-      const paras = content.paragraphs && content.paragraphs.length > 0
-        ? content.paragraphs
-        : (content.text ? content.text.split('\n') : []);
+      for (let lineIdx = 0; lineIdx < lines.length; lineIdx++) {
+        const rawLine = lines[lineIdx];
+        const line = cleanRawText(rawLine);
+        if (!line) continue;
 
-      const validLines = paras.map(p => cleanRawText(p)).filter(Boolean);
+        const isFirstElementOnPage = (pIdx > 0 && lineIdx === 0);
+        const isQuestionHeader = /^\d+[\.\)]\s*/.test(line) || /^(experiment|question|task|exercise|problem)\s*[\d\.\:]+/i.test(line);
+        const isCodeLabel = /^code\s*:/i.test(line) || line.toLowerCase() === 'code:';
+        const isOutputLabel = /^output\s*:/i.test(line) || line.toLowerCase() === 'output:';
+        const isCodeLine = line.includes('<!DOCTYPE') || line.includes('<html') || line.includes('</') ||
+                           line.includes('/>') || line.includes('style=') || line.includes('margin:') ||
+                           line.includes('padding:') || line.includes('border:') || line.includes('color:') ||
+                           line.includes('display:') || line.includes('font-size:') || line.includes('font-family:') ||
+                           line.includes('function(') || line.includes('const ') || line.includes('let ') ||
+                           (line.startsWith('<') && line.endsWith('>'));
 
-      const isKnownSection = (l: string) => {
-        const cl = l.toLowerCase().replace(/[:\-_•]+$/, '').trim();
-        const known = [
-          'about me', 'about us', 'technical skills', 'skills', 'core competencies',
-          'contact details', 'contact info', 'contact information', 'contact',
-          'work experience', 'experience', 'employment history', 'professional experience',
-          'projects', 'personal projects', 'key projects', 'academic projects',
-          'education', 'qualifications', 'academic background',
-          'certifications', 'certificates', 'licenses',
-          'summary', 'professional summary', 'executive summary', 'profile', 'objective',
-          'languages', 'achievements', 'awards', 'interests', 'hobbies', 'references'
-        ];
-        if (known.includes(cl)) return true;
-        if (l.length < 45 && (l.endsWith(':') || (l === l.toUpperCase() && /[A-Z]/.test(l))) && !l.includes('|')) return true;
-        return false;
-      };
-
-      const isJobTitle = (l: string) => {
-        const low = l.toLowerCase();
-        const kw = ['intern', 'developer', 'engineer', 'manager', 'lead', 'designer', 'architect', 'analyst', 'consultant', 'specialist', 'administrator', 'website', 'portfolio', 'application', 'app', 'system', 'platform'];
-        return l.length < 65 && kw.some(k => low.includes(k)) && !l.includes('|') && !l.startsWith('•') && !l.startsWith('-');
-      };
-
-      const isDateOrCompany = (l: string) => {
-        return l.includes('|') || /(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|\d{4})\s*[-–—to]+\s*(?:present|\d{4})/i.test(l);
-      };
-
-      for (let i = 0; i < validLines.length; i++) {
-        const line = validLines[i];
-
-        // 1. Candidate Name / Document Title (first line if short)
-        if (i === 0 && line.length < 50 && !line.includes(':') && !line.includes('|')) {
+        if (isQuestionHeader) {
           children.push(
             new Paragraph({
-              alignment: AlignmentType.CENTER,
-              spacing: { before: 60, after: 30 },
+              pageBreakBefore: isFirstElementOnPage,
+              spacing: { before: 140, after: 60 },
               children: [
                 new TextRun({
                   text: line,
                   bold: true,
-                  size: 34,
-                  color: '1E293B',
-                  font: 'Calibri'
-                })
-              ]
-            })
-          );
-          continue;
-        }
-
-        // 2. Subtitle / Profession (second line if short)
-        if (i === 1 && line.length < 50 && !line.includes(':') && !line.includes('|')) {
-          children.push(
-            new Paragraph({
-              alignment: AlignmentType.CENTER,
-              spacing: { after: 160 },
-              children: [
-                new TextRun({
-                  text: line,
                   size: 24,
-                  color: '475569',
+                  color: '0F172A',
                   font: 'Calibri'
                 })
               ]
             })
           );
-          continue;
-        }
-
-        // 3. Section Heading (About Me, Technical Skills, etc.)
-        if (isKnownSection(line)) {
+        } else if (isCodeLabel) {
           children.push(
             new Paragraph({
-              heading: HeadingLevel.HEADING_2,
-              spacing: { before: 180, after: 60 },
-              children: [
-                new TextRun({
-                  text: line.replace(/[:\-_]+$/, '').trim(),
-                  bold: true,
-                  size: 26,
-                  color: '2980B9',
-                  font: 'Calibri'
-                })
-              ]
-            })
-          );
-          continue;
-        }
-
-        // 4. Job Title or Project Name (Frontend Developer Intern, Personal Portfolio Website)
-        if (isJobTitle(line)) {
-          children.push(
-            new Paragraph({
-              heading: HeadingLevel.HEADING_3,
-              spacing: { before: 100, after: 30 },
+              pageBreakBefore: isFirstElementOnPage,
+              spacing: { before: 100, after: 40 },
               children: [
                 new TextRun({
                   text: line,
                   bold: true,
                   size: 22,
-                  color: '34495E',
+                  color: '0F172A',
                   font: 'Calibri'
                 })
               ]
             })
           );
-          continue;
-        }
-
-        // 5. Date / Company Line (Tech Solutions | June 2023 - Present)
-        if (isDateOrCompany(line)) {
+        } else if (isOutputLabel) {
           children.push(
             new Paragraph({
-              spacing: { after: 50 },
+              pageBreakBefore: isFirstElementOnPage,
+              spacing: { before: 120, after: 60 },
               children: [
                 new TextRun({
                   text: line,
-                  italics: true,
-                  size: 20,
-                  color: '7F8C8D',
+                  bold: true,
+                  size: 22,
+                  color: '0F172A',
                   font: 'Calibri'
                 })
               ]
             })
           );
-          continue;
-        }
 
-        // 6. Bullet Items (• HTML5, CSS3...)
-        if (/^[•\-\*\▪\▫\–\—]\s*/.test(line) || /^\d+[\.\)]\s+/.test(line)) {
-          const bulletText = line.replace(/^[•\-\*\▪\▫\–\—]\s*/, '').replace(/^\d+[\.\)]\s+/, '').trim();
+          // Embed the output screenshot/image associated with this page
+          if (pageObj.images && pageObj.images.length > 0) {
+            for (const img of pageObj.images) {
+              try {
+                const aspect = (img.width && img.height) ? img.width / img.height : 1.33;
+                let targetW = Math.min(img.width || 480, 480);
+                let targetH = Math.round(targetW / aspect);
+                if (targetH > 520) {
+                  targetH = 520;
+                  targetW = Math.round(targetH * aspect);
+                }
+                children.push(
+                  new Paragraph({
+                    alignment: AlignmentType.CENTER,
+                    spacing: { before: 60, after: 120 },
+                    children: [
+                      new ImageRun({
+                        data: img.data,
+                        transformation: { width: targetW, height: targetH },
+                        type: 'png' as any
+                      } as any)
+                    ]
+                  })
+                );
+                imagesRenderedOnPage = true;
+              } catch (imgErr) {
+                console.warn('Error embedding page image under output:', imgErr);
+              }
+            }
+          }
+        } else if (isCodeLine) {
+          // Exact verbatim code block line in monospace
           children.push(
             new Paragraph({
-              bullet: { level: 0 },
+              pageBreakBefore: isFirstElementOnPage,
+              spacing: { after: 20, line: 240 },
+              children: [
+                new TextRun({
+                  text: line,
+                  size: 19,
+                  color: '1E293B',
+                  font: 'Consolas'
+                })
+              ]
+            })
+          );
+        } else {
+          // Standard text line
+          children.push(
+            new Paragraph({
+              pageBreakBefore: isFirstElementOnPage,
               spacing: { after: 40, line: 260 },
               children: [
                 new TextRun({
-                  text: bulletText,
+                  text: line,
                   size: 21,
                   color: '334155',
                   font: 'Calibri'
@@ -1311,41 +1322,64 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
               ]
             })
           );
-          continue;
         }
-
-        // 7. Key-Value Contact details (Email: ..., Mobile: ...)
-        if (/^(email|mobile|phone|address|contact|website|github|linkedin|location)\s*:/i.test(line)) {
-          const colonIdx = line.indexOf(':');
-          const keyLabel = line.substring(0, colonIdx + 1);
-          const valText = line.substring(colonIdx + 1).trim();
-          children.push(
-            new Paragraph({
-              spacing: { after: 40, line: 260 },
-              children: [
-                new TextRun({ text: keyLabel + ' ', bold: true, size: 21, color: '1E293B', font: 'Calibri' }),
-                new TextRun({ text: valText, size: 21, color: '334155', font: 'Calibri' })
-              ]
-            })
-          );
-          continue;
-        }
-
-        // 8. Regular body paragraph
-        children.push(
-          new Paragraph({
-            spacing: { after: 100, line: 276 },
-            children: [
-              new TextRun({
-                text: line,
-                size: 21,
-                color: '334155',
-                font: 'Calibri'
-              })
-            ]
-          })
-        );
       }
+
+      // If page had images that weren't under an "Output:" line, embed them centered
+      if (!imagesRenderedOnPage && pageObj.images && pageObj.images.length > 0) {
+        for (const img of pageObj.images) {
+          try {
+            const aspect = (img.width && img.height) ? img.width / img.height : 1.33;
+            let targetW = Math.min(img.width || 480, 480);
+            let targetH = Math.round(targetW / aspect);
+            if (targetH > 520) {
+              targetH = 520;
+              targetW = Math.round(targetH * aspect);
+            }
+            children.push(
+              new Paragraph({
+                pageBreakBefore: (pIdx > 0 && lines.length === 0),
+                alignment: AlignmentType.CENTER,
+                spacing: { before: 80, after: 120 },
+                children: [
+                  new ImageRun({
+                    data: img.data,
+                    transformation: { width: targetW, height: targetH },
+                    type: 'png' as any
+                  } as any)
+                ]
+              })
+            );
+          } catch (imgErr) {
+            console.warn('Error embedding standalone page image:', imgErr);
+          }
+        }
+      }
+    }
+  } else {
+    // 4. Fallback Single Document Text
+    const paras = content.paragraphs && content.paragraphs.length > 0
+      ? content.paragraphs
+      : (content.text ? content.text.split('\n') : []);
+
+    const validLines = paras.map(p => cleanRawText(p)).filter(Boolean);
+
+    for (let i = 0; i < validLines.length; i++) {
+      const line = validLines[i];
+      const isCodeLine = line.includes('<') || line.includes('style=') || line.includes(';') || line.includes('{');
+      children.push(
+        new Paragraph({
+          spacing: { after: isCodeLine ? 20 : 60, line: isCodeLine ? 240 : 276 },
+          children: [
+            new TextRun({
+              text: line,
+              size: isCodeLine ? 19 : 21,
+              color: isCodeLine ? '1E293B' : '334155',
+              font: isCodeLine ? 'Consolas' : 'Calibri'
+            })
+          ]
+        })
+      );
     }
   }
 
