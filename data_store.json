@@ -211,15 +211,6 @@
   ],
   "recentFiles": [
     {
-      "id": "f_1789327123190",
-      "name": "Code (3)_converted.docx",
-      "size": "1266.0 KB",
-      "type": "DOCX",
-      "toolUsed": "PDF to Word",
-      "date": "2026-09-13T19:18:43.190Z",
-      "status": "completed"
-    },
-    {
       "id": "f_001",
       "name": "annual_report_draft.pdf",
       "size": "2.4 MB",
@@ -274,7 +265,7 @@
     }
   ],
   "analytics": {
-    "totalFilesProcessed": 29,
+    "totalFilesProcessed": 28,
     "activeUsers": 3,
     "premiumSubscribers": 2,
     "monthlyRevenue": 58,
@@ -343,10 +334,6 @@
       {
         "name": "Online PDF Editor",
         "count": 2
-      },
-      {
-        "name": "PDF to Word",
-        "count": 1
       }
     ],
     "userGrowth": [

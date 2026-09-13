@@ -62,7 +62,7 @@ interface ExtractedContent {
   pdfImages?: { data: ArrayBuffer; width?: number; height?: number }[];
 }
 
-// Dynamically load pdfjsLib safely if not present on window
+// Dynamically load pdfjsLib safely with reliable polling & fallback
 async function getPdfJsLib(): Promise<any> {
   const win = window as any;
   if (win.pdfjsLib) {
@@ -71,38 +71,34 @@ async function getPdfJsLib(): Promise<any> {
     }
     return win.pdfjsLib;
   }
+
   return new Promise((resolve) => {
-    const existing = document.querySelector('script[src*="pdf.min.js"]');
-    if (existing) {
-      existing.addEventListener('load', () => {
-        if (win.pdfjsLib && win.pdfjsLib.GlobalWorkerOptions) {
+    let attempts = 0;
+    const checkInterval = setInterval(() => {
+      attempts++;
+      if (win.pdfjsLib) {
+        clearInterval(checkInterval);
+        if (win.pdfjsLib.GlobalWorkerOptions && !win.pdfjsLib.GlobalWorkerOptions.workerSrc) {
           win.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
         }
-        resolve(win.pdfjsLib || null);
-      });
-      setTimeout(() => {
-        if (win.pdfjsLib) {
-          if (win.pdfjsLib.GlobalWorkerOptions && !win.pdfjsLib.GlobalWorkerOptions.workerSrc) {
+        resolve(win.pdfjsLib);
+        return;
+      }
+      if (attempts >= 15) {
+        clearInterval(checkInterval);
+        // Inject script if still missing
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js';
+        script.onload = () => {
+          if (win.pdfjsLib && win.pdfjsLib.GlobalWorkerOptions) {
             win.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
           }
-          resolve(win.pdfjsLib);
-        }
-      }, 500);
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js';
-    script.onload = () => {
-      if (win.pdfjsLib) {
-        win.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-        resolve(win.pdfjsLib);
-      } else {
-        resolve(null);
+          resolve(win.pdfjsLib || null);
+        };
+        script.onerror = () => resolve(null);
+        document.head.appendChild(script);
       }
-    };
-    script.onerror = () => resolve(null);
-    document.head.appendChild(script);
+    }, 100);
   });
 }
 
@@ -243,274 +239,175 @@ async function extractContentFromSourceFile(file: File): Promise<ExtractedConten
     // 4. PDF Format
     if (extension === '.pdf') {
       try {
-        const pdfjs = await getPdfJsLib();
+        const pdfjs = await Promise.race([
+          getPdfJsLib(),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('PDF.js loader timeout')), 4000))
+        ]).catch(() => null);
+
         if (pdfjs) {
           const loadingTask = pdfjs.getDocument({ data: arrayBuffer.slice(0) });
-          const pdf = await loadingTask.promise;
-          const paragraphs: string[] = [];
-          const excelRows: any[][] = [];
-          const pagesContent: { pageNum: number; title: string; lines: string[]; images?: { data: ArrayBuffer; width?: number; height?: number }[] }[] = [];
-          const pdfImages: { data: ArrayBuffer; width?: number; height?: number }[] = [];
+          const pdf = await Promise.race([
+            loadingTask.promise,
+            new Promise((_, reject) => setTimeout(() => reject(new Error('PDF loading task timeout')), 5000))
+          ]).catch(() => null);
 
-          for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const textContent = await page.getTextContent();
-            
-            const items = textContent.items
-              .filter((item: any) => item.str && item.str.trim() !== '')
-              .map((item: any) => ({
-                str: item.str,
-                x: item.transform ? item.transform[4] : 0,
-                y: item.transform ? Math.round(item.transform[5]) : 0,
-                h: item.height || 12
-              }));
+          if (pdf) {
+            const paragraphs: string[] = [];
+            const excelRows: any[][] = [];
+            const pagesContent: { pageNum: number; title: string; lines: string[]; images?: { data: ArrayBuffer; width?: number; height?: number }[] }[] = [];
+            const pdfImages: { data: ArrayBuffer; width?: number; height?: number }[] = [];
 
-            const lineGroups: { [yKey: number]: { str: string; x: number }[] } = {};
-            for (const it of items) {
-              const existingKey = Object.keys(lineGroups).map(Number).find(k => Math.abs(k - it.y) <= 4);
-              const key = existingKey !== undefined ? existingKey : it.y;
-              if (!lineGroups[key]) lineGroups[key] = [];
-              lineGroups[key].push({ str: it.str, x: it.x });
-            }
+            for (let i = 1; i <= pdf.numPages; i++) {
+              try {
+                const page = await pdf.getPage(i);
+                const textContent = await page.getTextContent();
+                
+                const items = (textContent.items || [])
+                  .filter((item: any) => item.str && item.str.trim() !== '')
+                  .map((item: any) => ({
+                    str: item.str,
+                    x: item.transform ? item.transform[4] : 0,
+                    y: item.transform ? Math.round(item.transform[5]) : 0,
+                    h: item.height || 12
+                  }));
 
-            const sortedYKeys = Object.keys(lineGroups).map(Number).sort((a, b) => b - a);
-            const pageLines: string[] = [];
-
-            for (const yKey of sortedYKeys) {
-              const lineItems = lineGroups[yKey].sort((a, b) => a.x - b.x);
-              let lineStr = '';
-              for (let idx = 0; idx < lineItems.length; idx++) {
-                const cur = lineItems[idx].str;
-                if (idx === 0) {
-                  lineStr = cur;
-                } else {
-                  const prev = lineItems[idx - 1].str;
-                  if (prev.endsWith(' ') || cur.startsWith(' ')) {
-                    lineStr += cur;
-                  } else {
-                    lineStr += ' ' + cur;
-                  }
-                }
-              }
-              lineStr = lineStr.trim();
-              if (lineStr) {
-                pageLines.push(lineStr);
-                paragraphs.push(lineStr);
-                if (lineItems.length > 1) {
-                  excelRows.push(lineItems.map(it => it.str.trim()));
-                } else {
-                  excelRows.push([lineStr]);
-                }
-              }
-            }
-
-            const pageImages: { data: ArrayBuffer; width?: number; height?: number }[] = [];
-
-            // Extract embedded images from this page
-            try {
-              const ops = await page.getOperatorList();
-              const imageNames: string[] = [];
-              for (let k = 0; k < ops.fnArray.length; k++) {
-                const fn = ops.fnArray[k];
-                if (
-                  fn === pdfjs.OPS.paintImageXObject ||
-                  fn === pdfjs.OPS.paintInlineImageXObject ||
-                  fn === pdfjs.OPS.paintJpegXObject ||
-                  fn === pdfjs.OPS.paintImageMaskXObject
-                ) {
-                  const imgName = ops.argsArray[k]?.[0];
-                  if (imgName && !imageNames.includes(imgName)) {
-                    imageNames.push(imgName);
-                  }
-                }
-              }
-
-              if (imageNames.length > 0) {
-                const viewport = page.getViewport({ scale: 1.5 });
-                const offCanvas = document.createElement('canvas');
-                offCanvas.width = Math.round(viewport.width);
-                offCanvas.height = Math.round(viewport.height);
-                const offCtx = offCanvas.getContext('2d');
-                if (offCtx) {
-                  await page.render({ canvasContext: offCtx, viewport }).promise;
+                const lineGroups: { [yKey: number]: { str: string; x: number }[] } = {};
+                for (const it of items) {
+                  const existingKey = Object.keys(lineGroups).map(Number).find(k => Math.abs(k - it.y) <= 4);
+                  const key = existingKey !== undefined ? existingKey : it.y;
+                  if (!lineGroups[key]) lineGroups[key] = [];
+                  lineGroups[key].push({ str: it.str, x: it.x });
                 }
 
-                for (const name of imageNames) {
-                  try {
-                    const imgObj = (page.objs && page.objs.get ? page.objs.get(name) : null) ||
-                                   (page.commonObjs && page.commonObjs.get ? page.commonObjs.get(name) : null);
-                    if (imgObj) {
-                      const imgCanvas = document.createElement('canvas');
-                      let w = imgObj.width || 120;
-                      let h = imgObj.height || 120;
-                      if (w > 800) {
-                        h = Math.round(h * (800 / w));
-                        w = 800;
-                      }
-                      imgCanvas.width = w;
-                      imgCanvas.height = h;
-                      const imgCtx = imgCanvas.getContext('2d');
-                      if (imgCtx) {
-                        if (imgObj.bitmap) {
-                          imgCtx.drawImage(imgObj.bitmap, 0, 0, w, h);
-                        } else if (imgObj instanceof Image || imgObj instanceof HTMLImageElement) {
-                          imgCtx.drawImage(imgObj, 0, 0, w, h);
-                        } else if (imgObj.data) {
-                          const imgData = imgCtx.createImageData(w, h);
-                          if (imgObj.data.length === w * h * 3) {
-                            let s = 0, d = 0;
-                            while (s < imgObj.data.length && d < imgData.data.length) {
-                              imgData.data[d] = imgObj.data[s];
-                              imgData.data[d + 1] = imgObj.data[s + 1];
-                              imgData.data[d + 2] = imgObj.data[s + 2];
-                              imgData.data[d + 3] = 255;
-                              s += 3;
-                              d += 4;
-                            }
-                          } else if (imgObj.data.length === w * h * 4) {
-                            imgData.data.set(imgObj.data.subarray(0, imgData.data.length));
-                          } else if (imgObj.data.length === w * h) {
-                            let s = 0, d = 0;
-                            while (s < imgObj.data.length && d < imgData.data.length) {
-                              const val = imgObj.data[s];
-                              imgData.data[d] = val;
-                              imgData.data[d + 1] = val;
-                              imgData.data[d + 2] = val;
-                              imgData.data[d + 3] = 255;
-                              s++;
-                              d += 4;
-                            }
-                          } else {
-                            imgData.data.set(imgObj.data.subarray(0, imgData.data.length));
-                          }
-                          imgCtx.putImageData(imgData, 0, 0);
-                        }
+                const sortedYKeys = Object.keys(lineGroups).map(Number).sort((a, b) => b - a);
+                const pageLines: string[] = [];
 
-                        const blob = await new Promise<Blob | null>(r => imgCanvas.toBlob(r, 'image/png'));
-                        if (blob) {
-                          const buf = await blob.arrayBuffer();
-                          if (buf.byteLength > 100) {
-                            const imgEntry = { data: buf, width: w, height: h };
-                            pageImages.push(imgEntry);
-                            pdfImages.push(imgEntry);
-                          }
-                        }
+                for (const yKey of sortedYKeys) {
+                  const lineItems = lineGroups[yKey].sort((a, b) => a.x - b.x);
+                  let lineStr = '';
+                  for (let idx = 0; idx < lineItems.length; idx++) {
+                    const cur = lineItems[idx].str;
+                    if (idx === 0) {
+                      lineStr = cur;
+                    } else {
+                      const prev = lineItems[idx - 1].str;
+                      if (prev.endsWith(' ') || cur.startsWith(' ')) {
+                        lineStr += cur;
+                      } else {
+                        lineStr += ' ' + cur;
                       }
                     }
-                  } catch (errImg) {
-                    console.warn('Error processing image object on page ' + i, errImg);
+                  }
+                  lineStr = lineStr.trim();
+                  if (lineStr) {
+                    pageLines.push(lineStr);
+                    paragraphs.push(lineStr);
+                    if (lineItems.length > 1) {
+                      excelRows.push(lineItems.map(it => it.str.trim()));
+                    } else {
+                      excelRows.push([lineStr]);
+                    }
                   }
                 }
-              }
 
-              // If page has an Output screenshot or visual element and no XObjects found:
-              if (pageImages.length === 0 && (pageLines.length <= 4 || pageLines.some(l => l.toLowerCase().startsWith('output')))) {
+                const pageImages: { data: ArrayBuffer; width?: number; height?: number }[] = [];
+
+                // Fast image extraction using operator list & image objects (guarded with timeout)
                 try {
-                  const viewport = page.getViewport({ scale: 2.0 });
-                  const snapCanvas = document.createElement('canvas');
-                  snapCanvas.width = Math.round(viewport.width);
-                  snapCanvas.height = Math.round(viewport.height);
-                  const snapCtx = snapCanvas.getContext('2d');
-                  if (snapCtx) {
-                    await page.render({ canvasContext: snapCtx, viewport }).promise;
-                    const imgData = snapCtx.getImageData(0, 0, snapCanvas.width, snapCanvas.height);
-                    const data = imgData.data;
-                    let minX = snapCanvas.width, minY = snapCanvas.height, maxX = 0, maxY = 0;
-                    let foundNonWhite = false;
-
-                    // Search for visual bounding box below the page header
-                    const startY = Math.round(snapCanvas.height * 0.08);
-                    for (let y = startY; y < snapCanvas.height; y += 4) {
-                      for (let x = 0; x < snapCanvas.width; x += 4) {
-                        const idx = (y * snapCanvas.width + x) * 4;
-                        const r = data[idx], g = data[idx + 1], b = data[idx + 2];
-                        if (r < 248 || g < 248 || b < 248) {
-                          foundNonWhite = true;
-                          if (x < minX) minX = x;
-                          if (x > maxX) maxX = x;
-                          if (y < minY) minY = y;
-                          if (y > maxY) maxY = y;
-                        }
-                      }
-                    }
-
-                    if (foundNonWhite && (maxX - minX > 50) && (maxY - minY > 50)) {
-                      const pad = 20;
-                      const cropX = Math.max(0, minX - pad);
-                      const cropY = Math.max(0, minY - pad);
-                      const cropW = Math.min(snapCanvas.width - cropX, (maxX - minX) + pad * 2);
-                      const cropH = Math.min(snapCanvas.height - cropY, (maxY - minY) + pad * 2);
-
-                      const cropCanvas = document.createElement('canvas');
-                      cropCanvas.width = cropW;
-                      cropCanvas.height = cropH;
-                      const cropCtx = cropCanvas.getContext('2d');
-                      if (cropCtx) {
-                        cropCtx.drawImage(snapCanvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
-                        const blob = await new Promise<Blob | null>(r => cropCanvas.toBlob(r, 'image/png'));
-                        if (blob) {
-                          const buf = await blob.arrayBuffer();
-                          const imgEntry = { data: buf, width: Math.round(cropW / 2), height: Math.round(cropH / 2) };
-                          pageImages.push(imgEntry);
-                          pdfImages.push(imgEntry);
-                        }
+                  const ops = await page.getOperatorList();
+                  const imageNames: string[] = [];
+                  for (let k = 0; k < (ops.fnArray ? ops.fnArray.length : 0); k++) {
+                    const fn = ops.fnArray[k];
+                    if (
+                      fn === pdfjs.OPS?.paintImageXObject ||
+                      fn === pdfjs.OPS?.paintInlineImageXObject ||
+                      fn === pdfjs.OPS?.paintJpegXObject ||
+                      fn === pdfjs.OPS?.paintImageMaskXObject
+                    ) {
+                      const imgName = ops.argsArray[k]?.[0];
+                      if (imgName && !imageNames.includes(imgName)) {
+                        imageNames.push(imgName);
                       }
                     }
                   }
-                } catch (snapErr) {
-                  console.warn('Snapshot crop fallback skipped for page ' + i, snapErr);
-                }
-              }
-            } catch (imgErr) {
-              console.warn('Image extraction from page skipped:', imgErr);
-            }
 
-            pagesContent.push({
-              pageNum: i,
-              title: pageLines[0] ? pageLines[0].substring(0, 60) : `Page ${i}`,
-              lines: pageLines,
-              images: pageImages.length > 0 ? pageImages : undefined
-            });
-          }
+                  if (imageNames.length > 0) {
+                    for (const name of imageNames) {
+                      try {
+                        const imgObj = (page.objs && page.objs.get ? page.objs.get(name) : null) ||
+                                       (page.commonObjs && page.commonObjs.get ? page.commonObjs.get(name) : null);
+                        if (imgObj) {
+                          const imgCanvas = document.createElement('canvas');
+                          let w = Math.min(imgObj.width || 480, 800);
+                          let h = Math.min(imgObj.height || 360, 800);
+                          imgCanvas.width = w;
+                          imgCanvas.height = h;
+                          const imgCtx = imgCanvas.getContext('2d');
+                          if (imgCtx) {
+                            if (imgObj.bitmap) {
+                              imgCtx.drawImage(imgObj.bitmap, 0, 0, w, h);
+                            } else if (imgObj instanceof Image || imgObj instanceof HTMLImageElement) {
+                              imgCtx.drawImage(imgObj, 0, 0, w, h);
+                            } else if (imgObj.data) {
+                              const imgData = imgCtx.createImageData(w, h);
+                              if (imgObj.data.length === w * h * 3) {
+                                let s = 0, d = 0;
+                                while (s < imgObj.data.length && d < imgData.data.length) {
+                                  imgData.data[d] = imgObj.data[s];
+                                  imgData.data[d + 1] = imgObj.data[s + 1];
+                                  imgData.data[d + 2] = imgObj.data[s + 2];
+                                  imgData.data[d + 3] = 255;
+                                  s += 3;
+                                  d += 4;
+                                }
+                              } else if (imgObj.data.length === w * h * 4) {
+                                imgData.data.set(imgObj.data.subarray(0, imgData.data.length));
+                              } else {
+                                imgData.data.set(imgObj.data.subarray(0, imgData.data.length));
+                              }
+                              imgCtx.putImageData(imgData, 0, 0);
+                            }
 
-          // Fallback image extraction from raw PDF streams if needed
-          if (pdfImages.length === 0) {
-            try {
-              const { PDFDocument, PDFName, PDFRawStream } = await import('pdf-lib');
-              const doc = await PDFDocument.load(arrayBuffer.slice(0), { ignoreEncryption: true });
-              for (const [, obj] of doc.context.enumerateIndirectObjects()) {
-                if (obj instanceof PDFRawStream) {
-                  const subtype = obj.dict.get(PDFName.of('Subtype'));
-                  if (subtype && subtype.toString() === '/Image') {
-                    const filter = obj.dict.get(PDFName.of('Filter'))?.toString();
-                    const w = Number(obj.dict.get(PDFName.of('Width'))?.toString()) || 120;
-                    const h = Number(obj.dict.get(PDFName.of('Height'))?.toString()) || 120;
-                    if (filter === '/DCTDecode') {
-                      const bytes = obj.contents;
-                      if (bytes && bytes.length > 200) {
-                        pdfImages.push({
-                          data: bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength),
-                          width: w,
-                          height: h
-                        });
+                            const blob = await new Promise<Blob | null>(r => imgCanvas.toBlob(r, 'image/png'));
+                            if (blob) {
+                              const buf = await blob.arrayBuffer();
+                              if (buf.byteLength > 100) {
+                                const imgEntry = { data: buf, width: w, height: h };
+                                pageImages.push(imgEntry);
+                                pdfImages.push(imgEntry);
+                              }
+                            }
+                          }
+                        }
+                      } catch (errImg) {
+                        console.warn('Image object processing skipped:', errImg);
                       }
                     }
                   }
+                } catch (imgExtractErr) {
+                  console.warn('Page image extraction skipped:', imgExtractErr);
                 }
-              }
-            } catch (errLib) {
-              console.warn('pdf-lib image fallback skipped:', errLib);
-            }
-          }
 
-          return {
-            text: paragraphs.join('\n'),
-            paragraphs,
-            excelRows: excelRows.length > 0 ? excelRows : undefined,
-            pagesContent,
-            sourceType: 'pdf',
-            pdfImages: pdfImages.length > 0 ? pdfImages : undefined
-          };
+                pagesContent.push({
+                  pageNum: i,
+                  title: pageLines[0] ? pageLines[0].substring(0, 60) : `Page ${i}`,
+                  lines: pageLines,
+                  images: pageImages.length > 0 ? pageImages : undefined
+                });
+              } catch (pageErr) {
+                console.warn(`Error extracting page ${i}:`, pageErr);
+              }
+            }
+
+            return {
+              text: paragraphs.join('\n'),
+              paragraphs,
+              excelRows: excelRows.length > 0 ? excelRows : undefined,
+              pagesContent,
+              sourceType: 'pdf',
+              pdfImages: pdfImages.length > 0 ? pdfImages : undefined
+            };
+          }
         }
       } catch (err) {
         console.error("PDF text extraction failed: ", err);
