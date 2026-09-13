@@ -298,6 +298,135 @@ async function extractContentFromSourceFile(file: File): Promise<ExtractedConten
               title: pageLines[0] ? pageLines[0].substring(0, 60) : `Page ${i}`,
               lines: pageLines.slice(pageLines[0] ? 1 : 0)
             });
+
+            // Extract images from the first page (or up to 3 pages)
+            if (i <= 3) {
+              try {
+                const ops = await page.getOperatorList();
+                const imageNames: string[] = [];
+                for (let k = 0; k < ops.fnArray.length; k++) {
+                  const fn = ops.fnArray[k];
+                  if (
+                    fn === pdfjs.OPS.paintImageXObject ||
+                    fn === pdfjs.OPS.paintInlineImageXObject ||
+                    fn === pdfjs.OPS.paintJpegXObject
+                  ) {
+                    const imgName = ops.argsArray[k][0];
+                    if (imgName && !imageNames.includes(imgName)) {
+                      imageNames.push(imgName);
+                    }
+                  }
+                }
+
+                if (imageNames.length > 0) {
+                  const viewport = page.getViewport({ scale: 1.5 });
+                  const offCanvas = document.createElement('canvas');
+                  offCanvas.width = Math.round(viewport.width);
+                  offCanvas.height = Math.round(viewport.height);
+                  const offCtx = offCanvas.getContext('2d');
+                  if (offCtx) {
+                    await page.render({ canvasContext: offCtx, viewport }).promise;
+                  }
+
+                  for (const name of imageNames) {
+                    try {
+                      const imgObj = (page.objs && page.objs.get ? page.objs.get(name) : null) ||
+                                     (page.commonObjs && page.commonObjs.get ? page.commonObjs.get(name) : null);
+                      if (imgObj) {
+                        const imgCanvas = document.createElement('canvas');
+                        let w = imgObj.width || 120;
+                        let h = imgObj.height || 120;
+                        if (w > 800) {
+                          h = Math.round(h * (800 / w));
+                          w = 800;
+                        }
+                        imgCanvas.width = w;
+                        imgCanvas.height = h;
+                        const imgCtx = imgCanvas.getContext('2d');
+                        if (imgCtx) {
+                          if (imgObj.bitmap) {
+                            imgCtx.drawImage(imgObj.bitmap, 0, 0, w, h);
+                          } else if (imgObj instanceof Image || imgObj instanceof HTMLImageElement) {
+                            imgCtx.drawImage(imgObj, 0, 0, w, h);
+                          } else if (imgObj.data) {
+                            const imgData = imgCtx.createImageData(w, h);
+                            if (imgObj.data.length === w * h * 3) {
+                              let s = 0, d = 0;
+                              while (s < imgObj.data.length && d < imgData.data.length) {
+                                imgData.data[d] = imgObj.data[s];
+                                imgData.data[d + 1] = imgObj.data[s + 1];
+                                imgData.data[d + 2] = imgObj.data[s + 2];
+                                imgData.data[d + 3] = 255;
+                                s += 3;
+                                d += 4;
+                              }
+                            } else if (imgObj.data.length === w * h * 4) {
+                              imgData.data.set(imgObj.data.subarray(0, imgData.data.length));
+                            } else if (imgObj.data.length === w * h) {
+                              let s = 0, d = 0;
+                              while (s < imgObj.data.length && d < imgData.data.length) {
+                                const val = imgObj.data[s];
+                                imgData.data[d] = val;
+                                imgData.data[d + 1] = val;
+                                imgData.data[d + 2] = val;
+                                imgData.data[d + 3] = 255;
+                                s++;
+                                d += 4;
+                              }
+                            } else {
+                              imgData.data.set(imgObj.data.subarray(0, imgData.data.length));
+                            }
+                            imgCtx.putImageData(imgData, 0, 0);
+                          }
+
+                          const blob = await new Promise<Blob | null>(r => imgCanvas.toBlob(r, 'image/png'));
+                          if (blob) {
+                            const buf = await blob.arrayBuffer();
+                            if (buf.byteLength > 100) {
+                              pdfImages.push({ data: buf, width: w, height: h });
+                            }
+                          }
+                        }
+                      }
+                    } catch (errImg) {
+                      console.warn('Error processing image object:', errImg);
+                    }
+                  }
+                }
+              } catch (imgErr) {
+                console.warn('Image extraction from page skipped:', imgErr);
+              }
+            }
+          }
+
+          // Fallback image extraction from raw PDF streams if needed
+          if (pdfImages.length === 0) {
+            try {
+              const { PDFDocument, PDFName, PDFRawStream } = await import('pdf-lib');
+              const doc = await PDFDocument.load(arrayBuffer.slice(0), { ignoreEncryption: true });
+              for (const [, obj] of doc.context.enumerateIndirectObjects()) {
+                if (obj instanceof PDFRawStream) {
+                  const subtype = obj.dict.get(PDFName.of('Subtype'));
+                  if (subtype && subtype.toString() === '/Image') {
+                    const filter = obj.dict.get(PDFName.of('Filter'))?.toString();
+                    const w = Number(obj.dict.get(PDFName.of('Width'))?.toString()) || 120;
+                    const h = Number(obj.dict.get(PDFName.of('Height'))?.toString()) || 120;
+                    if (filter === '/DCTDecode') {
+                      const bytes = obj.contents;
+                      if (bytes && bytes.length > 200) {
+                        pdfImages.push({
+                          data: bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength),
+                          width: w,
+                          height: h
+                        });
+                      }
+                    }
+                  }
+                }
+              }
+            } catch (errLib) {
+              console.warn('pdf-lib image fallback skipped:', errLib);
+            }
           }
 
           return {
@@ -952,12 +1081,16 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
     try {
       const topImg = content.pdfImages[0];
       const aspect = (topImg.width && topImg.height) ? topImg.width / topImg.height : 1;
-      const targetW = 120;
-      const targetH = Math.round(targetW / aspect);
+      let targetW = 110;
+      let targetH = Math.round(targetW / aspect);
+      if (targetH > 140) {
+        targetH = 140;
+        targetW = Math.round(targetH * aspect);
+      }
       children.push(
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          spacing: { before: 80, after: 140 },
+          spacing: { before: 40, after: 120 },
           children: [
             new ImageRun({
               data: topImg.data,
@@ -1014,17 +1147,19 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
       : (content.text || '');
 
     const hasHtml = containsHtmlMarkup(fullText);
+    let htmlParsedSuccess = false;
 
     if (hasHtml) {
       // Parse HTML structure into styled Word elements
       const parsedElements = htmlToDocxElements(fullText, docxLib);
       if (parsedElements.length > 0) {
         children.push(...parsedElements);
+        htmlParsedSuccess = true;
       }
     }
 
-    // If no HTML was parsed or standard document text
-    if (children.length === 0) {
+    // If no HTML was parsed or standard document text, layout with MS Word alignment
+    if (!htmlParsedSuccess) {
       const paras = content.paragraphs && content.paragraphs.length > 0
         ? content.paragraphs
         : (content.text ? content.text.split('\n') : []);
@@ -1066,7 +1201,7 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
           children.push(
             new Paragraph({
               alignment: AlignmentType.CENTER,
-              spacing: { before: 100, after: 40 },
+              spacing: { before: 60, after: 30 },
               children: [
                 new TextRun({
                   text: line,
@@ -1086,7 +1221,7 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
           children.push(
             new Paragraph({
               alignment: AlignmentType.CENTER,
-              spacing: { after: 180 },
+              spacing: { after: 160 },
               children: [
                 new TextRun({
                   text: line,
@@ -1105,12 +1240,12 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
           children.push(
             new Paragraph({
               heading: HeadingLevel.HEADING_2,
-              spacing: { before: 200, after: 80 },
+              spacing: { before: 180, after: 60 },
               children: [
                 new TextRun({
                   text: line.replace(/[:\-_]+$/, '').trim(),
                   bold: true,
-                  size: 28,
+                  size: 26,
                   color: '2980B9',
                   font: 'Calibri'
                 })
@@ -1125,12 +1260,12 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
           children.push(
             new Paragraph({
               heading: HeadingLevel.HEADING_3,
-              spacing: { before: 140, after: 40 },
+              spacing: { before: 100, after: 30 },
               children: [
                 new TextRun({
                   text: line,
                   bold: true,
-                  size: 24,
+                  size: 22,
                   color: '34495E',
                   font: 'Calibri'
                 })
@@ -1144,7 +1279,7 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
         if (isDateOrCompany(line)) {
           children.push(
             new Paragraph({
-              spacing: { after: 60 },
+              spacing: { after: 50 },
               children: [
                 new TextRun({
                   text: line,
@@ -1165,11 +1300,11 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
           children.push(
             new Paragraph({
               bullet: { level: 0 },
-              spacing: { after: 60, line: 260 },
+              spacing: { after: 40, line: 260 },
               children: [
                 new TextRun({
                   text: bulletText,
-                  size: 22,
+                  size: 21,
                   color: '334155',
                   font: 'Calibri'
                 })
@@ -1186,10 +1321,10 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
           const valText = line.substring(colonIdx + 1).trim();
           children.push(
             new Paragraph({
-              spacing: { after: 50 },
+              spacing: { after: 40, line: 260 },
               children: [
-                new TextRun({ text: keyLabel + ' ', bold: true, size: 22, color: '1E293B', font: 'Calibri' }),
-                new TextRun({ text: valText, size: 22, color: '334155', font: 'Calibri' })
+                new TextRun({ text: keyLabel + ' ', bold: true, size: 21, color: '1E293B', font: 'Calibri' }),
+                new TextRun({ text: valText, size: 21, color: '334155', font: 'Calibri' })
               ]
             })
           );
@@ -1199,11 +1334,11 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
         // 8. Regular body paragraph
         children.push(
           new Paragraph({
-            spacing: { after: 120, line: 276 },
+            spacing: { after: 100, line: 276 },
             children: [
               new TextRun({
                 text: line,
-                size: 22,
+                size: 21,
                 color: '334155',
                 font: 'Calibri'
               })
@@ -1225,7 +1360,16 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
 
   const doc = new Document({
     sections: [{
-      properties: {},
+      properties: {
+        page: {
+          margin: {
+            top: 1440,
+            right: 1440,
+            bottom: 1440,
+            left: 1440
+          }
+        }
+      },
       children
     }]
   });
