@@ -44,9 +44,11 @@ interface ExtractedContent {
   text: string;
   paragraphs: string[];
   excelRows?: any[][];
+  sourceType?: 'pdf' | 'spreadsheet' | 'html' | 'word' | 'image' | 'text';
   imageBuffer?: ArrayBuffer;
   imageType?: 'png' | 'jpg';
   pagesContent?: { pageNum: number; title: string; lines: string[] }[];
+  pdfImages?: { data: ArrayBuffer; width?: number; height?: number }[];
 }
 
 // Dynamically load pdfjsLib safely if not present on window
@@ -111,7 +113,7 @@ async function extractContentFromSourceFile(file: File): Promise<ExtractedConten
         const excelRows = XLSX.utils.sheet_to_json<any[]>(worksheet, { header: 1 });
         const paragraphs = excelRows.map(row => row.map(cell => String(cell ?? '')).join(' ').trim()).filter(Boolean);
         const text = paragraphs.join('\n');
-        return { text, paragraphs, excelRows };
+        return { text, paragraphs, excelRows, sourceType: 'spreadsheet' };
       } catch (err) {
         console.error("XLSX parsing failed: ", err);
       }
@@ -237,6 +239,7 @@ async function extractContentFromSourceFile(file: File): Promise<ExtractedConten
           const paragraphs: string[] = [];
           const excelRows: any[][] = [];
           const pagesContent: { pageNum: number; title: string; lines: string[] }[] = [];
+          const pdfImages: { data: ArrayBuffer; width?: number; height?: number }[] = [];
 
           for (let i = 1; i <= pdf.numPages; i++) {
             const page = await pdf.getPage(i);
@@ -264,7 +267,21 @@ async function extractContentFromSourceFile(file: File): Promise<ExtractedConten
 
             for (const yKey of sortedYKeys) {
               const lineItems = lineGroups[yKey].sort((a, b) => a.x - b.x);
-              const lineStr = lineItems.map(it => it.str).join(' ').trim();
+              let lineStr = '';
+              for (let idx = 0; idx < lineItems.length; idx++) {
+                const cur = lineItems[idx].str;
+                if (idx === 0) {
+                  lineStr = cur;
+                } else {
+                  const prev = lineItems[idx - 1].str;
+                  if (prev.endsWith(' ') || cur.startsWith(' ')) {
+                    lineStr += cur;
+                  } else {
+                    lineStr += ' ' + cur;
+                  }
+                }
+              }
+              lineStr = lineStr.trim();
               if (lineStr) {
                 pageLines.push(lineStr);
                 paragraphs.push(lineStr);
@@ -287,7 +304,9 @@ async function extractContentFromSourceFile(file: File): Promise<ExtractedConten
             text: paragraphs.join('\n'),
             paragraphs,
             excelRows: excelRows.length > 0 ? excelRows : undefined,
-            pagesContent
+            pagesContent,
+            sourceType: 'pdf',
+            pdfImages: pdfImages.length > 0 ? pdfImages : undefined
           };
         }
       } catch (err) {
@@ -303,15 +322,17 @@ async function extractContentFromSourceFile(file: File): Promise<ExtractedConten
         text: `Image file: ${file.name}`,
         paragraphs: [`Image File: ${file.name}`],
         imageBuffer: arrayBuffer,
-        imageType: type
+        imageType: type,
+        sourceType: 'image'
       };
     }
 
     // 6. Plaintext / HTML / Code fallback
+    const isHtml = ['.html', '.htm'].includes(extension);
     const textDecoder = new TextDecoder('utf-8');
     const text = textDecoder.decode(arrayBuffer);
     const paragraphs = text.split('\n').map(line => line.trim()).filter(Boolean);
-    return { text, paragraphs };
+    return { text, paragraphs, sourceType: isHtml ? 'html' : 'text' };
   } catch (err) {
     console.error("Content extraction error: ", err);
   }
@@ -682,35 +703,277 @@ async function generateRealExcel(sourceFileName: string, targetFormat: string, c
   return new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 }
 
+// Helper to decode HTML entities
+function decodeHtmlEntities(str: string): string {
+  return str
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&bull;/g, '•')
+    .replace(/&mdash;/g, '—')
+    .replace(/&ndash;/g, '–');
+}
+
+// Strip raw HTML tags cleanly and decode entities
+function cleanRawText(str: string): string {
+  return decodeHtmlEntities(str.replace(/<[^>]+>/g, '')).trim();
+}
+
+// Parse hex color from inline CSS style
+function parseCssColor(style: string): string | undefined {
+  const m = style.match(/color\s*:\s*#?([0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b/i);
+  if (m) {
+    let hex = m[1];
+    if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+    return hex.toUpperCase();
+  }
+  const rgb = style.match(/color\s*:\s*rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/i);
+  if (rgb) {
+    const r = Math.min(255, parseInt(rgb[1])).toString(16).padStart(2, '0');
+    const g = Math.min(255, parseInt(rgb[2])).toString(16).padStart(2, '0');
+    const b = Math.min(255, parseInt(rgb[3])).toString(16).padStart(2, '0');
+    return `${r}${g}${b}`.toUpperCase();
+  }
+  return undefined;
+}
+
+// Check if string contains HTML markup tags
+function containsHtmlMarkup(text: string): boolean {
+  return /<(?:h[1-6]|p|div|ul|ol|li|table|tr|td|th|span|strong|b|em|i|br|hr|section|article)\b[^>]*>/i.test(text);
+}
+
+// Convert HTML content into structured, beautifully styled docx Paragraphs & Tables
+function htmlToDocxElements(html: string, docxLib: any): any[] {
+  const { Paragraph, TextRun, HeadingLevel, Table, TableRow, TableCell, BorderStyle, WidthType, AlignmentType, ImageRun } = docxLib;
+  const elements: any[] = [];
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(`<div>${html}</div>`, 'text/html');
+
+  // Clean script and style nodes
+  doc.querySelectorAll('script, style, noscript').forEach(el => el.remove());
+
+  function parseAlign(style: string, attr?: string): any {
+    const a = (style.match(/text-align\s*:\s*(center|right|justify|left)/i)?.[1] || attr || '').toLowerCase();
+    if (a === 'center') return AlignmentType.CENTER;
+    if (a === 'right') return AlignmentType.RIGHT;
+    if (a === 'justify') return AlignmentType.JUSTIFIED;
+    return undefined;
+  }
+
+  function extractRuns(node: Node, inherited: { bold?: boolean; italics?: boolean; color?: string; size?: number }): any[] {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const raw = node.textContent || '';
+      const text = cleanRawText(raw);
+      if (!text) return [];
+      return [
+        new TextRun({
+          text,
+          font: 'Calibri',
+          ...inherited
+        })
+      ];
+    }
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as HTMLElement;
+      const tag = el.tagName.toUpperCase();
+      const next = { ...inherited };
+      if (tag === 'STRONG' || tag === 'B') next.bold = true;
+      if (tag === 'EM' || tag === 'I') next.italics = true;
+      if (tag === 'CODE') next.color = 'E11D48';
+
+      const st = el.getAttribute('style') || '';
+      const c = parseCssColor(st);
+      if (c) next.color = c;
+      if (/font-style\s*:\s*italic/i.test(st)) next.italics = true;
+      if (/font-weight\s*:\s*(bold|[6-9]00)/i.test(st)) next.bold = true;
+
+      const runs: any[] = [];
+      for (let i = 0; i < el.childNodes.length; i++) {
+        runs.push(...extractRuns(el.childNodes[i], next));
+      }
+      return runs;
+    }
+    return [];
+  }
+
+  function processNode(node: Node) {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as HTMLElement;
+      const tag = el.tagName.toUpperCase();
+      const style = el.getAttribute('style') || '';
+      const color = parseCssColor(style);
+      const alignment = parseAlign(style, el.getAttribute('align') || undefined);
+
+      if (tag === 'H1') {
+        const runs = extractRuns(el, { bold: true, size: 32, color: color || '1E293B' });
+        if (runs.length > 0) {
+          elements.push(new Paragraph({ heading: HeadingLevel.HEADING_1, spacing: { before: 200, after: 120 }, alignment, children: runs }));
+        }
+      } else if (tag === 'H2') {
+        const runs = extractRuns(el, { bold: true, size: 28, color: color || '2980B9' });
+        if (runs.length > 0) {
+          elements.push(new Paragraph({ heading: HeadingLevel.HEADING_2, spacing: { before: 180, after: 100 }, alignment, children: runs }));
+        }
+      } else if (tag === 'H3') {
+        const runs = extractRuns(el, { bold: true, size: 24, color: color || '34495E' });
+        if (runs.length > 0) {
+          elements.push(new Paragraph({ heading: HeadingLevel.HEADING_3, spacing: { before: 140, after: 80 }, alignment, children: runs }));
+        }
+      } else if (tag === 'H4' || tag === 'H5' || tag === 'H6') {
+        const runs = extractRuns(el, { bold: true, size: 22, color: color || '334155' });
+        if (runs.length > 0) {
+          elements.push(new Paragraph({ heading: HeadingLevel.HEADING_4, spacing: { before: 100, after: 60 }, alignment, children: runs }));
+        }
+      } else if (tag === 'P') {
+        const isItalic = /font-style\s*:\s*italic/i.test(style);
+        const isBold = /font-weight\s*:\s*(bold|[6-9]00)/i.test(style);
+        const runs = extractRuns(el, { size: 22, color: color || '334155', italics: isItalic, bold: isBold });
+        if (runs.length > 0) {
+          elements.push(new Paragraph({ spacing: { after: 120, line: 276 }, alignment, children: runs }));
+        }
+      } else if (tag === 'UL' || tag === 'OL') {
+        const lis = el.querySelectorAll(':scope > li');
+        lis.forEach(li => {
+          const liStyle = li.getAttribute('style') || '';
+          const liColor = parseCssColor(liStyle) || color || '334155';
+          const runs = extractRuns(li, { size: 22, color: liColor });
+          if (runs.length > 0) {
+            elements.push(new Paragraph({ bullet: { level: 0 }, spacing: { after: 60, line: 260 }, children: runs }));
+          }
+        });
+      } else if (tag === 'LI') {
+        const runs = extractRuns(el, { size: 22, color: color || '334155' });
+        if (runs.length > 0) {
+          elements.push(new Paragraph({ bullet: { level: 0 }, spacing: { after: 60, line: 260 }, children: runs }));
+        }
+      } else if (tag === 'TABLE') {
+        const trs = el.querySelectorAll('tr');
+        if (trs.length > 0) {
+          const tableRows = Array.from(trs).map((tr, rIdx) => {
+            const tds = tr.querySelectorAll('td, th');
+            const cells = Array.from(tds).map(td => {
+              const tdRuns = extractRuns(td, { size: 20, bold: rIdx === 0 || td.tagName.toUpperCase() === 'TH' });
+              return new TableCell({
+                children: [new Paragraph({ children: tdRuns.length > 0 ? tdRuns : [new TextRun({ text: ' ' })] })],
+                borders: {
+                  top: { style: BorderStyle.SINGLE, size: 1, color: 'CBD5E1' },
+                  bottom: { style: BorderStyle.SINGLE, size: 1, color: 'CBD5E1' },
+                  left: { style: BorderStyle.SINGLE, size: 1, color: 'CBD5E1' },
+                  right: { style: BorderStyle.SINGLE, size: 1, color: 'CBD5E1' }
+                },
+                width: { size: Math.floor(100 / Math.max(tds.length, 1)), type: WidthType.PERCENTAGE }
+              });
+            });
+            return new TableRow({ children: cells });
+          });
+          elements.push(new Table({ rows: tableRows, width: { size: 100, type: WidthType.PERCENTAGE } }));
+        }
+      } else if (tag === 'HR') {
+        elements.push(new Paragraph({ spacing: { before: 100, after: 100 } }));
+      } else if (tag === 'IMG') {
+        const src = el.getAttribute('src') || '';
+        if (src.startsWith('data:image/')) {
+          try {
+            const base64Data = src.split(',')[1];
+            if (base64Data) {
+              const bin = atob(base64Data);
+              const u8 = new Uint8Array(bin.length);
+              for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+              elements.push(
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  spacing: { before: 100, after: 140 },
+                  children: [
+                    new ImageRun({
+                      data: u8.buffer,
+                      transformation: { width: 140, height: 140 },
+                      type: 'png' as any
+                    } as any)
+                  ]
+                })
+              );
+            }
+          } catch (imgErr) {
+            console.warn("HTML image embedding skipped: ", imgErr);
+          }
+        }
+      } else {
+        const blockTags = ['H1','H2','H3','H4','H5','H6','P','UL','OL','DIV','SECTION','ARTICLE','TABLE','HR','IMG'];
+        const hasBlockChildren = Array.from(el.childNodes).some(c => 
+          c.nodeType === Node.ELEMENT_NODE && blockTags.includes((c as HTMLElement).tagName.toUpperCase())
+        );
+        if (hasBlockChildren) {
+          for (let i = 0; i < el.childNodes.length; i++) {
+            processNode(el.childNodes[i]);
+          }
+        } else {
+          const runs = extractRuns(el, { size: 22, color: color || '334155' });
+          if (runs.length > 0) {
+            elements.push(new Paragraph({ spacing: { after: 100, line: 276 }, alignment, children: runs }));
+          }
+        }
+      }
+    } else if (node.nodeType === Node.TEXT_NODE) {
+      const raw = node.textContent || '';
+      const txt = cleanRawText(raw);
+      if (txt) {
+        elements.push(new Paragraph({
+          spacing: { after: 100, line: 276 },
+          children: [new TextRun({ text: txt, font: 'Calibri', size: 22, color: '334155' })]
+        }));
+      }
+    }
+  }
+
+  const root = doc.body.firstElementChild || doc.body;
+  for (let i = 0; i < root.childNodes.length; i++) {
+    processNode(root.childNodes[i]);
+  }
+
+  return elements;
+}
+
 // Generate Real Microsoft Word Document (.docx)
 async function generateRealWord(sourceFileName: string, targetFormat: string, content: ExtractedContent): Promise<Blob> {
+  const docxLib = await getDocx();
   const { 
     Document, Paragraph, TextRun, HeadingLevel, Table, TableRow, TableCell, 
-    WidthType, BorderStyle, Packer 
-  } = await getDocx();
+    WidthType, BorderStyle, AlignmentType, ImageRun, Packer 
+  } = docxLib;
 
   const children: any[] = [];
-  const baseTitle = sourceFileName.replace(/\.[^/.]+$/, '').replace(/_/g, ' ');
 
-  // Document Title
-  children.push(
-    new Paragraph({
-      heading: HeadingLevel.TITLE,
-      spacing: { after: 240 },
-      children: [
-        new TextRun({
-          text: baseTitle,
-          bold: true,
-          size: 32,
-          color: '1E293B',
-          font: 'Calibri'
+  // Embed first-page avatar or image if available
+  if (content.pdfImages && content.pdfImages.length > 0) {
+    try {
+      const topImg = content.pdfImages[0];
+      const aspect = (topImg.width && topImg.height) ? topImg.width / topImg.height : 1;
+      const targetW = 120;
+      const targetH = Math.round(targetW / aspect);
+      children.push(
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          spacing: { before: 80, after: 140 },
+          children: [
+            new ImageRun({
+              data: topImg.data,
+              transformation: { width: targetW, height: targetH },
+              type: 'png' as any
+            } as any)
+          ]
         })
-      ]
-    })
-  );
+      );
+    } catch (e) {
+      console.warn("Avatar embedding skipped: ", e);
+    }
+  }
 
-  // If tabular rows detected
-  if (content.excelRows && content.excelRows.length > 1 && content.excelRows.some(r => r.length > 1)) {
+  // 1. If source is an actual spreadsheet, render spreadsheet table
+  if (content.sourceType === 'spreadsheet' && content.excelRows && content.excelRows.length > 1) {
     const tableRows = content.excelRows.map((row, rIdx) => {
       const cells = row.map((cell: any) => new TableCell({
         children: [
@@ -728,10 +991,10 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
         ],
         shading: rIdx === 0 ? { fill: 'F1F5F9' } : undefined,
         borders: {
-          top: { style: BorderStyle.SINGLE, size: 1, color: 'E2E8F0' },
-          bottom: { style: BorderStyle.SINGLE, size: 1, color: 'E2E8F0' },
-          left: { style: BorderStyle.SINGLE, size: 1, color: 'E2E8F0' },
-          right: { style: BorderStyle.SINGLE, size: 1, color: 'E2E8F0' }
+          top: { style: BorderStyle.SINGLE, size: 1, color: 'CBD5E1' },
+          bottom: { style: BorderStyle.SINGLE, size: 1, color: 'CBD5E1' },
+          left: { style: BorderStyle.SINGLE, size: 1, color: 'CBD5E1' },
+          right: { style: BorderStyle.SINGLE, size: 1, color: 'CBD5E1' }
         },
         width: { size: Math.floor(100 / Math.max(row.length, 1)), type: WidthType.PERCENTAGE }
       }));
@@ -745,28 +1008,219 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
       })
     );
   } else {
-    // Render as paragraphs and headings
-    const paras = content.paragraphs.length > 0 ? content.paragraphs : (content.text ? content.text.split('\n') : ['[Document content]']);
-    for (const p of paras) {
-      if (!p || !p.trim()) continue;
-      const trimmed = p.trim();
-      const isHeading = trimmed.length < 80 && (trimmed.endsWith(':') || trimmed === trimmed.toUpperCase());
-      children.push(
-        new Paragraph({
-          heading: isHeading ? HeadingLevel.HEADING_2 : undefined,
-          spacing: { after: isHeading ? 140 : 100 },
-          children: [
-            new TextRun({
-              text: trimmed,
-              bold: isHeading,
-              size: isHeading ? 24 : 22,
-              color: isHeading ? '0F172A' : '334155',
-              font: 'Calibri'
-            })
-          ]
-        })
-      );
+    // 2. Document mode (PDF, Word, HTML, or Plaintext)
+    const fullText = (content.paragraphs && content.paragraphs.length > 0)
+      ? content.paragraphs.join('\n')
+      : (content.text || '');
+
+    const hasHtml = containsHtmlMarkup(fullText);
+
+    if (hasHtml) {
+      // Parse HTML structure into styled Word elements
+      const parsedElements = htmlToDocxElements(fullText, docxLib);
+      if (parsedElements.length > 0) {
+        children.push(...parsedElements);
+      }
     }
+
+    // If no HTML was parsed or standard document text
+    if (children.length === 0) {
+      const paras = content.paragraphs && content.paragraphs.length > 0
+        ? content.paragraphs
+        : (content.text ? content.text.split('\n') : []);
+
+      const validLines = paras.map(p => cleanRawText(p)).filter(Boolean);
+
+      const isKnownSection = (l: string) => {
+        const cl = l.toLowerCase().replace(/[:\-_•]+$/, '').trim();
+        const known = [
+          'about me', 'about us', 'technical skills', 'skills', 'core competencies',
+          'contact details', 'contact info', 'contact information', 'contact',
+          'work experience', 'experience', 'employment history', 'professional experience',
+          'projects', 'personal projects', 'key projects', 'academic projects',
+          'education', 'qualifications', 'academic background',
+          'certifications', 'certificates', 'licenses',
+          'summary', 'professional summary', 'executive summary', 'profile', 'objective',
+          'languages', 'achievements', 'awards', 'interests', 'hobbies', 'references'
+        ];
+        if (known.includes(cl)) return true;
+        if (l.length < 45 && (l.endsWith(':') || (l === l.toUpperCase() && /[A-Z]/.test(l))) && !l.includes('|')) return true;
+        return false;
+      };
+
+      const isJobTitle = (l: string) => {
+        const low = l.toLowerCase();
+        const kw = ['intern', 'developer', 'engineer', 'manager', 'lead', 'designer', 'architect', 'analyst', 'consultant', 'specialist', 'administrator', 'website', 'portfolio', 'application', 'app', 'system', 'platform'];
+        return l.length < 65 && kw.some(k => low.includes(k)) && !l.includes('|') && !l.startsWith('•') && !l.startsWith('-');
+      };
+
+      const isDateOrCompany = (l: string) => {
+        return l.includes('|') || /(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|\d{4})\s*[-–—to]+\s*(?:present|\d{4})/i.test(l);
+      };
+
+      for (let i = 0; i < validLines.length; i++) {
+        const line = validLines[i];
+
+        // 1. Candidate Name / Document Title (first line if short)
+        if (i === 0 && line.length < 50 && !line.includes(':') && !line.includes('|')) {
+          children.push(
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              spacing: { before: 100, after: 40 },
+              children: [
+                new TextRun({
+                  text: line,
+                  bold: true,
+                  size: 34,
+                  color: '1E293B',
+                  font: 'Calibri'
+                })
+              ]
+            })
+          );
+          continue;
+        }
+
+        // 2. Subtitle / Profession (second line if short)
+        if (i === 1 && line.length < 50 && !line.includes(':') && !line.includes('|')) {
+          children.push(
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              spacing: { after: 180 },
+              children: [
+                new TextRun({
+                  text: line,
+                  size: 24,
+                  color: '475569',
+                  font: 'Calibri'
+                })
+              ]
+            })
+          );
+          continue;
+        }
+
+        // 3. Section Heading (About Me, Technical Skills, etc.)
+        if (isKnownSection(line)) {
+          children.push(
+            new Paragraph({
+              heading: HeadingLevel.HEADING_2,
+              spacing: { before: 200, after: 80 },
+              children: [
+                new TextRun({
+                  text: line.replace(/[:\-_]+$/, '').trim(),
+                  bold: true,
+                  size: 28,
+                  color: '2980B9',
+                  font: 'Calibri'
+                })
+              ]
+            })
+          );
+          continue;
+        }
+
+        // 4. Job Title or Project Name (Frontend Developer Intern, Personal Portfolio Website)
+        if (isJobTitle(line)) {
+          children.push(
+            new Paragraph({
+              heading: HeadingLevel.HEADING_3,
+              spacing: { before: 140, after: 40 },
+              children: [
+                new TextRun({
+                  text: line,
+                  bold: true,
+                  size: 24,
+                  color: '34495E',
+                  font: 'Calibri'
+                })
+              ]
+            })
+          );
+          continue;
+        }
+
+        // 5. Date / Company Line (Tech Solutions | June 2023 - Present)
+        if (isDateOrCompany(line)) {
+          children.push(
+            new Paragraph({
+              spacing: { after: 60 },
+              children: [
+                new TextRun({
+                  text: line,
+                  italics: true,
+                  size: 20,
+                  color: '7F8C8D',
+                  font: 'Calibri'
+                })
+              ]
+            })
+          );
+          continue;
+        }
+
+        // 6. Bullet Items (• HTML5, CSS3...)
+        if (/^[•\-\*\▪\▫\–\—]\s*/.test(line) || /^\d+[\.\)]\s+/.test(line)) {
+          const bulletText = line.replace(/^[•\-\*\▪\▫\–\—]\s*/, '').replace(/^\d+[\.\)]\s+/, '').trim();
+          children.push(
+            new Paragraph({
+              bullet: { level: 0 },
+              spacing: { after: 60, line: 260 },
+              children: [
+                new TextRun({
+                  text: bulletText,
+                  size: 22,
+                  color: '334155',
+                  font: 'Calibri'
+                })
+              ]
+            })
+          );
+          continue;
+        }
+
+        // 7. Key-Value Contact details (Email: ..., Mobile: ...)
+        if (/^(email|mobile|phone|address|contact|website|github|linkedin|location)\s*:/i.test(line)) {
+          const colonIdx = line.indexOf(':');
+          const keyLabel = line.substring(0, colonIdx + 1);
+          const valText = line.substring(colonIdx + 1).trim();
+          children.push(
+            new Paragraph({
+              spacing: { after: 50 },
+              children: [
+                new TextRun({ text: keyLabel + ' ', bold: true, size: 22, color: '1E293B', font: 'Calibri' }),
+                new TextRun({ text: valText, size: 22, color: '334155', font: 'Calibri' })
+              ]
+            })
+          );
+          continue;
+        }
+
+        // 8. Regular body paragraph
+        children.push(
+          new Paragraph({
+            spacing: { after: 120, line: 276 },
+            children: [
+              new TextRun({
+                text: line,
+                size: 22,
+                color: '334155',
+                font: 'Calibri'
+              })
+            ]
+          })
+        );
+      }
+    }
+  }
+
+  // Fallback if empty
+  if (children.length === 0) {
+    children.push(
+      new Paragraph({
+        children: [new TextRun({ text: content.text || 'Document Content', font: 'Calibri', size: 22 })]
+      })
+    );
   }
 
   const doc = new Document({
