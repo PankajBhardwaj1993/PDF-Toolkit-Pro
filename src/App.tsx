@@ -699,7 +699,27 @@ function AppContent() {
                   </div>
                 </section>
 
-
+                {/* Featured / Trusted Section */}
+                <section className="py-8 bg-slate-50/80 dark:bg-zinc-900/30 border-b border-slate-200 dark:border-zinc-800 px-4 sm:px-6 lg:px-8 xl:px-12">
+                  <div className="max-w-[1850px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                    <div>
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-0.5">
+                        Featured &amp; Trusted
+                      </div>
+                      <h3 className="font-display text-sm sm:text-base font-bold text-slate-900 dark:text-zinc-100">
+                        Recognized on LaunchNest
+                      </h3>
+                      <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
+                        PDF Toolkit Pro is featured as a modern, client-side document utility platform.
+                      </p>
+                    </div>
+                    <div className="shrink-0 flex items-center justify-center">
+                      <a href="https://launchnest.io/p/pdf-toolkit-pro" target="_blank" rel="noopener noreferrer">
+                        <img src="https://launchnest.io/badge/pdf-toolkit-pro.svg?variant=featured" alt="PDF Toolkit Pro on LaunchNest" width="220" height="56" />
+                      </a>
+                    </div>
+                  </div>
+                </section>
               </>
             )}
           </>
