@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 180" width="760" height="180">
+  <defs>
+    <!-- Background Gradient for Icon -->
+    <linearGradient id="iconBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="45%" stop-color="#2563eb"/>
+      <stop offset="80%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#9333ea"/>
+    </linearGradient>
+
+    <!-- Document Gradient -->
+    <linearGradient id="docGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+
+    <!-- Fold Corner Gradient -->
+    <linearGradient id="docFoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#cbd5e1"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+
+    <!-- Badge Gradient -->
+    <linearGradient id="pdfBadgeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#dc2626"/>
+    </linearGradient>
+
+    <!-- Drop Shadow -->
+    <filter id="iconShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#2563eb" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Left Icon Mark -->
+  <g transform="translate(18, 18)">
+    <rect width="144" height="144" rx="36" fill="url(#iconBgGrad)" filter="url(#iconShadow)" />
+    <rect width="142" height="142" x="1" y="1" rx="35" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-opacity="0.25"/>
+
+    <!-- Document -->
+    <g transform="translate(-8, -2) scale(0.36)">
+      <path d="M 160 120 L 290 120 L 352 182 L 352 384 A 16 16 0 0 1 336 400 L 160 400 A 16 16 0 0 1 144 384 L 144 136 A 16 16 0 0 1 160 120 Z" fill="url(#docGrad)" />
+      <path d="M 290 120 L 290 166 A 16 16 0 0 0 306 182 L 352 182 Z" fill="url(#docFoldGrad)" />
+      <rect x="180" y="222" width="152" height="12" rx="6" fill="#94a3b8" />
+      <rect x="180" y="252" width="152" height="12" rx="6" fill="#cbd5e1" />
+      <rect x="180" y="282" width="104" height="12" rx="6" fill="#cbd5e1" />
+      <g transform="translate(136, 320)">
+        <rect width="138" height="54" rx="14" fill="url(#pdfBadgeGrad)" />
+        <text x="69" y="37" font-family="system-ui, sans-serif" font-size="28" font-weight="900" letter-spacing="2" fill="#ffffff" text-anchor="middle">PDF</text>
+      </g>
+    </g>
+
+    <!-- Sparkle on Icon -->
+    <path d="M 124 18 Q 124 26 132 26 Q 124 26 124 34 Q 124 26 116 26 Q 124 26 124 18 Z" fill="#fbbf24"/>
+  </g>
+
+  <!-- Typography Right Side -->
+  <g transform="translate(186, 0)">
+    <!-- "PDF Toolkit" -->
+    <text x="0" y="88" 
+          font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif" 
+          font-size="52" 
+          font-weight="900" 
+          letter-spacing="-1.5" 
+          fill="#0f172a">PDF Toolkit </text>
+    
+    <!-- "Pro" in Blue with gradient/glow -->
+    <text x="306" y="88" 
+          font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif" 
+          font-size="52" 
+          font-weight="900" 
+          letter-spacing="-1.5" 
+          fill="#2563eb">Pro</text>
+
+    <!-- Tagline Badge -->
+    <g transform="translate(0, 110)">
+      <rect width="198" height="26" rx="6" fill="#eff6ff" />
+      <text x="10" y="17.5" 
+            font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+            font-size="12" 
+            font-weight="800" 
+            letter-spacing="1.5" 
+            fill="#2563eb">HIGH-SPEED UTILITIES</text>
+
+      <text x="212" y="17.5" 
+            font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+            font-size="12" 
+            font-weight="600" 
+            letter-spacing="0.5" 
+            fill="#64748b">• FREE ONLINE PDF &amp; AI WORKSPACE</text>
+    </g>
+  </g>
+</svg>

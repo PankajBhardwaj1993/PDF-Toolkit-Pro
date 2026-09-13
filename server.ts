@@ -1538,6 +1538,24 @@ OCR TEXT:
   app.get(['/llms.txt', '/llms.txt/'], serveLlmsTxt);
   app.get(['/llms-full.txt', '/llms-full.txt/'], serveLlmsFullTxt);
 
+  // Serve static assets from public/ folder (logos, favicons, robots, ads, etc.)
+  app.use(express.static(path.join(process.cwd(), 'public')));
+
+  // Direct Logo Download Endpoint
+  app.get('/download-logo', (req, res) => {
+    const format = (req.query.format as string) || 'png';
+    if (format === 'svg') {
+      const svgPath = path.join(process.cwd(), 'public', 'logo.svg');
+      return res.download(svgPath, 'pdf-toolkit-pro-logo.svg');
+    } else if (format === 'full-svg') {
+      const fullSvgPath = path.join(process.cwd(), 'public', 'logo-full.svg');
+      return res.download(fullSvgPath, 'pdf-toolkit-pro-logo-full.svg');
+    } else {
+      const pngPath = path.join(process.cwd(), 'public', 'logo.png');
+      return res.download(pngPath, 'pdf-toolkit-pro-logo.png');
+    }
+  });
+
   // ==========================================
   // 3. VITE DEV SERVER OR STATIC FILE SERVING
   // ==========================================

@@ -9,7 +9,20 @@ export default defineConfig(() => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
+        react: path.resolve(__dirname, 'node_modules/react'),
+        'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
       },
+      dedupe: ['react', 'react-dom'],
+    },
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        'react-dom/client',
+        'react-router-dom',
+        'react-helmet-async',
+        'lucide-react',
+      ],
     },
     server: {
       hmr: process.env.DISABLE_HMR !== 'true',
@@ -24,17 +37,26 @@ export default defineConfig(() => {
               if (id.includes('pdf-lib') || id.includes('@pdf-lib') || id.includes('@pdfsmaller')) {
                 return 'vendor-pdflib';
               }
-              if (id.includes('xlsx') || id.includes('docx') || id.includes('mammoth') || id.includes('jszip')) {
-                return 'vendor-office';
+              if (id.includes('docx')) {
+                return 'vendor-docx';
+              }
+              if (id.includes('pptxgenjs')) {
+                return 'vendor-pptx';
+              }
+              if (id.includes('xlsx')) {
+                return 'vendor-xlsx';
+              }
+              if (id.includes('jszip')) {
+                return 'vendor-jszip';
+              }
+              if (id.includes('mammoth')) {
+                return 'vendor-mammoth';
               }
               if (id.includes('tesseract.js')) {
                 return 'vendor-ocr';
               }
               if (id.includes('lucide-react')) {
                 return 'vendor-icons';
-              }
-              if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom') || id.includes('react-helmet-async')) {
-                return 'vendor-core';
               }
             }
           },

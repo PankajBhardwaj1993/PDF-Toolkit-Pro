@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
-import JSZip from 'jszip';
 import SEO from './SEO';
 import PageSkeleton from './PageSkeleton';
 import { 
@@ -222,6 +221,7 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
 
         // Trigger automatic ZIP download for seamless experience
         try {
+          const JSZip = (await import('jszip')).default;
           const zip = new JSZip();
           results.forEach((pg: any) => {
             zip.file(`page_${pg.pageNum}.pdf`, pg.bytes);
@@ -651,6 +651,7 @@ export default function ToolActiveView({ toolId, onBack, user, onAddRecentFile }
   const handleDownloadAllAsZip = async () => {
     if (!successResult || !successResult.pages) return;
     try {
+      const JSZip = (await import('jszip')).default;
       const zip = new JSZip();
       successResult.pages.forEach((pg: any) => {
         zip.file(`page_${pg.pageNum}.pdf`, pg.bytes);

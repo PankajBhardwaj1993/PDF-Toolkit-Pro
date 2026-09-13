@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="45%" stop-color="#2563eb"/>
+      <stop offset="80%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#9333ea"/>
+    </linearGradient>
+
+    <!-- Document Gradient -->
+    <linearGradient id="sheetGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+
+    <!-- Fold Corner Gradient -->
+    <linearGradient id="foldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#cbd5e1"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+
+    <!-- Badge Gradient -->
+    <linearGradient id="badgeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#dc2626"/>
+    </linearGradient>
+
+    <!-- Soft Drop Shadow for Icon Card -->
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#0f172a" flood-opacity="0.35"/>
+    </filter>
+    
+    <filter id="sheetShadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Squircle Base Canvas -->
+  <rect width="456" height="456" x="28" y="28" rx="108" fill="url(#bgGrad)" filter="url(#shadow)" />
+  
+  <!-- Subtle Inner Border Highlight -->
+  <rect width="454" height="454" x="29" y="29" rx="107" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-opacity="0.2"/>
+
+  <!-- Main Document Shape -->
+  <!-- Document body with folded top-right corner -->
+  <g filter="url(#sheetShadow)">
+    <path d="M 160 120 
+             L 290 120 
+             L 352 182 
+             L 352 384 
+             A 16 16 0 0 1 336 400 
+             L 160 400 
+             A 16 16 0 0 1 144 384 
+             L 144 136 
+             A 16 16 0 0 1 160 120 Z" 
+          fill="url(#sheetGrad)" />
+
+    <!-- Folded Corner Flap -->
+    <path d="M 290 120 
+             L 290 166 
+             A 16 16 0 0 0 306 182 
+             L 352 182 Z" 
+          fill="url(#foldGrad)" />
+  </g>
+
+  <!-- Document Horizontal Lines -->
+  <rect x="180" y="222" width="152" height="12" rx="6" fill="#94a3b8" />
+  <rect x="180" y="252" width="152" height="12" rx="6" fill="#cbd5e1" />
+  <rect x="180" y="282" width="104" height="12" rx="6" fill="#cbd5e1" />
+
+  <!-- Stylized PDF Tag Badge -->
+  <g transform="translate(136, 320)">
+    <rect width="138" height="54" rx="14" fill="url(#badgeGrad)" filter="url(#sheetShadow)"/>
+    <text x="69" y="37" 
+          font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+          font-size="28" 
+          font-weight="900" 
+          letter-spacing="2" 
+          fill="#ffffff" 
+          text-anchor="middle">PDF</text>
+  </g>
+
+  <!-- AI / Sparkle Star in Top Right -->
+  <g transform="translate(372, 88)">
+    <path d="M 0 -22 Q 0 0 22 0 Q 0 0 0 22 Q 0 0 -22 0 Q 0 0 0 -22 Z" fill="#fbbf24" opacity="0.95"/>
+    <circle cx="0" cy="0" r="4" fill="#ffffff" />
+  </g>
+  <g transform="translate(412, 134)">
+    <path d="M 0 -12 Q 0 0 12 0 Q 0 0 0 12 Q 0 0 -12 0 Q 0 0 0 -12 Z" fill="#60a5fa" opacity="0.8"/>
+  </g>
+</svg>

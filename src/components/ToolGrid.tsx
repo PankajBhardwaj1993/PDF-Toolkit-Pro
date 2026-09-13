@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
 import { 
   FileText, Image as ImageIcon, FileSignature, Sparkles, Sliders, Type, Star, 
   Search, ArrowRight, Zap, TrendingUp, Cpu, Compass, Briefcase, Layers, FileSpreadsheet, ArrowLeftRight
@@ -14,6 +13,16 @@ interface ToolGridProps {
   onToggleFavorite: (toolId: string, e: React.MouseEvent) => void;
   allToolsList: Tool[];
 }
+
+const isConverterTool = (tool: Tool) => {
+  return (
+    (tool.id.includes('_to_') && tool.id !== 'text_to_speech') ||
+    tool.id.includes('converter') ||
+    tool.name.toLowerCase().includes('converter') ||
+    tool.id === 'convert_image' ||
+    tool.id === 'batch_processor'
+  );
+};
 
 export default function ToolGrid({
   onSelectTool,
@@ -35,16 +44,6 @@ export default function ToolGrid({
     { id: 'utilities', name: 'Extra Utilities', icon: Sliders },
     { id: 'converter', name: 'Converter Tools', icon: ArrowLeftRight },
   ];
-
-  const isConverterTool = (tool: Tool) => {
-    return (
-      (tool.id.includes('_to_') && tool.id !== 'text_to_speech') ||
-      tool.id.includes('converter') ||
-      tool.name.toLowerCase().includes('converter') ||
-      tool.id === 'convert_image' ||
-      tool.id === 'batch_processor'
-    );
-  };
 
   const filteredTools = allToolsList.filter((tool) => {
     if (tool.hidden || tool.adminOnly) return false;

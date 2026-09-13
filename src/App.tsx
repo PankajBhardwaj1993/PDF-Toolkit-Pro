@@ -11,7 +11,8 @@ import PageSkeleton from './components/PageSkeleton';
 import CookieConsent from './components/CookieConsent';
 
 import ToolGrid from './components/ToolGrid';
-const ToolActiveView = React.lazy(() => import('./components/ToolActiveView'));
+import ToolActiveView from './components/ToolActiveView';
+import ConverterView from './components/ConverterView';
 const BlogView = React.lazy(() => import('./components/BlogView'));
 const DashboardView = React.lazy(() => import('./components/DashboardView'));
 const PricingView = React.lazy(() => import('./components/PricingView'));
@@ -20,7 +21,6 @@ const ContactView = React.lazy(() => import('./components/ContactView'));
 const DocumentationView = React.lazy(() => import('./components/DocumentationView'));
 const AdminView = React.lazy(() => import('./components/AdminView'));
 const InfoPagesView = React.lazy(() => import('./components/InfoPagesView'));
-const ConverterView = React.lazy(() => import('./components/ConverterView'));
 const NotFoundView = React.lazy(() => import('./components/NotFoundView'));
 
 
