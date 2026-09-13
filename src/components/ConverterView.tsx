@@ -12,7 +12,13 @@ import {
 // Dynamic module loaders - loaded on demand only when running a conversion
 // Keeps ConverterView initial chunk featherlight (<25 KB) so any tool opens instantly in 0ms
 const getPdfLib = () => import('pdf-lib');
-const getDocx = () => import('docx');
+const getDocx = async () => {
+  if (typeof window !== 'undefined') {
+    (window as any).global = window;
+    (window as any).exports = (window as any).exports || {};
+  }
+  return await import('docx');
+};
 const getPptxGen = async () => (await import('pptxgenjs')).default;
 const getXLSX = () => import('xlsx');
 const getJSZip = async () => (await import('jszip')).default;
@@ -1271,13 +1277,14 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
                   targetH = 520;
                   targetW = Math.round(targetH * aspect);
                 }
+                const imgBytes = img.data instanceof Uint8Array ? img.data : new Uint8Array(img.data);
                 children.push(
                   new Paragraph({
                     alignment: AlignmentType.CENTER,
                     spacing: { before: 60, after: 120 },
                     children: [
                       new ImageRun({
-                        data: img.data,
+                        data: imgBytes,
                         transformation: { width: targetW, height: targetH },
                         type: 'png' as any
                       } as any)
@@ -1336,6 +1343,7 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
               targetH = 520;
               targetW = Math.round(targetH * aspect);
             }
+            const imgBytes = img.data instanceof Uint8Array ? img.data : new Uint8Array(img.data);
             children.push(
               new Paragraph({
                 pageBreakBefore: (pIdx > 0 && lines.length === 0),
@@ -1343,7 +1351,7 @@ async function generateRealWord(sourceFileName: string, targetFormat: string, co
                 spacing: { before: 80, after: 120 },
                 children: [
                   new ImageRun({
-                    data: img.data,
+                    data: imgBytes,
                     transformation: { width: targetW, height: targetH },
                     type: 'png' as any
                   } as any)
