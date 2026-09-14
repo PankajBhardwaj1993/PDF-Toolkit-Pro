@@ -29,6 +29,7 @@ export default defineConfig(() => {
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
     build: {
+      outDir: 'dist',
       chunkSizeWarningLimit: 1200,
       rollupOptions: {
         output: {
@@ -37,8 +38,8 @@ export default defineConfig(() => {
               if (id.includes('pdf-lib') || id.includes('@pdf-lib') || id.includes('@pdfsmaller')) {
                 return 'vendor-pdflib';
               }
-              if (id.includes('docx')) {
-                return 'vendor-docx';
+              if (id.includes('docx') || id.includes('mammoth')) {
+                return 'vendor-documents';
               }
               if (id.includes('pptxgenjs')) {
                 return 'vendor-pptx';
@@ -48,9 +49,6 @@ export default defineConfig(() => {
               }
               if (id.includes('jszip')) {
                 return 'vendor-jszip';
-              }
-              if (id.includes('mammoth')) {
-                return 'vendor-mammoth';
               }
               if (id.includes('tesseract.js')) {
                 return 'vendor-ocr';
